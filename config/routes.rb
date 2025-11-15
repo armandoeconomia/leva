@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   # Rutas para Usuarios Autenticados (General)
   # Podría ser un dashboard general o redirigir según el rol
-  get 'dashboard', to: 'dashboards#show'
+  get 'dashboard', to: 'dashboard#show'
 
   # Rutas Específicas para PACIENTES
   namespace :patients do
@@ -32,7 +32,7 @@ Rails.application.routes.draw do
   # Rutas Específicas para DOCTORES
   namespace :doctors do
     # Dashboard del doctor
-    get 'dashboard', to: 'dashboards#show', as: 'dashboard'
+    get 'dashboard', to: 'dashboard#show', as: 'dashboard'
 
     # Ver perfil del doctor (él mismo)
     resource :doctor, only: [:show, :edit, :update]
@@ -63,7 +63,7 @@ Rails.application.routes.draw do
   # Rutas Específicas para ADMINISTRATIVOS
   namespace :admin do
     # Dashboard del administrador
-    get 'dashboard', to: 'dashboards#show', as: 'dashboard'
+    get 'dashboard', to: 'dashboard#show', as: 'dashboard'
 
     # Gestión de Usuarios
     resources :users # 'users' aquí se refiere a la tabla USERS, que incluye doctores, pacientes, etc.
