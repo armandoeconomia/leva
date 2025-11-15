@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   root to: "pages#home"
 
   # Rutas para Visitantes (sin autenticar)
-  get '/', to: 'pages#home' # Página principal
   get 'pages/about', to: 'pages#about' # "Sobre nosotros"
   get 'doctors', to: 'doctors#index' # Ver directorio de doctores
   get 'medical_institutes', to: 'medical_institutes#index' # Ver institutos cercanos
