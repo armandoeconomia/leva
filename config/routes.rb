@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   # Rutas Específicas para PACIENTES
   namespace :patients do
     # Dashboard del paciente
-    get 'dashboard', to: 'dashboards#show', as: 'dashboard'
+    get 'dashboard', to: 'dashboard#show', as: 'dashboard'
 
     # Recursos para el paciente
     resources :medical_histories, only: [:index, :show] # Ver historial médico
