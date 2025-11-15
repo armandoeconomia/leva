@@ -18,6 +18,6 @@ class User < ApplicationRecord
                     uniqueness: { case_sensitive: false },
                     format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, presence: true, on: :create, length: { minimum: 8 }
-  validates :id_number, uniqueness: true
+  validates :identification, uniqueness: true
 
 end

@@ -7,7 +7,8 @@ class Doctor < ApplicationRecord
   has_many :calendars
   has_many :hours, through: :calendars
 
-  validates :specialty, presence: true, length: { minimum: 3, maximum: 100 }
+  enum speciality: { cardiologia: 0, general: 1, "nutrición"=> 2}
+  validates :speciality, presence: true
   validates :medical_registration,
             presence: true,
             uniqueness: true,
