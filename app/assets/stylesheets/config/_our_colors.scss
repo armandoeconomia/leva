@@ -1,0 +1,39 @@
+// ---- Colores principales ----
+$color-primary:        #D9D8E0;   // Lavanda suave (fondos, inputs, contenedores)
+$color-primary-light:  #F8F7F9;   // Casi blanco con tintes lavanda
+$color-accent:         #B69CFF;   // Botón "Buscar" y resaltes lilas
+
+// ---- Grays / Neutrales ----
+$gray-100:             #F8F7F9;
+$gray-200:             #EDECF0;
+$gray-300:             #D9D8E0;
+$gray-400:             #C3C2C8;
+$gray-500:             #8C8C8B;
+$gray-600:             #6F6F6F;
+$gray-700:             #444444;
+$gray-800:             #2A2A2A;
+
+// ---- Texto ----
+$text-primary:         #2A2A2A;   // Negro suave
+$text-secondary:       #6F6F6F;   // Gris medio
+$text-light:           #8C8C8B;   // Gris claro
+$text-inverse:         #FFFFFF;
+
+// ---- Fondos ----
+$background-main:      #F8F7F9;   // Fondo general
+$background-card:      #FFFFFF;   // Tarjetas y contenedores
+$background-soft:      #D9D8E0;   // Bloques secundarios
+
+// ---- Bordes ----
+$border-light:         #EDECF0;
+$border-medium:        #D9D8E0;
+
+// ---- Colores especiales ----
+$color-star:           #FFC107;   // Estrellas de calificación
+$color-success:        #5DD39E;
+$color-warning:        #FFCA3A;
+$color-danger:         #FF595E;
+
+// ---- Sombras ----
+$shadow-soft:          0 4px 12px rgba(0,0,0,0.05);
+$shadow-medium:        0 6px 20px rgba(0,0,0,0.08);
