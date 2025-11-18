@@ -16,7 +16,7 @@ class Patients::AppointmentsController < Patients::BaseController
     @appointment.status ||= :pendiente
 
     if @appointment.save
-      redirect_to patients_appointment_path(@appointment), notice: "Cita creada exitosamente"
+      redirect_to patients_appointment_path(@appointment), notice: "Cita creada"
     else
       render :new, status: :unprocessable_entity
     end
