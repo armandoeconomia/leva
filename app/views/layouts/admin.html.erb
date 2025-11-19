@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_link_tag "application", media: "all" %>
+  <%= javascript_include_tag "application" %>
+
+  <style>
+    body {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .sidebar {
+      width: 250px;
+      background: #0d6efd;
+      color: white;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      margin: 10px 0;
+    }
+    .content {
+      flex: 1;
+      background: #f8f9fa;
+      overflow-y: scroll;
+      padding: 30px;
+    }
+    .navbar {
+      background: white;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="sidebar">
+    <h3>Admin Panel</h3>
+    <hr>
+
+    <%= link_to "Dashboard", admin_dashboard_path %>
+    <%= link_to "Users", admin_users_path %>
+    <%= link_to "Patients", admin_patients_path %>
+    <%= link_to "Doctors", admin_doctors_path %>
+    <%= link_to "Medical Institutes", admin_medical_institutes_path %>
+    <%= link_to "Appointments", admin_appointments_path %>
+    <%= link_to "Medical Histories", admin_medical_histories_path %>
+    <%= link_to "Invoices", admin_invoices_path %>
+  </div>
+
+  <div class="content">
+    <div class="navbar">
+      <strong>Hospital Admin</strong>
+    </div>
+
+    <%= yield %>
+  </div>
+
+</body>
+</html>
