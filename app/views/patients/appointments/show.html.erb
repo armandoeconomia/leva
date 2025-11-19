@@ -1,2 +1,35 @@
-<h1>Patients::Appointments#show</h1>
-<p>Find me in app/views/patients/appointments/show.html.erb</p>
+<div class="patient-page">
+  <div class="patient-container narrow">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Detalle</p>
+        <h1>Cita con <%= @appointment.doctor.user.name %> <%= @appointment.doctor.user.last_name %></h1>
+        <p class="muted"><%= @appointment.doctor.speciality.humanize %></p>
+      </div>
+      <div class="action-group">
+        <%= link_to "Dashboard", patients_dashboard_path, class: "btn-ghost-sm" %>
+        <span class="status-pill <%= @appointment.status %>"><%= @appointment.status %></span>
+        <%= link_to "Editar", edit_patients_appointment_path(@appointment), class: "btn-ghost-sm" %>
+      </div>
+    </div>
+
+    <div class="patient-card">
+      <div class="info-row">
+        <p class="label">Fecha</p>
+        <p><%= @appointment.date&.strftime('%d %B %Y') %></p>
+      </div>
+      <div class="info-row">
+        <p class="label">Hora</p>
+        <p><%= @appointment.hour&.strftime('%H:%M') %></p>
+      </div>
+      <div class="info-row">
+        <p class="label">Motivo</p>
+        <p><%= @appointment.reason_for_consultation %></p>
+      </div>
+      <div class="info-row">
+        <p class="label">Instituto</p>
+        <p><%= @appointment.doctor.medical_institute.name %> · <%= @appointment.doctor.medical_institute.address %></p>
+      </div>
+    </div>
+  </div>
+</div>

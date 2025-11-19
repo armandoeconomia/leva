@@ -1,2 +1,13 @@
-<h1>Patients::Appointments#new</h1>
-<p>Find me in app/views/patients/appointments/new.html.erb</p>
+<div class="patient-page">
+  <div class="patient-container narrow">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Nueva cita</p>
+        <h1>Agenda tu consulta</h1>
+        <p class="muted">Selecciona el especialista, fecha y hora que prefieras.</p>
+      </div>
+      <%= link_to "Dashboard", patients_dashboard_path, class: "btn-ghost-sm" %>
+    </div>
+    <%= render "form" %>
+  </div>
+</div>

@@ -1,4 +1,5 @@
 class Patients::AppointmentsController < Patients::BaseController
+  before_action :set_doctors, only: [:new, :create, :edit, :update]
   before_action :set_appointment, only: [:show, :edit, :update, :destroy, :consult, :schedule]
 
   def index
@@ -57,5 +58,9 @@ class Patients::AppointmentsController < Patients::BaseController
 
   def appointment_params
     params.require(:appointment).permit(:doctor_id, :date, :hour, :reason_for_consultation, :status)
+  end
+
+  def set_doctors
+    @doctors = Doctor.includes(:user, :medical_institute).order(:id)
   end
 end
