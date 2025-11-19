@@ -1,2 +1,27 @@
-<h1>Doctors::Appointments#edit</h1>
-<p>Find me in app/views/doctors/appointments/edit.html.erb</p>
+<h1>Editar cita</h1>
+
+<%= form_with model: [:doctors, @appointment], local: true do |form| %>
+  <div>
+    <%= form.label :date %>
+    <%= form.date_field :date %>
+  </div>
+
+  <div>
+    <%= form.label :hour %>
+    <%= form.time_field :hour %>
+  </div>
+
+  <div>
+    <%= form.label :reason_for_consultation %>
+    <%= form.text_area :reason_for_consultation %>
+  </div>
+
+  <div>
+    <%= form.label :status %>
+    <%= form.select :status, Appointment.statuses.keys.map { |s| [s.humanize, s] } %>
+  </div>
+
+  <%= form.submit "Guardar cambios" %>
+<% end %>
+
+<%= link_to 'Volver', doctors_appointments_path %>
