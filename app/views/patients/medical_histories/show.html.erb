@@ -1,2 +1,28 @@
-<h1>Patients::MedicalHistories#show</h1>
-<p>Find me in app/views/patients/medical_histories/show.html.erb</p>
+<div class="patient-page">
+  <div class="patient-container narrow">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Detalle</p>
+        <h1>Consulta con <%= @medical_history.doctor.user.name %> <%= @medical_history.doctor.user.last_name %></h1>
+        <p class="muted"><%= @medical_history.registration_date&.strftime('%d %B %Y') %> · <%= @medical_history.doctor.speciality.humanize %></p>
+      </div>
+      <div class="action-group">
+        <%= link_to "Dashboard", patients_dashboard_path, class: "btn-ghost-sm" %>
+        <%= link_to "Volver al historial", patients_medical_histories_path, class: "btn-ghost" %>
+      </div>
+    </div>
+
+    <div class="patient-card">
+      <h3>Diagnóstico</h3>
+      <p><%= @medical_history.diagnosis %></p>
+      <% if @medical_history.treatment.present? %>
+        <h3>Tratamiento</h3>
+        <p><%= @medical_history.treatment %></p>
+      <% end %>
+      <% if @medical_history.prescription.present? %>
+        <h3>Prescripción</h3>
+        <p><%= @medical_history.prescription %></p>
+      <% end %>
+    </div>
+  </div>
+</div>

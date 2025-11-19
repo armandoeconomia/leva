@@ -1,2 +1,57 @@
-<h1>Patients::Doctors#index</h1>
-<p>Find me in app/views/patients/doctors/index.html.erb</p>
+<div class="patient-page">
+  <div class="patient-container">
+    <%= form_with url: patients_doctors_path, method: :get, local: true, class: "patient-hero search-form" do |f| %>
+      <div>
+        <p class="eyebrow">Paso 1 de 3: Búsqueda y selección</p>
+        <h1>Encuentra tu especialista y reserva tu cita</h1>
+        <p class="muted">Busca por especialidad o nombre y elige el doctor que más te convenga.</p>
+        <div class="search-grid">
+          <div class="input-shell">
+            <i class="fa fa-search"></i>
+            <%= f.search_field :q, value: @q, placeholder: "Ej. Cardiología o nombre del doctor" %>
+          </div>
+          <div class="input-shell">
+            <i class="fa fa-map-marker-alt"></i>
+            <%= f.search_field :city, value: @city, placeholder: "Ej. Ciudad, Código Postal" %>
+          </div>
+          <%= f.submit "Buscar", class: "btn-lilac" %>
+        </div>
+        <div class="hero-actions">
+          <%= link_to "Volver al dashboard", patients_dashboard_path, class: "btn-ghost-sm" %>
+        </div>
+      </div>
+      <div class="hero-card calendar-card">
+        <p class="eyebrow">Selecciona una fecha</p>
+        <div class="date-picker">
+          <%= f.date_field :date, value: @date, class: "form-control" %>
+          <p class="muted small">Filtra doctores con disponibilidad ese día.</p>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Resultados de la búsqueda</p>
+        <h2><%= pluralize(@doctors.count, 'Doctor', 'Doctores') %></h2>
+      </div>
+    </div>
+
+    <div class="card-list vertical">
+      <% @doctors.each do |doctor| %>
+        <div class="doctor-card">
+          <div class="doctor-avatar">
+            <i class="fa fa-user-md"></i>
+          </div>
+          <div class="doctor-body">
+            <p class="item-title">Dr(a). <%= doctor.user.name %> <%= doctor.user.last_name %></p>
+            <p class="muted"><%= doctor.speciality.humanize %> · <%= doctor.medical_institute.name %></p>
+            <p class="muted small"><i class="fa fa-map-marker-alt"></i> <%= doctor.medical_institute.address %></p>
+          </div>
+          <div class="doctor-actions">
+            <%= link_to "Ver horarios", patients_doctor_path(doctor), class: "btn-ghost" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
