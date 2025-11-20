@@ -1,2 +1,192 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<!-- HERO / HEADER PRINCIPAL -->
+<section id="home" class="@container">
+  <div class="flex flex-col gap-8 px-4 py-10 @[864px]:flex-row @[864px]:items-center">
+    <!-- Texto -->
+    <div class="flex flex-col gap-6 @[480px]:min-w-[400px] @[480px]:gap-8 @[864px]:justify-center flex-1">
+      <div class="flex flex-col gap-4 text-left">
+        <h1
+          class="text-text-primary text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-6xl">
+          Tu salud, a un clic de distancia
+        </h1>
+        <h2
+          class="text-text-secondary text-base font-normal leading-normal @[480px]:text-lg">
+          Agenda citas con tus especialistas de confianza de forma rápida y segura.
+        </h2>
+      </div>
+      <div class="flex flex-wrap items-center gap-4">
+        <button
+          class="flex min-w-[84px] w-fit cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-accent text-white text-base font-bold leading-normal tracking-[0.015em] shadow-medium hover:bg-purple-500">
+          <span class="truncate">Ver Clinicas y Hospitales</span>
+        </button>
+        <button
+          class="flex min-w-[84px] w-fit cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-background-card text-text-primary text-base font-bold leading-normal tracking-[0.015em] border border-primary hover:bg-primary-light">
+          <span class="truncate">Ver especialistas</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Imagen / “carrusel” (por ahora estático, luego se puede animar) -->
+<div
+  class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl @[480px]:h-auto @[480px]:min-w-[400px] @[864px]:w-full flex-1 shadow-medium"
+  style="background-image: url('/assets/logo-leva.png');"
+  data-alt="Imagen representativa LEVA">
+</div>
+
+</section>
+
+<!-- SOBRE NOSOTROS + CARDS DE VENTA -->
+<section id="about" class="flex flex-col gap-10 px-4 py-10 @container mt-10 md:mt-20">
+  <div class="flex flex-col gap-4">
+    <h2
+      class="text-text-primary tracking-light text-[32px] font-bold leading-tight @[480px]:text-4xl @[480px]:font-black max-w-[720px]">
+      Sobre Nosotros
+    </h2>
+    <p
+      class="text-text-secondary text-base font-normal leading-normal max-w-[720px]">
+      Nuestra misión es simplificar el acceso a la atención médica, conectando a pacientes y doctores de manera
+      eficiente. Creemos en un sistema de salud donde la tecnología facilita el cuidado, permitiéndote gestionar tus
+      citas y consultas con total tranquilidad y seguridad.
+    </p>
+  </div>
+
+  <!-- CARDS / BENEFICIOS (VENTA) -->
+  <section id="features" class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 p-0">
+    <!-- Card 1 -->
+    <div class="flex flex-1 gap-4 rounded-xl bg-background-card p-6 flex-col shadow-soft">
+      <div class="text-accent">
+        <span class="material-symbols-outlined" style="font-size: 32px;">schedule</span>
+      </div>
+      <div class="flex flex-col gap-1">
+        <h3 class="text-text-primary text-lg font-bold leading-tight">
+          Fácil y Rápido
+        </h3>
+        <p class="text-text-secondary text-sm font-normal leading-normal">
+          Encuentra disponibilidad y agenda tu cita en menos de un minuto.
+        </p>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="flex flex-1 gap-4 rounded-xl bg-background-card p-6 flex-col shadow-soft">
+      <div class="text-accent">
+        <span class="material-symbols-outlined" style="font-size: 32px;">verified_user</span>
+      </div>
+      <div class="flex flex-col gap-1">
+        <h3 class="text-text-primary text-lg font-bold leading-tight">
+          Especialistas de Confianza
+        </h3>
+        <p class="text-text-secondary text-sm font-normal leading-normal">
+          Accede a una red verificada de profesionales médicos en diversas especialidades.
+        </p>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="flex flex-1 gap-4 rounded-xl bg-background-card p-6 flex-col shadow-soft">
+      <div class="text-accent">
+        <span class="material-symbols-outlined" style="font-size: 32px;">lock</span>
+      </div>
+      <div class="flex flex-col gap-1">
+        <h3 class="text-text-primary text-lg font-bold leading-tight">
+          Seguridad Garantizada
+        </h3>
+        <p class="text-text-secondary text-sm font-normal leading-normal">
+          Tus datos personales y médicos están protegidos con los más altos estándares.
+        </p>
+      </div>
+    </div>
+  </section>
+</section>
+
+<!-- TESTIMONIOS -->
+<section id="testimonios" class="px-4 py-10 @container mt-4 md:mt-10 mb-16">
+  <div class="flex flex-col gap-4 mb-6">
+    <h2
+      class="text-text-primary tracking-light text-[28px] font-bold leading-tight @[480px]:text-3xl @[480px]:font-black">
+      Lo que dicen nuestros usuarios
+    </h2>
+    <p class="text-text-secondary text-base font-normal leading-normal max-w-[640px]">
+      Pacientes y profesionales confían en LEVA para gestionar sus citas y mantener una atención continua.
+    </p>
+  </div>
+
+  <div class="relative max-w-[960px]">
+    <!-- CONTENEDOR DEL CARRUSEL -->
+    <div id="testimonios-carousel" class="overflow-hidden rounded-xl">
+      <div class="flex transition-transform duration-500 ease-out" data-carousel-track>
+        <!-- Slide 1 -->
+        <article class="min-w-full bg-background-card p-6 shadow-soft flex flex-col gap-3">
+          <p class="text-text-secondary text-sm leading-relaxed">
+            “Puedo agendar mis citas sin llamar a la clínica. Todo es súper rápido y recibo recordatorios automáticos.”
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-primary-light"></div>
+            <div>
+              <p class="text-text-primary text-sm font-semibold">Ana Pérez</p>
+              <p class="text-text-secondary text-xs">Paciente</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 2 -->
+        <article class="min-w-full bg-background-card p-6 shadow-soft flex flex-col gap-3">
+          <p class="text-text-secondary text-sm leading-relaxed">
+            “LEVA me ayuda a organizar mejor mi agenda y reducir ausencias. Todo queda registrado en un mismo lugar.”
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-primary-light"></div>
+            <div>
+              <p class="text-text-primary text-sm font-semibold">Dr. López</p>
+              <p class="text-text-secondary text-xs">Cardiólogo</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 3 -->
+        <article class="min-w-full bg-background-card p-6 shadow-soft flex flex-col gap-3">
+          <p class="text-text-secondary text-sm leading-relaxed">
+            “Como clínica, tenemos una mejor visión de la demanda y podemos asignar recursos de manera más eficiente.”
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-primary-light"></div>
+            <div>
+              <p class="text-text-primary text-sm font-semibold">Hospital Militar</p>
+              <p class="text-text-secondary text-xs">Administración</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- BOTONES SIGUIENTE / ANTERIOR -->
+    <button
+      type="button"
+      class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 rounded-full bg-background-card shadow-soft w-9 h-9 items-center justify-center text-text-secondary hover:bg-primary-light"
+      data-carousel-prev>
+      <span class="material-symbols-outlined text-base">chevron_left</span>
+    </button>
+
+    <button
+      type="button"
+      class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 rounded-full bg-background-card shadow-soft w-9 h-9 items-center justify-center text-text-secondary hover:bg-primary-light"
+      data-carousel-next>
+      <span class="material-symbols-outlined text-base">chevron_right</span>
+    </button>
+
+    <!-- INDICADORES (PUNTITOS) -->
+    <div class="mt-4 flex items-center justify-center gap-2" data-carousel-dots>
+      <button
+        type="button"
+        class="w-2.5 h-2.5 rounded-full bg-primary"
+        data-carousel-dot="0"></button>
+      <button
+        type="button"
+        class="w-2.5 h-2.5 rounded-full bg-primary-light"
+        data-carousel-dot="1"></button>
+      <button
+        type="button"
+        class="w-2.5 h-2.5 rounded-full bg-primary-light"
+        data-carousel-dot="2"></button>
+    </div>
+  </div>
+</section>
