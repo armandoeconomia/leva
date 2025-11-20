@@ -1,20 +1,117 @@
-<h2>Log in</h2>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LEVA - Iniciar Sesión</title>
 
-<%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="form-inputs">
-    <%= f.input :email,
-                required: false,
-                autofocus: true,
-                input_html: { autocomplete: "email" } %>
-    <%= f.input :password,
-                required: false,
-                input_html: { autocomplete: "current-password" } %>
-    <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
-  </div>
+  <!-- Tailwind (Rails ya lo carga, pero dejamos el config por si lo necesitas para colores) -->
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#B69CFF",
+            "background-light": "#F8F7F9",
+            "background-dark": "#1F2937",
+            "card-light": "#FFFFFF",
+            "card-dark": "#374151",
+            "text-light": "#374151",
+            "text-dark": "#E5E7EB",
+            "subtle-light": "#6B7280",
+            "subtle-dark": "#9CA3AF"
+          },
+          fontFamily: {
+            display: ["Roboto", "sans-serif"],
+          },
+          borderRadius: {
+            DEFAULT: "0.5rem",
+          },
+        },
+      },
+    };
+  </script>
 
-  <div class="form-actions">
-    <%= f.button :submit, "Log in" %>
-  </div>
-<% end %>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
-<%= render "devise/shared/links" %>
+  <style>
+    .material-icons { font-size: 24px; }
+  </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark flex flex-col min-h-screen">
+
+<main class="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="w-full max-w-md space-y-8">
+
+<!-- LOGO -->
+<div class="flex flex-col items-center justify-center">
+  <%= link_to root_path, class: "flex items-center gap-3 mb-8" do %>
+    <%= image_tag "logo-leva.png",
+          alt: "LEVA Logo",
+          class: "w-16 h-16 rounded-2xl shadow-lg object-cover" %>
+
+    <span class="text-3xl font-bold text-text-light dark:text-text-dark">
+      LEVA
+    </span>
+  <% end %>
+</div>
+
+    <!-- CARD LOGIN -->
+    <div class="bg-card-light dark:bg-card-dark p-8 sm:p-10 rounded-2xl shadow-lg">
+      <div class="text-center">
+        <h2 class="text-3xl font-bold">Iniciar Sesión</h2>
+        <p class="mt-2 text-subtle-light dark:text-subtle-dark">Bienvenido de nuevo. Accede a tu cuenta.</p>
+      </div>
+
+      <!-- FORMULARIO DEVISE -->
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <div class="mt-8 space-y-6">
+
+          <!-- EMAIL -->
+          <div>
+            <label class="block text-sm font-medium mb-1">Email</label>
+            <%= f.email_field :email,
+              autofocus: true,
+              autocomplete: "email",
+              class: "appearance-none rounded-lg block w-full px-3 py-3 border border-gray-300 bg-background-light focus:ring-primary focus:border-primary"
+            %>
+          </div>
+
+          <!-- PASSWORD -->
+          <div>
+            <label class="block text-sm font-medium mb-1">Contraseña</label>
+            <%= f.password_field :password,
+              autocomplete: "current-password",
+              class: "appearance-none rounded-lg block w-full px-3 py-3 border border-gray-300 bg-background-light focus:ring-primary focus:border-primary"
+            %>
+          </div>
+
+          <!-- RECORDARME -->
+          <% if devise_mapping.rememberable? %>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <%= f.check_box :remember_me, class: "h-4 w-4 text-primary rounded" %>
+                <label class="ml-2 text-sm text-subtle-light dark:text-subtle-dark">Recordarme</label>
+              </div>
+
+              <div class="text-sm">
+                <%= link_to "¿Olvidaste tu contraseña?", new_password_path(resource_name),
+                    class: "font-medium text-primary hover:text-primary/80" %>
+              </div>
+            </div>
+          <% end %>
+
+          <!-- BOTÓN -->
+          <div>
+            <%= f.submit "Iniciar Sesión",
+              class: "group w-full flex justify-center py-3 px-4 rounded-lg text-white bg-primary hover:opacity-90 transition-opacity"
+            %>
+          </div>
+
+        </div>
+      <% end %>
+
+    </div>
