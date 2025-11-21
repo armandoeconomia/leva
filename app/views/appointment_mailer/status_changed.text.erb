@@ -1,0 +1,15 @@
+Actualización de cita
+
+Hola,
+
+La cita del paciente <%= @patient.user.name %> <%= @patient.user.last_name %> con el Dr(a). <%= @doctor.user.name %> <%= @doctor.user.last_name %> ha cambiado de estado a <%= @appointment.status.humanize %>.
+
+Fecha: <%= @appointment.date&.strftime('%d %B %Y') %>
+Hora: <%= @appointment.hour&.strftime('%H:%M') %>
+Motivo: <%= @appointment.reason_for_consultation %>
+
+<% if @actor.present? %>
+Actualizado por: <%= @actor.name %> <%= @actor.last_name %>
+<% end %>
+
+Gracias por usar LEVA.

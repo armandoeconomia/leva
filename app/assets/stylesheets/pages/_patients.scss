@@ -257,6 +257,10 @@
   display: flex;
   align-items: center;
   gap: 8px;
+
+  form {
+    margin: 0;
+  }
 }
 
 .info-row {

@@ -32,10 +32,6 @@
         <%= f.text_field :reason_for_consultation, class: "form-control", placeholder: "Describe brevemente el motivo" %>
       </div>
 
-      <div class="form-group">
-        <%= f.label :status, "Estado" %>
-        <%= f.select :status, Appointment.statuses.keys.map { |k| [k.humanize, k] }, {}, class: "form-control" %>
-      </div>
     </div>
 
     <div class="form-actions">
