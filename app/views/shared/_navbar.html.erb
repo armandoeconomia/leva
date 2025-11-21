@@ -1,41 +1,38 @@
-<header class="flex items-center justify-between whitespace-nowrap px-4 md:px-10 py-3">
-  <!-- LOGO -->
-<div class="flex items-center gap-3">
-  <img src="/assets/logo-leva.png"
-        alt="LEVA Logo"
-        class="w-10 h-10 rounded-xl shadow-soft object-cover">
-  <h2 class="text-text-primary text-xl font-bold leading-tight tracking-[-0.015em]">
-    LEVA
-  </h2>
-</div>
+<nav class="navbar navbar-expand-sm navbar-light navbar-lewagon">
+  <div class="container-fluid">
+    <%= link_to "#", class: "navbar-brand" do %>
+      <%= image_tag "https://raw.githubusercontent.com/lewagon/fullstack-images/master/uikit/logo.png" %>
+    <% end %>
 
-
-  <!-- RUTAS CENTRALES -->
-  <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-text-secondary">
-    <a href="#home" class="hover:text-text-primary">Inicio</a>
-    <a href="#about" class="hover:text-text-primary">Sobre Nosotros</a>
-    <a href="#features" class="hover:text-text-primary">Servicios</a>
-    <a href="#testimonios" class="hover:text-text-primary">Testimonios</a>
-  </nav>
-
-  <!-- BOTONES + USUARIO -->
-  <div class="flex items-center gap-3">
-    <button
-      class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-accent text-white text-sm font-bold leading-normal tracking-[0.015em] shadow-soft hover:bg-purple-500">
-      <span class="truncate">Contáctanos</span>
-    </button>
-    <button
-      class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-accent text-white text-sm font-bold leading-normal tracking-[0.015em] shadow-soft hover:bg-purple-500">
-      <span class="truncate"></span>
-      <%= link_to "Ingresar", new_user_session_path, class:"flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-accent text-white text-sm font-bold leading-normal tracking-[0.015em] shadow-soft hover:bg-purple-500" %>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- IMAGEN DE USUARIO -->
-    <div class="w-9 h-9 rounded-full bg-primary-light flex items-center justify-center overflow-hidden border border-primary">
-      <img
-        src="https://via.placeholder.com/48x48.png"
-        alt="Usuario"
-        class="w-full h-full object-cover" />
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto">
+        <% if user_signed_in? %>
+          <li class="nav-item active">
+            <%= link_to "Home", "#", class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Messages", "#", class: "nav-link" %>
+          </li>
+          <li class="nav-item dropdown">
+          <a href="#" class="avatar" id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <%= image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar", alt: "dropdown menu" %>
+          </a>
+            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <%= link_to "Action", "#", class: "dropdown-item" %>
+              <%= link_to "Another action", "#", class: "dropdown-item" %>
+              <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item" %>
+            </div>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+          </li>
+        <% end %>
+      </ul>
     </div>
   </div>
-</header>
+</nav>
