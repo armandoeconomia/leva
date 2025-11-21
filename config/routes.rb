@@ -63,7 +63,7 @@ Rails.application.routes.draw do
   # Rutas Específicas para ADMINISTRATIVOS
   namespace :admin do
     # Dashboard del administrador
-    get 'dashboard', to: 'dashboards#show', as: 'dashboard'
+    get 'dashboard', to: 'dashboard#show', as: 'dashboard'
 
     # Gestión de Usuarios
     resources :users # 'users' aquí se refiere a la tabla USERS, que incluye doctores, pacientes, etc.

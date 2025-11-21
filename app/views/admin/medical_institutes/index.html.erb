@@ -1,2 +1,44 @@
-<h1>Admin::MedicalInstitutes#index</h1>
-<p>Find me in app/views/admin/medical_institutes/index.html.erb</p>
+<h2 class="mb-4">Medical Institutes</h2>
+
+<div class="d-flex justify-content-between mb-3">
+  <div></div>
+  <%= link_to "New Institute", new_admin_medical_institute_path,
+              class: "btn btn-primary" %>
+</div>
+
+<div class="card shadow-sm">
+  <table class="table table-hover mb-0">
+    <thead class="table-light">
+      <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Phone</th>
+        <th>Type</th>
+        <th class="text-end">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @medical_institutes.each do |mi| %>
+        <tr>
+          <td><%= mi.name %></td>
+          <td><%= mi.address %></td>
+          <td><%= mi.phone_number %></td>
+          <td><%= mi.institute_type %></td>
+
+          <td class="text-end">
+            <%= link_to "Show", admin_medical_institute_path(mi),
+                        class: "btn btn-sm btn-info" %>
+            <%= link_to "Edit", edit_admin_medical_institute_path(mi),
+                        class: "btn btn-sm btn-warning" %>
+            <%= link_to "Delete",
+                        admin_medical_institute_path(mi),
+                        method: :delete,
+                        data: { confirm: "Are you sure?" },
+                        class: "btn btn-sm btn-danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

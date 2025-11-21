@@ -1,2 +1,44 @@
-<h1>Admin::Doctors#index</h1>
-<p>Find me in app/views/admin/doctors/index.html.erb</p>
+<h2 class="mb-4">Doctors</h2>
+
+<div class="d-flex justify-content-between mb-3">
+  <div></div>
+  <%= link_to "New Doctor", new_admin_doctor_path, class: "btn btn-primary" %>
+</div>
+
+<div class="card shadow-sm">
+  <table class="table table-hover mb-0">
+    <thead class="table-light">
+      <tr>
+        <th>User</th>
+        <th>Email</th>
+        <th>Institute</th>
+        <th>Speciality</th>
+        <th>Medical License</th>
+        <th class="text-end">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @doctors.each do |doctor| %>
+        <tr>
+          <td><%= doctor.user.name %> <%= doctor.user.last_name %></td>
+          <td><%= doctor.user.email %></td>
+          <td><%= doctor.medical_institute.name %></td>
+          <td><%= doctor.speciality %></td>
+          <td><%= doctor.medical_registration %></td>
+
+          <td class="text-end">
+            <%= link_to "Show", admin_doctor_path(doctor), class: "btn btn-sm btn-info" %>
+            <%= link_to "Edit", edit_admin_doctor_path(doctor), class: "btn btn-sm btn-warning" %>
+            <%= link_to "Delete",
+                        admin_doctor_path(doctor),
+                        method: :delete,
+                        data: { confirm: "Are you sure?" },
+                        class: "btn btn-sm btn-danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+
+  </table>
+</div>

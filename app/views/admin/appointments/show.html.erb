@@ -1,2 +1,35 @@
-<h1>Admin::Appointments#show</h1>
-<p>Find me in app/views/admin/appointments/show.html.erb</p>
+<h2 class="mb-4">Appointment Details</h2>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+
+    <p><strong>Patient:</strong>
+      <%= @appointment.patient.user.name %> <%= @appointment.patient.user.last_name %>
+      (<%= @appointment.patient.user.email %>)
+    </p>
+
+    <p><strong>Doctor:</strong>
+      <%= @appointment.doctor.user.name %> <%= @appointment.doctor.user.last_name %>
+      - <%= @appointment.doctor.speciality %>
+    </p>
+
+    <p><strong>Date:</strong> <%= @appointment.date %></p>
+    <p><strong>Hour:</strong>
+      <%= @appointment.hour.strftime("%I:%M %p") if @appointment.hour %></p>
+
+    <p><strong>Status:</strong>
+      <span class="badge bg-primary"><%= @appointment.status %></span></p>
+
+    <p><strong>Reason for Consultation:</strong><br>
+      <%= simple_format(@appointment.reason_for_consultation) %>
+    </p>
+
+    <div class="mt-4">
+      <%= link_to "Edit", edit_admin_appointment_path(@appointment),
+                  class: "btn btn-warning" %>
+      <%= link_to "Back", admin_appointments_path,
+                  class: "btn btn-secondary ms-2" %>
+    </div>
+
+  </div>
+</div>

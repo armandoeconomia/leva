@@ -1,2 +1,19 @@
-<h1>Admin::Doctors#show</h1>
-<p>Find me in app/views/admin/doctors/show.html.erb</p>
+<h2 class="mb-4">Doctor Details</h2>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+
+    <p><strong>User:</strong> <%= @doctor.user.name %> <%= @doctor.user.last_name %></p>
+    <p><strong>Email:</strong> <%= @doctor.user.email %></p>
+
+    <p><strong>Medical Institute:</strong> <%= @doctor.medical_institute.name %></p>
+    <p><strong>Speciality:</strong> <%= @doctor.speciality %></p>
+    <p><strong>Medical License:</strong> <%= @doctor.medical_registration %></p>
+
+    <div class="mt-4">
+      <%= link_to "Edit", edit_admin_doctor_path(@doctor), class: "btn btn-warning" %>
+      <%= link_to "Back", admin_doctors_path, class: "btn btn-secondary ms-2" %>
+    </div>
+
+  </div>
+</div>

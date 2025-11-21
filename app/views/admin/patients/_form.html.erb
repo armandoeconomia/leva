@@ -1,0 +1,81 @@
+<div class="card">
+  <div class="card-body">
+
+    <%= form_with model: [:admin, @patient], local: true do |f| %>
+
+      <% if @patient.errors.any? %>
+        <div class="alert alert-danger">
+          <h5>There were errors:</h5>
+          <ul>
+            <% @patient.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <%= f.label :user_id %>
+          <%= f.collection_select :user_id, User.all, :id, :email,
+                { prompt: "Select a User" },
+                class: "form-select" %>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <%= f.label :blood_type %>
+          <%= f.select :blood_type, Patient.blood_types.keys,
+                { prompt: "Select" },
+                class: "form-select" %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <%= f.label :emergency_contact %>
+          <%= f.text_field :emergency_contact, class: "form-control" %>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <%= f.label :medical_insurance %>
+          <%= f.text_field :medical_insurance, class: "form-control" %>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :allergies %>
+        <%= f.text_area :allergies, rows: 2, class: "form-control" %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :medical_history %>
+        <%= f.text_area :medical_history, rows: 2, class: "form-control" %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :pathology %>
+        <%= f.text_area :pathology, rows: 2, class: "form-control" %>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <%= f.label :marital_status %>
+          <%= f.select :marital_status, Patient.marital_statuses.keys,
+                { prompt: "Select" },
+                class: "form-select" %>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <%= f.label :payments %>
+          <%= f.number_field :payments, step: 0.01, class: "form-control" %>
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <%= f.submit class: "btn btn-primary" %>
+        <%= link_to "Cancel", admin_patients_path, class: "btn btn-secondary ms-2" %>
+      </div>
+
+    <% end %>
+  </div>
+</div>

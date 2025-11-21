@@ -1,2 +1,31 @@
-<h1>Admin::Patients#show</h1>
-<p>Find me in app/views/admin/patients/show.html.erb</p>
+<h2 class="mb-4">Patient Details</h2>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+
+    <p><strong>User:</strong> <%= @patient.user.email %></p>
+    <p><strong>Blood Type:</strong> <%= @patient.blood_type %></p>
+    <p><strong>Emergency Contact:</strong> <%= @patient.emergency_contact %></p>
+    <p><strong>Medical Insurance:</strong> <%= @patient.medical_insurance %></p>
+
+    <p><strong>Allergies:</strong><br>
+      <%= simple_format(@patient.allergies) %></p>
+
+    <p><strong>Medical History:</strong><br>
+      <%= simple_format(@patient.medical_history) %></p>
+
+    <p><strong>Pathology:</strong><br>
+      <%= simple_format(@patient.pathology) %></p>
+
+    <p><strong>Marital Status:</strong> <%= @patient.marital_status %></p>
+    <p><strong>Payments:</strong> $<%= @patient.payments %></p>
+
+    <div class="mt-4">
+      <%= link_to "Edit", edit_admin_patient_path(@patient),
+                  class: "btn btn-warning" %>
+      <%= link_to "Back", admin_patients_path,
+                  class: "btn btn-secondary ms-2" %>
+    </div>
+
+  </div>
+</div>

@@ -1,2 +1,49 @@
-<h1>Admin::Appointments#index</h1>
-<p>Find me in app/views/admin/appointments/index.html.erb</p>
+<h2 class="mb-4">Appointments</h2>
+
+<div class="d-flex justify-content-between mb-3">
+  <div></div>
+  <%= link_to "New Appointment", new_admin_appointment_path,
+              class: "btn btn-primary" %>
+</div>
+
+<div class="card shadow-sm">
+  <table class="table table-hover mb-0">
+    <thead class="table-light">
+      <tr>
+        <th>Patient</th>
+        <th>Doctor</th>
+        <th>Date</th>
+        <th>Hour</th>
+        <th>Status</th>
+        <th class="text-end">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @appointments.each do |a| %>
+        <tr>
+          <td><%= a.patient.user.name %> <%= a.patient.user.last_name %></td>
+          <td><%= a.doctor.user.name %> <%= a.doctor.user.last_name %></td>
+          <td><%= a.date %></td>
+          <td><%= a.hour.strftime("%I:%M %p") if a.hour %></td>
+          <td>
+            <span class="badge bg-primary"><%= a.status %></span>
+          </td>
+
+          <td class="text-end">
+            <%= link_to "Show", admin_appointment_path(a),
+                        class: "btn btn-sm btn-info" %>
+            <%= link_to "Edit", edit_admin_appointment_path(a),
+                        class: "btn btn-sm btn-warning" %>
+            <%= link_to "Delete",
+                        admin_appointment_path(a),
+                        method: :delete,
+                        data: { confirm: "Are you sure?" },
+                        class: "btn btn-sm btn-danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+
+  </table>
+</div>
