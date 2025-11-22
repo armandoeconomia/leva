@@ -1,2 +1,42 @@
-<h1>Patients::Appointments#index</h1>
-<p>Find me in app/views/patients/appointments/index.html.erb</p>
+<div class="patient-page">
+  <div class="patient-container">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Tus citas</p>
+        <h1>Mis citas</h1>
+        <p class="muted">Consulta y gestiona tus próximas y pasadas citas.</p>
+      </div>
+      <div class="action-group">
+        <%= link_to "Dashboard", patients_dashboard_path, class: "btn-ghost-sm" %>
+        <%= link_to "Reservar nueva", new_patients_appointment_path, class: "btn-lilac" %>
+      </div>
+    </div>
+
+    <% if @appointments.any? %>
+      <div class="card-list vertical">
+        <% @appointments.each do |appointment| %>
+          <div class="doctor-card">
+            <div class="doctor-avatar">
+              <i class="fa fa-user-md"></i>
+            </div>
+            <div class="doctor-body">
+              <p class="item-title">Dr(a). <%= appointment.doctor.user.name %> <%= appointment.doctor.user.last_name %></p>
+              <p class="muted">
+                <%= appointment.doctor.speciality.humanize %> ·
+                <%= appointment.date&.strftime('%d %b %Y') %> ·
+                <%= appointment.hour&.strftime('%H:%M') %>
+              </p>
+              <p class="muted small"><%= appointment.reason_for_consultation %></p>
+            </div>
+            <div class="doctor-actions">
+              <span class="status-pill <%= appointment.status %>"><%= appointment.status %></span>
+              <%= link_to "Ver detalle", patients_appointment_path(appointment), class: "btn-ghost" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="muted">Aún no tienes citas registradas.</p>
+    <% end %>
+  </div>
+</div>

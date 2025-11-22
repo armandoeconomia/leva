@@ -16,4 +16,8 @@ class User < ApplicationRecord
   validates :last_name, presence: true
   validates :identification, uniqueness: true
 
+  def doctor?
+    
+  end
+
 end

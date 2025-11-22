@@ -1,0 +1,42 @@
+<div class="patient-card">
+  <%= form_with model: [:patients, @appointment], local: true do |f| %>
+    <% if @appointment.errors.any? %>
+      <div class="alert alert-danger">
+        <p><strong>Revisa los errores:</strong></p>
+        <ul>
+          <% @appointment.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <%= f.label :doctor_id, "Doctor" %>
+        <%= f.collection_select :doctor_id, @doctors, :id, ->(d) { "Dr(a). #{d.user.name} #{d.user.last_name} — #{d.speciality.humanize}" }, { prompt: "Selecciona un doctor" }, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :date, "Fecha" %>
+        <%= f.date_field :date, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :hour, "Hora" %>
+        <%= f.time_field :hour, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :reason_for_consultation, "Motivo" %>
+        <%= f.text_field :reason_for_consultation, class: "form-control", placeholder: "Describe brevemente el motivo" %>
+      </div>
+
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit class: "btn-lilac" %>
+      <%= link_to "Cancelar", patients_appointments_path, class: "btn-ghost" %>
+    </div>
+  <% end %>
+</div>

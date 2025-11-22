@@ -1,18 +1,67 @@
-<h2>Forgot your password?</h2>
+<style>
+  .leva-login-page {
+    background: #f7f4fb;
+  }
 
-<%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= f.error_notification %>
+  .leva-login-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 1rem;
+    box-shadow: 0 12px 30px rgba(122, 109, 255, 0.4);
+  }
 
-  <div class="form-inputs">
-    <%= f.input :email,
-                required: true,
-                autofocus: true,
-                input_html: { autocomplete: "email" } %>
+  .leva-login-card {
+    border-radius: 30px;
+    max-width: 480px;
+  }
+
+  .leva-login-card .form-control {
+    border-radius: 12px;
+    border-color: #e1dff0;
+    padding: 0.75rem 1rem;
+  }
+
+  .leva-login-card label {
+    font-weight: 600;
+    color: #4b4b63;
+  }
+</style>
+
+<div class="leva-login-page min-vh-100 d-flex flex-column">
+  <div class="container flex-grow-1 d-flex flex-column align-items-center justify-content-center py-5">
+    <div class="text-center mb-4">
+      <%= image_tag "logo_leva.png", alt: "Leva logo", class: "leva-login-logo mb-3" %>
+      <p class="fw-semibold fs-4 mb-0">LEVA</p>
+    </div>
+
+    <div class="leva-login-card bg-white shadow-lg w-100 p-4 p-md-5">
+      <h1 class="text-center fw-bold mb-2">Restablece tu contraseña</h1>
+      <p class="text-center text-secondary mb-4">Ingresa tu correo y te enviaremos instrucciones.</p>
+
+      <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+        <%= f.error_notification %>
+
+        <div class="mb-4">
+          <%= f.input :email,
+                      label: "Email",
+                      required: true,
+                      autofocus: true,
+                      placeholder: "ejemplo@correo.com",
+                      input_html: { autocomplete: "email", class: "form-control" } %>
+        </div>
+
+        <%= f.button :submit, "Enviar instrucciones", class: "btn mediapp-hero-btn text-white w-100 py-3" %>
+      <% end %>
+
+      <p class="text-center text-secondary mt-4 mb-0">
+        ¿Recordaste tu contraseña?
+        <%= link_to "Inicia sesión aquí", new_session_path(resource_name), class: "fw-semibold text-decoration-none", style: "color: #9d84ff;" %>
+      </p>
+    </div>
   </div>
 
-  <div class="form-actions">
-    <%= f.button :submit, "Send me reset password instructions" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+  <footer class="container text-center text-secondary py-4">
+    <small>&copy; <%= Time.current.year %> LEVA. Todos los derechos reservados.<br>
+      Contacto: soporte@leva.com · +54 11 0000-0000</small>
+  </footer>
+</div>

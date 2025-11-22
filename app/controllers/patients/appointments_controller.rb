@@ -1,5 +1,6 @@
 class Patients::AppointmentsController < Patients::BaseController
-  before_action :set_appointment, only: [:show, :edit, :update, :destroy, :consult, :schedule]
+  before_action :set_doctors, only: [:new, :create, :edit, :update]
+  before_action :set_appointment, only: [:show, :edit, :update, :destroy]
 
   def index
     @appointments = @patient.appointments.includes(:doctor).order(date: :desc, hour: :desc)
@@ -8,7 +9,11 @@ class Patients::AppointmentsController < Patients::BaseController
   def show; end
 
   def new
-    @appointment = @patient.appointments.new
+    @appointment = @patient.appointments.new(
+      doctor_id: params[:doctor_id],
+      date: params[:date],
+      hour: params[:hour].present? ? Time.zone.parse(params[:hour]) : nil
+    )
   end
 
   def create
@@ -37,18 +42,6 @@ class Patients::AppointmentsController < Patients::BaseController
     redirect_to patients_appointments_path, notice: "Cita eliminada"
   end
 
-  def consult
-    render :show
-  end
-
-  def schedule
-    if @appointment.update(status: :pendiente)
-      redirect_to patients_appointment_path(@appointment), notice: "Cita agendada"
-    else
-      render :show, status: :unprocessable_entity
-    end
-  end
-
   private
 
   def set_appointment
@@ -56,6 +49,11 @@ class Patients::AppointmentsController < Patients::BaseController
   end
 
   def appointment_params
-    params.require(:appointment).permit(:doctor_id, :date, :hour, :reason_for_consultation, :status)
+    params.require(:appointment).permit(:doctor_id, :date, :hour, :reason_for_consultation)
   end
+
+  def set_doctors
+    @doctors = Doctor.includes(:user, :medical_institute).order(:id)
+  end
+
 end

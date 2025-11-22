@@ -10,8 +10,11 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body><%= render "shared/navbar" %>
-<%= render "shared/flashes" %>
+  <body>
+    <% if user_signed_in? && !current_page?(root_path) %>
+      <%= render "shared/user_navbar" %>
+    <% end %>
+    <%= render "shared/flashes" %>
 
     <%= yield %>
   </body>

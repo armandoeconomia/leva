@@ -21,12 +21,7 @@ Rails.application.routes.draw do
     resources :doctors, only: [:index, :show] # Ver doctores (sus perfiles)
 
     # Citas del paciente
-    resources :appointments, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
-      member do
-        get 'consult'
-        post 'schedule'
-      end
-    end
+    resources :appointments, only: [:index, :show, :new, :create, :edit, :update, :destroy]
   end
 
   # Rutas Específicas para DOCTORES

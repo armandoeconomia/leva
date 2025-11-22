@@ -1,2 +1,67 @@
-<h1>Patients::Doctors#show</h1>
-<p>Find me in app/views/patients/doctors/show.html.erb</p>
+<div class="patient-page">
+  <div class="patient-container narrow">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Doctor</p>
+        <h1>Dr(a). <%= @doctor.user.name %> <%= @doctor.user.last_name %></h1>
+        <p class="muted"><%= @doctor.speciality.humanize %> · <%= @doctor.medical_institute.name %></p>
+      </div>
+      <div class="action-group">
+        <%= link_to "Dashboard", patients_dashboard_path, class: "btn-ghost-sm" %>
+        <%= link_to "Agendar cita", new_patients_appointment_path(doctor_id: @doctor.id), class: "btn-lilac" %>
+      </div>
+    </div>
+
+    <div class="patient-card">
+      <p class="muted"><i class="fa fa-map-marker-alt"></i> <%= @doctor.medical_institute.address %></p>
+      <% if @doctor.medical_registration.present? %>
+        <p class="muted">Registro médico: <%= @doctor.medical_registration %></p>
+      <% end %>
+    </div>
+
+    <div class="patient-card">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Disponibilidad</p>
+          <h2>Próximos horarios</h2>
+          <p class="muted">Selecciona un horario libre y reserva tu cita.</p>
+        </div>
+      </div>
+
+      <% if @upcoming_calendars.any? %>
+        <div class="availability-grid">
+          <% @upcoming_calendars.each do |calendar| %>
+            <% available_hours = calendar.hours.order(:start_time) %>
+            <% next if available_hours.empty? %>
+            <div class="availability-card">
+              <p class="item-title"><%= calendar.date.strftime("%A %d %B") %></p>
+              <div class="slots">
+                <% available_hours.each do |slot_hour| %>
+                  <% formatted_hour = slot_hour.start_time.strftime("%H:%M") %>
+                  <% booked = @booked_slots[[calendar.date, formatted_hour]] %>
+
+                  <% if booked %>
+                    <button class="slot-btn slot-booked" disabled>
+                      <%= formatted_hour %>
+                    </button>
+                  <% else %>
+                    <%= button_to formatted_hour,
+                                  new_patients_appointment_path(
+                                    doctor_id: @doctor.id,
+                                    date: calendar.date,
+                                    hour: formatted_hour
+                                  ),
+                                  method: :get,
+                                  class: "slot-btn" %>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="muted">Este doctor aún no tiene horarios disponibles.</p>
+      <% end %>
+    </div>
+  </div>
+</div>
