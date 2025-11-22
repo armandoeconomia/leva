@@ -39,6 +39,20 @@
     box-shadow: 0 20px 35px rgba(120, 109, 255, 0.35);
   }
 
+  .mediapp-nav-btn {
+    border-radius: 999px;
+    padding-inline: 1.5rem;
+    box-shadow: 0 15px 30px rgba(122, 109, 255, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  }
+
+  .mediapp-nav-btn:hover,
+  .mediapp-nav-btn:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(122, 109, 255, 0.45);
+    opacity: 0.95;
+  }
+
   .mediapp-outline-btn {
     border: 1px solid rgba(122, 109, 255, 0.35);
     color: #7a6dff;
@@ -80,10 +94,15 @@
     color: #4a4a4a;
     font-weight: 600;
     text-decoration: none;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    transition: color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
   }
 
   .mediapp-nav-link:hover {
     color: #7a6dff;
+    background-color: rgba(122, 109, 255, 0.12);
+    box-shadow: 0 8px 20px rgba(122, 109, 255, 0.2);
   }
 
   .mediapp-contact-btn {
@@ -101,6 +120,174 @@
     backdrop-filter: blur(12px);
     border-bottom: none;
     box-shadow: none;
+  }
+
+  .mediapp-nav-inner {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 999px;
+    padding: 0.5rem 1.5rem;
+    border: 1px solid rgba(122, 109, 255, 0.15);
+    box-shadow: 0 25px 60px rgba(29, 27, 58, 0.12);
+  }
+
+  .mediapp-contact-shell {
+    position: relative;
+    border-radius: 2rem;
+    background: linear-gradient(135deg, #fefefe, #eef3ff);
+    box-shadow: 0 35px 65px rgba(47, 31, 120, 0.08);
+    overflow: hidden;
+  }
+
+  .mediapp-contact-shell::before,
+  .mediapp-contact-shell::after {
+    content: "";
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: rgba(180, 107, 255, 0.15);
+    filter: blur(40px);
+    z-index: 0;
+  }
+
+  .mediapp-contact-shell::before {
+    top: -100px;
+    right: -80px;
+  }
+
+  .mediapp-contact-shell::after {
+    bottom: -120px;
+    left: -120px;
+    background: rgba(120, 109, 255, 0.12);
+  }
+
+  .mediapp-contact-shell > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .mediapp-contact-badge {
+    background: rgba(122, 109, 255, 0.15);
+    color: #7362ff;
+    border-radius: 999px;
+    padding: 0.3rem 0.95rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+
+  .mediapp-contact-chip {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 1.25rem;
+    border: 1px solid rgba(122, 109, 255, 0.12);
+    padding: 0.9rem 1.2rem;
+    box-shadow: 0 18px 35px rgba(24, 16, 66, 0.08);
+    min-width: 240px;
+  }
+
+  .mediapp-contact-panel {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 1.75rem;
+    border: 1px solid rgba(122, 109, 255, 0.12);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+
+  .mediapp-contact-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 1rem;
+    background: rgba(122, 109, 255, 0.12);
+    color: #7a6dff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mediapp-contact-signal {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #4cd964;
+    box-shadow: 0 0 0 rgba(76, 217, 100, 0.4);
+    animation: mediappPulse 1.8s infinite;
+  }
+
+  @keyframes mediappPulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(76, 217, 100, 0.4);
+    }
+    70% {
+      box-shadow: 0 0 0 12px rgba(76, 217, 100, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(76, 217, 100, 0);
+    }
+  }
+
+  .mediapp-testimonial-shell {
+    position: relative;
+    border-radius: 2rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(238, 241, 248, 0.95));
+    box-shadow: 0 35px 65px rgba(47, 31, 120, 0.1);
+    overflow: hidden;
+  }
+
+  .mediapp-testimonial-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(193, 199, 226, 0.35), transparent 55%);
+    pointer-events: none;
+  }
+
+  .mediapp-testimonial-card {
+    background: #fff;
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 45px rgba(24, 16, 66, 0.08);
+    position: relative;
+    z-index: 1;
+  }
+
+  .mediapp-testimonial-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 1rem;
+    background: linear-gradient(120deg, #c284ff, #9f7bff);
+    color: #fff;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mediapp-testimonial-quote {
+    font-size: 1.15rem;
+    color: #3a3456;
+    line-height: 1.7;
+  }
+
+  .mediapp-testimonial-role {
+    color: #7f7f98;
+  }
+
+  .mediapp-testimonial-stars svg {
+    width: 20px;
+    height: 20px;
+    fill: #f9b233;
+  }
+
+  .mediapp-carousel-control {
+    width: 3rem;
+    height: 3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(122, 109, 255, 0.25);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+  }
+
+  .mediapp-carousel-control span.carousel-control-prev-icon,
+  .mediapp-carousel-control span.carousel-control-next-icon {
+    filter: invert(1);
   }
 
   .mediapp-hero-badge {
@@ -205,7 +392,7 @@
 <div class="leva-home py-4 min-vh-100">
   <div id="leva-home-top"></div>
   <nav class="mediapp-nav w-100">
-    <div class="container d-flex flex-column flex-lg-row justify-content-between align-items-center gap-4 py-3">
+    <div class="container mediapp-nav-inner d-flex flex-column flex-lg-row justify-content-between align-items-center gap-4 py-3">
       <div class="d-flex align-items-center gap-3">
         <%= link_to root_path, class: "d-inline-flex align-items-center gap-3 text-decoration-none" do %>
           <%= image_tag "logo_leva.png", class: "mediapp-logo", alt: "Leva logo" %>
@@ -219,7 +406,7 @@
         <a class="mediapp-nav-link" href="#testimonios" data-scroll-target="#testimonios">Testimonios</a>
       </div>
       <div class="d-flex align-items-center gap-3 flex-wrap justify-content-end">
-        <%= link_to "Contáctanos", "#contacto", class: "btn btn-sm text-white mediapp-hero-btn px-4", data: { scroll_target: "#contacto" } %>
+        <%= link_to "Contáctanos", "#contacto", class: "btn btn-sm text-white mediapp-hero-btn mediapp-nav-btn px-4", data: { scroll_target: "#contacto" } %>
         <% if user_signed_in? %>
           <div class="dropdown">
             <a href="#" class="d-inline-block" id="levaNavbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -232,7 +419,7 @@
             </div>
           </div>
         <% else %>
-          <%= link_to "Iniciar Sesión", new_user_session_path, class: "btn btn-sm text-white mediapp-hero-btn px-4" %>
+          <%= link_to "Iniciar Sesión", new_user_session_path, class: "btn btn-sm text-white mediapp-hero-btn mediapp-nav-btn px-4" %>
         <% end %>
       </div>
     </div>
@@ -472,44 +659,237 @@
         <h2 class="fw-bold">Testimonios</h2>
         <p class="text-secondary fs-5 mb-0">Lo que nuestros pacientes dicen sobre su experiencia con LEVA.</p>
       </div>
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <p class="text-secondary mb-3">"Con LEVA pude agendar mi consulta en minutos. El proceso fue muy simple y seguro."</p>
-              <h6 class="fw-bold mb-0">Carolina M.</h6>
-              <small class="text-secondary">Paciente de Cardiología</small>
+      <div class="mediapp-testimonial-shell p-4 p-md-5">
+        <div id="levaTestimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="7000" data-bs-touch="true">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Carolina"></button>
+            <button type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide-to="1" aria-label="Tomás"></button>
+            <button type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide-to="2" aria-label="Gabriela"></button>
+            <button type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide-to="3" aria-label="Dra. Valeria"></button>
+            <button type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide-to="4" aria-label="Dr. Miguel"></button>
+            <button type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide-to="5" aria-label="Clínica Aurora"></button>
+            <button type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide-to="6" aria-label="Red Salud Viva"></button>
+          </div>
+          <div class="carousel-inner px-2 px-md-5">
+            <div class="carousel-item active">
+              <div class="mediapp-testimonial-card mx-auto p-4 p-md-5">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                  <span class="mediapp-testimonial-avatar">CM</span>
+                  <div>
+                    <h5 class="mb-0 fw-bold">Carolina M.</h5>
+                    <small class="mediapp-testimonial-role">Paciente de Cardiología</small>
+                  </div>
+                </div>
+                <div class="mediapp-testimonial-stars d-flex gap-1 mb-3">
+                  <% 5.times do %>
+                    <svg viewBox="0 0 24 24"><path d="M12 2l3 6.1 6.7.9-4.9 4.7 1.2 6.6-6-3.2-6 3.2 1.2-6.6-4.9-4.7 6.7-.9z"/></svg>
+                  <% end %>
+                </div>
+                <p class="mediapp-testimonial-quote mb-0">"Con LEVA pude agendar mi consulta en minutos. El proceso fue muy simple y seguro."</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="mediapp-testimonial-card mx-auto p-4 p-md-5">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                  <span class="mediapp-testimonial-avatar">TR</span>
+                  <div>
+                    <h5 class="mb-0 fw-bold">Tomás R.</h5>
+                    <small class="mediapp-testimonial-role">Paciente de Neurología</small>
+                  </div>
+                </div>
+                <div class="mediapp-testimonial-stars d-flex gap-1 mb-3">
+                  <% 5.times do %>
+                    <svg viewBox="0 0 24 24"><path d="M12 2l3 6.1 6.7.9-4.9 4.7 1.2 6.6-6-3.2-6 3.2 1.2-6.6-4.9-4.7 6.7-.9z"/></svg>
+                  <% end %>
+                </div>
+                <p class="mediapp-testimonial-quote mb-0">"Los especialistas verificados me dieron la confianza que necesitaba para hacer seguimiento."</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="mediapp-testimonial-card mx-auto p-4 p-md-5">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                  <span class="mediapp-testimonial-avatar">GS</span>
+                  <div>
+                    <h5 class="mb-0 fw-bold">Gabriela S.</h5>
+                    <small class="mediapp-testimonial-role">Paciente de Pediatría</small>
+                  </div>
+                </div>
+                <div class="mediapp-testimonial-stars d-flex gap-1 mb-3">
+                  <% 5.times do %>
+                    <svg viewBox="0 0 24 24"><path d="M12 2l3 6.1 6.7.9-4.9 4.7 1.2 6.6-6-3.2-6 3.2 1.2-6.6-4.9-4.7 6.7-.9z"/></svg>
+                  <% end %>
+                </div>
+                <p class="mediapp-testimonial-quote mb-0">"La seguridad de mis datos y la atención personalizada son excelentes."</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="mediapp-testimonial-card mx-auto p-4 p-md-5">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                  <span class="mediapp-testimonial-avatar">VR</span>
+                  <div>
+                    <h5 class="mb-0 fw-bold">Dra. Valeria Ruiz</h5>
+                    <small class="mediapp-testimonial-role">Cardióloga pediátrica</small>
+                  </div>
+                </div>
+                <div class="mediapp-testimonial-stars d-flex gap-1 mb-3">
+                  <% 5.times do %>
+                    <svg viewBox="0 0 24 24"><path d="M12 2l3 6.1 6.7.9-4.9 4.7 1.2 6.6-6-3.2-6 3.2 1.2-6.6-4.9-4.7 6.7-.9z"/></svg>
+                  <% end %>
+                </div>
+                <p class="mediapp-testimonial-quote mb-0">"Con LEVA puedo hacer seguimiento remoto a mis pacientes y compartir informes con sus familias en segundos."</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="mediapp-testimonial-card mx-auto p-4 p-md-5">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                  <span class="mediapp-testimonial-avatar">MN</span>
+                  <div>
+                    <h5 class="mb-0 fw-bold">Dr. Miguel Núñez</h5>
+                    <small class="mediapp-testimonial-role">Director médico NeuroPlus</small>
+                  </div>
+                </div>
+                <div class="mediapp-testimonial-stars d-flex gap-1 mb-3">
+                  <% 5.times do %>
+                    <svg viewBox="0 0 24 24"><path d="M12 2l3 6.1 6.7.9-4.9 4.7 1.2 6.6-6-3.2-6 3.2 1.2-6.6-4.9-4.7 6.7-.9z"/></svg>
+                  <% end %>
+                </div>
+                <p class="mediapp-testimonial-quote mb-0">"La sincronización con nuestro sistema de historias clínicas redujo tiempos de espera y mejoró la adherencia a tratamientos."</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="mediapp-testimonial-card mx-auto p-4 p-md-5">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                  <span class="mediapp-testimonial-avatar">CA</span>
+                  <div>
+                    <h5 class="mb-0 fw-bold">Clínica Aurora</h5>
+                    <small class="mediapp-testimonial-role">Centro integral asociado</small>
+                  </div>
+                </div>
+                <div class="mediapp-testimonial-stars d-flex gap-1 mb-3">
+                  <% 5.times do %>
+                    <svg viewBox="0 0 24 24"><path d="M12 2l3 6.1 6.7.9-4.9 4.7 1.2 6.6-6-3.2-6 3.2 1.2-6.6-4.9-4.7 6.7-.9z"/></svg>
+                  <% end %>
+                </div>
+                <p class="mediapp-testimonial-quote mb-0">"Coordinamos cirugías y turnos ambulatorios con mayor precisión. Nuestro equipo administrativo ganó horas valiosas."</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="mediapp-testimonial-card mx-auto p-4 p-md-5">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                  <span class="mediapp-testimonial-avatar">RS</span>
+                  <div>
+                    <h5 class="mb-0 fw-bold">Red Salud Viva</h5>
+                    <small class="mediapp-testimonial-role">Clínica aliada</small>
+                  </div>
+                </div>
+                <div class="mediapp-testimonial-stars d-flex gap-1 mb-3">
+                  <% 5.times do %>
+                    <svg viewBox="0 0 24 24"><path d="M12 2l3 6.1 6.7.9-4.9 4.7 1.2 6.6-6-3.2-6 3.2 1.2-6.6-4.9-4.7 6.7-.9z"/></svg>
+                  <% end %>
+                </div>
+                <p class="mediapp-testimonial-quote mb-0">"Integramos todas nuestras sedes en un mismo panel y los pacientes reservan con cualquier especialidad desde el celular."</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <p class="text-secondary mb-3">"Los especialistas verificados me dieron la confianza que necesitaba para hacer seguimiento."</p>
-              <h6 class="fw-bold mb-0">Tomás R.</h6>
-              <small class="text-secondary">Paciente de Neurología</small>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <p class="text-secondary mb-3">"La seguridad de mis datos y la atención personalizada son excelentes."</p>
-              <h6 class="fw-bold mb-0">Gabriela S.</h6>
-              <small class="text-secondary">Paciente de Pediatría</small>
-            </div>
-          </div>
+          <button class="carousel-control-prev mediapp-carousel-control" type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+          </button>
+          <button class="carousel-control-next mediapp-carousel-control" type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+          </button>
         </div>
       </div>
     </section>
 
     <section id="contacto" class="py-5">
-      <div class="bg-white rounded-4 shadow-sm p-4 p-md-5 d-flex flex-column flex-md-row align-items-center justify-content-between">
-        <div class="mb-3 mb-md-0">
-          <h3 class="fw-bold mb-2">¿Necesitas ayuda personalizada?</h3>
-          <p class="text-secondary mb-0">Nuestro equipo está disponible para resolver tus dudas y coordinar la mejor atención para ti.</p>
+      <div class="mediapp-contact-shell p-4 p-lg-5">
+        <div class="row g-4 align-items-center">
+          <div class="col-lg-7">
+            <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+              <span class="mediapp-contact-badge text-uppercase">Asistencia en vivo</span>
+              <small class="text-secondary">Tiempo de respuesta promedio <span class="fw-semibold text-dark">15 min</span></small>
+            </div>
+            <h3 class="fw-bold mb-2">¿Necesitas ayuda personalizada?</h3>
+            <p class="text-secondary mb-4">Nuestro equipo está disponible para resolver tus dudas, coordinar nuevas integraciones o ayudarte a migrar tu agenda con acompañamiento dedicado.</p>
+            <div class="d-flex flex-wrap gap-3 align-items-center">
+              <a href="mailto:leva.soporte@gmail.com" class="btn mediapp-hero-btn mediapp-nav-btn text-white px-4 py-3 fw-semibold">Contactar equipo</a>
+              <div class="d-flex align-items-center gap-2 text-secondary small">
+                <span class="mediapp-contact-signal"></span>
+                En línea ahora
+              </div>
+            </div>
+            <div class="d-flex flex-wrap gap-3 mt-4">
+              <div class="mediapp-contact-chip flex-fill flex-md-grow-0">
+                <div class="d-flex align-items-center gap-3">
+                  <span class="mediapp-contact-icon">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                      <path d="M6.6 10.8a11.05 11.05 0 0 0 6.6 6.6l1.5-2.2a1 1 0 0 1 1.1-.4c1.2.4 2.5.6 3.8.6a1 1 0 0 1 1 1v3.7a1 1 0 0 1-1 1C9.8 21.1 2.9 14.2 2.9 5.4a1 1 0 0 1 1-1H7.6a1 1 0 0 1 1 1c0 1.3.2 2.6.6 3.8a1 1 0 0 1-.4 1.1l-2.2 1.5z"/>
+                    </svg>
+                  </span>
+                  <div>
+                    <small class="text-secondary d-block">Línea directa</small>
+                    <strong class="text-dark">+11 0000 0000</strong>
+                  </div>
+                </div>
+              </div>
+              <div class="mediapp-contact-chip flex-fill flex-md-grow-0">
+                <div class="d-flex align-items-center gap-3">
+                  <span class="mediapp-contact-icon">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                      <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 2v.01L12 13 4 6.01V6h16zM4 18V8l8 7 8-7v10H4z"/>
+                    </svg>
+                  </span>
+                  <div>
+                    <small class="text-secondary d-block">Escríbenos</small>
+                    <strong class="text-dark">leva.soporte@gmail.com</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="mediapp-contact-panel h-100 p-4">
+              <h6 class="fw-bold mb-3">Canales disponibles</h6>
+              <ul class="list-unstyled mb-0">
+                <li class="d-flex align-items-start gap-3 mb-3">
+                  <span class="mediapp-contact-icon">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                      <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                  </span>
+                  <div>
+                    <strong class="d-block">Gestor dedicado</strong>
+                    <small class="text-secondary">Acompañamiento para clínicas y grupos médicos.</small>
+                  </div>
+                </li>
+                <li class="d-flex align-items-start gap-3 mb-3">
+                  <span class="mediapp-contact-icon">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                      <path d="M12 3a9 9 0 0 0-9 9c0 3.87 2.45 7.16 5.86 8.39.43.08.59-.18.59-.4v-1.55c-2.39.52-2.89-1.04-2.89-1.04-.39-.98-.95-1.24-.95-1.24-.78-.54.06-.53.06-.53.86.06 1.31.88 1.31.88.77 1.31 2.02.93 2.51.71.08-.56.3-.93.54-1.15-1.91-.22-3.92-.96-3.92-4.27 0-.94.34-1.71.9-2.31-.09-.22-.38-1.11.09-2.31 0 0 .72-.23 2.36.88a8.1 8.1 0 0 1 4.3 0c1.64-1.11 2.36-.88 2.36-.88.47 1.2.18 2.09.09 2.31.56.6.9 1.37.9 2.31 0 3.32-2.01 4.05-3.93 4.27.31.27.59.8.59 1.62v2.4c0 .22.16.48.6.4A9 9 0 0 0 21 12 9 9 0 0 0 12 3z"/>
+                    </svg>
+                  </span>
+                  <div>
+                    <strong class="d-block">Comunidad médica</strong>
+                    <small class="text-secondary">Webinars, soporte y recursos exclusivos.</small>
+                  </div>
+                </li>
+                <li class="d-flex align-items-start gap-3">
+                  <span class="mediapp-contact-icon">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                      <path d="M20 2H4a2 2 0 0 0-2 2v16l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
+                    </svg>
+                  </span>
+                  <div>
+                    <strong class="d-block">Chat prioritario</strong>
+                    <small class="text-secondary">Respuesta instantánea desde la app o WhatsApp.</small>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <a href="mailto:leva.soporte@gmail.com" class="btn mediapp-hero-btn text-white px-4 py-3 fw-semibold">Contactar equipo</a>
       </div>
     </section>
   </main>
