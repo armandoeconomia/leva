@@ -97,10 +97,10 @@
     position: sticky;
     top: 0;
     z-index: 1020;
-    background: rgba(246, 242, 255, 0.95);
+    background: transparent;
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(122, 109, 255, 0.08);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    border-bottom: none;
+    box-shadow: none;
   }
 
   .mediapp-hero-badge {
@@ -166,6 +166,7 @@
         <a class="mediapp-nav-link" href="#testimonios" data-scroll-target="#testimonios">Testimonios</a>
       </div>
       <div class="d-flex align-items-center gap-3 flex-wrap justify-content-end">
+        <%= link_to "Contáctanos", "#contacto", class: "btn btn-sm text-white mediapp-hero-btn px-4", data: { scroll_target: "#contacto" } %>
         <% if user_signed_in? %>
           <div class="dropdown">
             <a href="#" class="d-inline-block" id="levaNavbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -199,7 +200,7 @@
           Agenda citas con tus especialistas de confianza de forma rápida y segura. Simplificamos la experiencia médica con tecnología humana.
         </p>
         <div class="d-flex flex-wrap gap-3">
-          <a class="btn btn-lg text-white mediapp-hero-btn" href="#">Agenda tu cita ahora</a>
+          <a class="btn btn-lg text-white mediapp-hero-btn" href="#">Ver ubicaciones</a>
           <a class="btn btn-lg mediapp-outline-btn px-4" href="#">Ver plantilla medica</a>
         </div>
       </div>
@@ -392,7 +393,7 @@
           <h3 class="fw-bold mb-2">¿Necesitas ayuda personalizada?</h3>
           <p class="text-secondary mb-0">Nuestro equipo está disponible para resolver tus dudas y coordinar la mejor atención para ti.</p>
         </div>
-        <a href="mailto:soporte@leva.com" class="btn mediapp-hero-btn text-white px-4 py-3 fw-semibold">Contactar equipo</a>
+        <a href="mailto:leva.soporte@gmail.com" class="btn mediapp-hero-btn text-white px-4 py-3 fw-semibold">Contactar equipo</a>
       </div>
     </section>
   </main>
@@ -401,7 +402,7 @@
     <div class="row gy-2 align-items-center">
       <div class="col-md-8 text-center text-md-start">
         <small class="text-secondary d-block">&copy; 2025 LEVA. Todos los derechos reservados.</small>
-        <small class="text-secondary">Contacto: <a href="mailto:soporte@leva.com" class="text-decoration-none text-secondary">soporte@leva.com</a> · +11 0000 0000</small>
+        <small class="text-secondary">Contacto: <a href="mailto:leva.soporte@gmail.com" class="text-decoration-none text-secondary">leva.soporte@gmail.com</a> · +11 0000 0000</small>
       </div>
       <div class="col-md-4 text-center text-md-end">
         <small class="text-secondary">Innovamos la experiencia médica digital.</small>
@@ -422,15 +423,21 @@
 
 <script>
   const levaSmoothNav = () => {
+    const nav = document.querySelector('.mediapp-nav');
+    const navOffset = (nav?.offsetHeight || 0) + 20;
+
     document.querySelectorAll('[data-scroll-target]').forEach((link) => {
       if (link.dataset.bound === 'true') return;
       link.dataset.bound = 'true';
       link.addEventListener('click', (event) => {
         event.preventDefault();
         const target = document.querySelector(link.dataset.scrollTarget);
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        if (!target) return;
+
+        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
+        const scrollTo = Math.max(targetPosition - navOffset, 0);
+
+        window.scrollTo({ top: scrollTo, behavior: 'smooth' });
       });
     });
   };
