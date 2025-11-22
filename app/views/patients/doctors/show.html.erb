@@ -18,5 +18,50 @@
         <p class="muted">Registro médico: <%= @doctor.medical_registration %></p>
       <% end %>
     </div>
+
+    <div class="patient-card">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Disponibilidad</p>
+          <h2>Próximos horarios</h2>
+          <p class="muted">Selecciona un horario libre y reserva tu cita.</p>
+        </div>
+      </div>
+
+      <% if @upcoming_calendars.any? %>
+        <div class="availability-grid">
+          <% @upcoming_calendars.each do |calendar| %>
+            <% available_hours = calendar.hours.order(:start_time) %>
+            <% next if available_hours.empty? %>
+            <div class="availability-card">
+              <p class="item-title"><%= calendar.date.strftime("%A %d %B") %></p>
+              <div class="slots">
+                <% available_hours.each do |slot_hour| %>
+                  <% formatted_hour = slot_hour.start_time.strftime("%H:%M") %>
+                  <% booked = @booked_slots[[calendar.date, formatted_hour]] %>
+
+                  <% if booked %>
+                    <button class="slot-btn slot-booked" disabled>
+                      <%= formatted_hour %>
+                    </button>
+                  <% else %>
+                    <%= button_to formatted_hour,
+                                  new_patients_appointment_path(
+                                    doctor_id: @doctor.id,
+                                    date: calendar.date,
+                                    hour: formatted_hour
+                                  ),
+                                  method: :get,
+                                  class: "slot-btn" %>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="muted">Este doctor aún no tiene horarios disponibles.</p>
+      <% end %>
+    </div>
   </div>
 </div>

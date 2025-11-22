@@ -35,7 +35,11 @@
                   <i class="fa fa-user-md"></i>
                 </div>
                 <div class="item-body">
-                  <p class="item-title"><%= appointment.doctor.user.name %> <%= appointment.doctor.user.last_name %></p>
+                  <p class="item-title">
+                    <%= link_to "#{appointment.doctor.user.name} #{appointment.doctor.user.last_name}",
+                                patients_doctor_path(appointment.doctor),
+                                class: "doctor-link" %>
+                  </p>
                   <p class="muted"><%= appointment.doctor.speciality.humanize %> · <%= appointment.date&.strftime('%d %b %Y') %> · <%= appointment.hour&.strftime('%H:%M') %></p>
                 </div>
                 <div class="item-actions">

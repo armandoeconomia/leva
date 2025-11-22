@@ -9,7 +9,11 @@ class Patients::AppointmentsController < Patients::BaseController
   def show; end
 
   def new
-    @appointment = @patient.appointments.new
+    @appointment = @patient.appointments.new(
+      doctor_id: params[:doctor_id],
+      date: params[:date],
+      hour: params[:hour].present? ? Time.zone.parse(params[:hour]) : nil
+    )
   end
 
   def create
