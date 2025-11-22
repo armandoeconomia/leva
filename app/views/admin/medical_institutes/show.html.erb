@@ -1,24 +1,46 @@
-<h2 class="mb-4">Institute Details</h2>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Detalle del instituto</span>
+    <h1 class="admin-page-title"><%= @medical_institute.name %></h1>
+    <p class="admin-page-description">
+      Revisa la informacion operativa para que los pacientes sepan donde y como ser atendidos.
+    </p>
+  </div>
+  <div class="admin-actions">
+    <span class="status-chip"><%= @medical_institute.institute_type&.humanize || "Sin tipo" %></span>
+  </div>
+</div>
 
-<div class="card shadow-sm">
-  <div class="card-body">
-
-    <p><strong>Name:</strong> <%= @medical_institute.name %></p>
-    <p><strong>Address:</strong> <%= @medical_institute.address %></p>
-    <p><strong>Phone:</strong> <%= @medical_institute.phone_number %></p>
-    <p><strong>Emergency Phone:</strong> <%= @medical_institute.emergency_phone_number %></p>
-    <p><strong>Type:</strong> <%= @medical_institute.institute_type %></p>
-    <p><strong>Latitude:</strong> <%= @medical_institute.latitude %></p>
-    <p><strong>Longitude:</strong> <%= @medical_institute.longitude %></p>
-
-    <p><strong>Admin User:</strong> <%= @medical_institute.user.email %></p>
-
-    <div class="mt-4">
-      <%= link_to "Edit", edit_admin_medical_institute_path(@medical_institute),
-                  class: "btn btn-warning" %>
-      <%= link_to "Back", admin_medical_institutes_path,
-                  class: "btn btn-secondary ms-2" %>
+<div class="admin-card">
+  <div class="admin-details">
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Direccion</p>
+      <p class="admin-detail-value"><%= @medical_institute.address %></p>
     </div>
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Telefono</p>
+      <p class="admin-detail-value"><%= @medical_institute.phone_number %></p>
+    </div>
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Emergencias</p>
+      <p class="admin-detail-value"><%= @medical_institute.emergency_phone_number.presence || "Sin numero" %></p>
+    </div>
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Latitud</p>
+      <p class="admin-detail-value"><%= @medical_institute.latitude.presence || "Sin registro" %></p>
+    </div>
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Longitud</p>
+      <p class="admin-detail-value"><%= @medical_institute.longitude.presence || "Sin registro" %></p>
+    </div>
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Administrador</p>
+      <p class="admin-detail-value"><%= @medical_institute.user&.email || "Sin asignar" %></p>
+    </div>
+  </div>
 
+  <div class="admin-form-actions">
+    <%= link_to "Editar", edit_admin_medical_institute_path(@medical_institute), class: "btn-leva-primary" %>
+    <%= link_to "Volver al listado", admin_medical_institutes_path, class: "btn-leva-ghost" %>
   </div>
 </div>

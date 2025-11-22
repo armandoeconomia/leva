@@ -1,2 +1,14 @@
-<h2>Edit Doctor</h2>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Equipo medico</span>
+    <h1 class="admin-page-title">Editar doctor</h1>
+    <p class="admin-page-description">
+      Ajusta especialidad, institucion y licencia para mantener datos al dia.
+    </p>
+  </div>
+  <div class="admin-actions">
+    <%= link_to "Ver detalle", admin_doctor_path(@doctor), class: "btn-leva-ghost" %>
+  </div>
+</div>
+
 <%= render "form" %>

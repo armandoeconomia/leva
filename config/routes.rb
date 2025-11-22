@@ -79,12 +79,6 @@ Rails.application.routes.draw do
 
     # Gestión de Institutos Médicos
     resources :medical_institutes
-
-    # Historiales de pacientes
-    resources :medical_histories, only: [:index, :show]
-
-    # Facturas
-    resources :invoices, only: [:index, :show, :new, :create, :edit, :update, :destroy]
   end
 
 end

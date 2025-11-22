@@ -4,6 +4,5 @@ class Admin::DashboardController < Admin::BaseController
     @total_patients = Patient.count
     @total_doctors = Doctor.count
     @appointments_today = Appointment.where(date: Date.today).count
-    #@invoices_count = Invoice.count
   end
 end

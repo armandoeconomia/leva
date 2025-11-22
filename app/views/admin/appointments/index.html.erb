@@ -1,49 +1,65 @@
-<h2 class="mb-4">Appointments</h2>
-
-<div class="d-flex justify-content-between mb-3">
-  <div></div>
-  <%= link_to "New Appointment", new_admin_appointment_path,
-              class: "btn btn-primary" %>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Coordinacion</span>
+    <h1 class="admin-page-title">Citas programadas</h1>
+    <p class="admin-page-description">
+      Visualiza la agenda completa para conectar pacientes y doctores de forma impecable.
+    </p>
+  </div>
+  <div class="admin-actions">
+    <%= link_to "Nueva cita", new_admin_appointment_path, class: "btn-leva-primary" %>
+    <%= link_to "Ver dashboard", admin_dashboard_path, class: "btn-leva-ghost" %>
+  </div>
 </div>
 
-<div class="card shadow-sm">
-  <table class="table table-hover mb-0">
-    <thead class="table-light">
+<div class="admin-card">
+  <table class="admin-table">
+    <thead>
       <tr>
-        <th>Patient</th>
+        <th>Paciente</th>
         <th>Doctor</th>
-        <th>Date</th>
-        <th>Hour</th>
-        <th>Status</th>
-        <th class="text-end">Actions</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Estado</th>
+        <th>Acciones</th>
       </tr>
     </thead>
 
     <tbody>
-      <% @appointments.each do |a| %>
+      <% @appointments.each do |appointment| %>
+        <% patient_user = appointment.patient&.user %>
+        <% doctor_user = appointment.doctor&.user %>
+        <% status_chip_class = case appointment.status
+                              when "confirmed", "completed" then "status-chip--success"
+                              when "cancelled" then "status-chip--danger"
+                              else "" end %>
         <tr>
-          <td><%= a.patient.user.name %> <%= a.patient.user.last_name %></td>
-          <td><%= a.doctor.user.name %> <%= a.doctor.user.last_name %></td>
-          <td><%= a.date %></td>
-          <td><%= a.hour.strftime("%I:%M %p") if a.hour %></td>
           <td>
-            <span class="badge bg-primary"><%= a.status %></span>
+            <strong><%= patient_user&.name %> <%= patient_user&.last_name %></strong><br>
+            <small class="admin-row-meta"><%= patient_user&.email %></small>
           </td>
-
-          <td class="text-end">
-            <%= link_to "Show", admin_appointment_path(a),
-                        class: "btn btn-sm btn-info" %>
-            <%= link_to "Edit", edit_admin_appointment_path(a),
-                        class: "btn btn-sm btn-warning" %>
-            <%= link_to "Delete",
-                        admin_appointment_path(a),
-                        method: :delete,
-                        data: { confirm: "Are you sure?" },
-                        class: "btn btn-sm btn-danger" %>
+          <td>
+            <strong><%= doctor_user&.name %> <%= doctor_user&.last_name %></strong><br>
+            <small class="admin-row-meta"><%= appointment.doctor&.speciality&.humanize || "Sin especialidad" %></small>
+          </td>
+          <td><%= l(appointment.date) if appointment.date %></td>
+          <td><%= appointment.hour&.strftime("%I:%M %p") || "--" %></td>
+          <td>
+            <span class="status-chip <%= status_chip_class %>"><%= appointment.status.humanize %></span>
+          </td>
+          <td>
+            <div class="admin-actions">
+              <%= link_to "Ver", admin_appointment_path(appointment), class: "btn-soft btn-soft--info" %>
+              <%= link_to "Editar", edit_admin_appointment_path(appointment), class: "btn-soft btn-soft--warning" %>
+              <%= link_to "Eliminar",
+                          admin_appointment_path(appointment),
+                          method: :delete,
+                          data: { confirm: "Seguro que deseas eliminar esta cita?" },
+                          class: "btn-soft btn-soft--danger" %>
+            </div>
           </td>
         </tr>
       <% end %>
     </tbody>
-
   </table>
 </div>

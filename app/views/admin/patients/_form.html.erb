@@ -1,81 +1,72 @@
-<div class="card">
-  <div class="card-body">
-
-    <%= form_with model: [:admin, @patient], local: true do |f| %>
-
-      <% if @patient.errors.any? %>
-        <div class="alert alert-danger">
-          <h5>There were errors:</h5>
-          <ul>
-            <% @patient.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <%= f.label :user_id %>
-          <%= f.collection_select :user_id, User.all, :id, :email,
-                { prompt: "Select a User" },
-                class: "form-select" %>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <%= f.label :blood_type %>
-          <%= f.select :blood_type, Patient.blood_types.keys,
-                { prompt: "Select" },
-                class: "form-select" %>
-        </div>
+<div class="admin-card">
+  <%= form_with model: [:admin, @patient], local: true, html: { class: "admin-form" } do |f| %>
+    <% if @patient.errors.any? %>
+      <div class="admin-alert">
+        Revisa los siguientes campos:
+        <ul>
+          <% @patient.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
       </div>
-
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <%= f.label :emergency_contact %>
-          <%= f.text_field :emergency_contact, class: "form-control" %>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <%= f.label :medical_insurance %>
-          <%= f.text_field :medical_insurance, class: "form-control" %>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <%= f.label :allergies %>
-        <%= f.text_area :allergies, rows: 2, class: "form-control" %>
-      </div>
-
-      <div class="mb-3">
-        <%= f.label :medical_history %>
-        <%= f.text_area :medical_history, rows: 2, class: "form-control" %>
-      </div>
-
-      <div class="mb-3">
-        <%= f.label :pathology %>
-        <%= f.text_area :pathology, rows: 2, class: "form-control" %>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <%= f.label :marital_status %>
-          <%= f.select :marital_status, Patient.marital_statuses.keys,
-                { prompt: "Select" },
-                class: "form-select" %>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <%= f.label :payments %>
-          <%= f.number_field :payments, step: 0.01, class: "form-control" %>
-        </div>
-      </div>
-
-      <div class="mt-3">
-        <%= f.submit class: "btn btn-primary" %>
-        <%= link_to "Cancel", admin_patients_path, class: "btn btn-secondary ms-2" %>
-      </div>
-
     <% end %>
-  </div>
+
+    <div class="field-group">
+      <%= f.label :user_id, "Usuario" %>
+      <%= f.collection_select :user_id,
+                              User.all,
+                              :id,
+                              :email,
+                              { prompt: "Selecciona usuario" } %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :blood_type, "Tipo de sangre" %>
+      <%= f.select :blood_type,
+                   Patient.blood_types.keys.map { |b| [b.upcase, b] },
+                   { prompt: "Selecciona tipo" } %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :emergency_contact, "Contacto de emergencia" %>
+      <%= f.text_field :emergency_contact, placeholder: "Nombre y telefono del contacto" %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :medical_insurance, "Seguro medico" %>
+      <%= f.text_field :medical_insurance, placeholder: "Aseguradora o plan" %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :allergies, "Alergias" %>
+      <%= f.text_area :allergies, rows: 2, placeholder: "Lista de alergias conocidas" %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :medical_history, "Historial medico" %>
+      <%= f.text_area :medical_history, rows: 2, placeholder: "Antecedentes relevantes" %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :pathology, "Patologia" %>
+      <%= f.text_area :pathology, rows: 2, placeholder: "Condiciones actuales" %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :marital_status, "Estado civil" %>
+      <%= f.select :marital_status,
+                   Patient.marital_statuses.keys.map { |m| [m.humanize, m] },
+                   { prompt: "Selecciona estado" } %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :payments, "Pagos" %>
+      <%= f.number_field :payments, step: 0.01, placeholder: "0.00" %>
+    </div>
+
+    <div class="admin-form-actions">
+      <%= f.submit "Guardar paciente", class: "btn-leva-primary" %>
+      <%= link_to "Cancelar", admin_patients_path, class: "btn-leva-ghost" %>
+    </div>
+  <% end %>
 </div>

@@ -1,41 +1,54 @@
-<h2 class="mb-4">Medical Institutes</h2>
-
-<div class="d-flex justify-content-between mb-3">
-  <div></div>
-  <%= link_to "New Institute", new_admin_medical_institute_path,
-              class: "btn btn-primary" %>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Red de atencion</span>
+    <h1 class="admin-page-title">Institutos medicos</h1>
+    <p class="admin-page-description">
+      Gestiona sedes, telefonos de emergencia y responsables para conectar pacientes con el lugar correcto.
+    </p>
+  </div>
+  <div class="admin-actions">
+    <%= link_to "Nuevo instituto", new_admin_medical_institute_path, class: "btn-leva-primary" %>
+    <%= link_to "Ver doctores", admin_doctors_path, class: "btn-leva-ghost" %>
+  </div>
 </div>
 
-<div class="card shadow-sm">
-  <table class="table table-hover mb-0">
-    <thead class="table-light">
+<div class="admin-card">
+  <table class="admin-table">
+    <thead>
       <tr>
-        <th>Name</th>
-        <th>Address</th>
-        <th>Phone</th>
-        <th>Type</th>
-        <th class="text-end">Actions</th>
+        <th>Instituto</th>
+        <th>Direccion</th>
+        <th>Telefonos</th>
+        <th>Tipo</th>
+        <th>Administrador</th>
+        <th>Acciones</th>
       </tr>
     </thead>
 
     <tbody>
       <% @medical_institutes.each do |mi| %>
         <tr>
-          <td><%= mi.name %></td>
+          <td>
+            <strong><%= mi.name %></strong><br>
+            <small class="admin-row-meta">ID: <%= mi.id %></small>
+          </td>
           <td><%= mi.address %></td>
-          <td><%= mi.phone_number %></td>
-          <td><%= mi.institute_type %></td>
-
-          <td class="text-end">
-            <%= link_to "Show", admin_medical_institute_path(mi),
-                        class: "btn btn-sm btn-info" %>
-            <%= link_to "Edit", edit_admin_medical_institute_path(mi),
-                        class: "btn btn-sm btn-warning" %>
-            <%= link_to "Delete",
-                        admin_medical_institute_path(mi),
-                        method: :delete,
-                        data: { confirm: "Are you sure?" },
-                        class: "btn btn-sm btn-danger" %>
+          <td>
+            <span class="admin-row-meta">Principal: <%= mi.phone_number %></span><br>
+            <span class="admin-row-meta">Emergencia: <%= mi.emergency_phone_number.presence || "N/D" %></span>
+          </td>
+          <td><span class="status-chip"><%= mi.institute_type&.humanize || "Sin tipo" %></span></td>
+          <td><%= mi.user&.email || "No asignado" %></td>
+          <td>
+            <div class="admin-actions">
+              <%= link_to "Ver", admin_medical_institute_path(mi), class: "btn-soft btn-soft--info" %>
+              <%= link_to "Editar", edit_admin_medical_institute_path(mi), class: "btn-soft btn-soft--warning" %>
+              <%= link_to "Eliminar",
+                          admin_medical_institute_path(mi),
+                          method: :delete,
+                          data: { confirm: "Seguro que deseas eliminar este instituto?" },
+                          class: "btn-soft btn-soft--danger" %>
+            </div>
           </td>
         </tr>
       <% end %>

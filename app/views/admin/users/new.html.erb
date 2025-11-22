@@ -1,2 +1,14 @@
-<h2>New User</h2>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Nuevo registro</span>
+    <h1 class="admin-page-title">Crear usuario</h1>
+    <p class="admin-page-description">
+      Ingresa los datos basicos para invitar a un especialista o paciente al ecosistema LEVA.
+    </p>
+  </div>
+  <div class="admin-actions">
+    <%= link_to "Volver al listado", admin_users_path, class: "btn-leva-ghost" %>
+  </div>
+</div>
+
 <%= render "form" %>

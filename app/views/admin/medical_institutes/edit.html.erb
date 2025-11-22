@@ -1,2 +1,14 @@
-<h2>Edit Medical Institute</h2>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Red de atencion</span>
+    <h1 class="admin-page-title">Editar instituto</h1>
+    <p class="admin-page-description">
+      Ajusta datos de contacto y ubicacion para mantener consistencia en la experiencia de los pacientes.
+    </p>
+  </div>
+  <div class="admin-actions">
+    <%= link_to "Ver detalle", admin_medical_institute_path(@medical_institute), class: "btn-leva-ghost" %>
+  </div>
+</div>
+
 <%= render "form" %>

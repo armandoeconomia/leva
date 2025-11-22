@@ -1,19 +1,38 @@
-<h2 class="mb-4">Doctor Details</h2>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Ficha del medico</span>
+    <h1 class="admin-page-title"><%= @doctor.user.name %> <%= @doctor.user.last_name %></h1>
+    <p class="admin-page-description">
+      Informacion clave para coordinar agendas, teleconsultas y cobertura institucional.
+    </p>
+  </div>
+  <div class="admin-actions">
+    <span class="status-chip"><%= @doctor.speciality&.humanize || "Sin especialidad" %></span>
+  </div>
+</div>
 
-<div class="card shadow-sm">
-  <div class="card-body">
-
-    <p><strong>User:</strong> <%= @doctor.user.name %> <%= @doctor.user.last_name %></p>
-    <p><strong>Email:</strong> <%= @doctor.user.email %></p>
-
-    <p><strong>Medical Institute:</strong> <%= @doctor.medical_institute.name %></p>
-    <p><strong>Speciality:</strong> <%= @doctor.speciality %></p>
-    <p><strong>Medical License:</strong> <%= @doctor.medical_registration %></p>
-
-    <div class="mt-4">
-      <%= link_to "Edit", edit_admin_doctor_path(@doctor), class: "btn btn-warning" %>
-      <%= link_to "Back", admin_doctors_path, class: "btn btn-secondary ms-2" %>
+<div class="admin-card">
+  <div class="admin-details">
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Correo</p>
+      <p class="admin-detail-value"><%= @doctor.user.email %></p>
     </div>
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Instituto</p>
+      <p class="admin-detail-value"><%= @doctor.medical_institute&.name || "No asignado" %></p>
+    </div>
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Licencia</p>
+      <p class="admin-detail-value"><%= @doctor.medical_registration %></p>
+    </div>
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Tipo de instituto</p>
+      <p class="admin-detail-value"><%= @doctor.medical_institute&.institute_type&.humanize || "No definido" %></p>
+    </div>
+  </div>
 
+  <div class="admin-form-actions">
+    <%= link_to "Editar", edit_admin_doctor_path(@doctor), class: "btn-leva-primary" %>
+    <%= link_to "Volver al listado", admin_doctors_path, class: "btn-leva-ghost" %>
   </div>
 </div>
