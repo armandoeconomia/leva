@@ -53,9 +53,8 @@
               <%= link_to "Editar", edit_admin_appointment_path(appointment), class: "btn-soft btn-soft--warning" %>
               <%= link_to "Eliminar",
                           admin_appointment_path(appointment),
-                          method: :delete,
-                          data: { confirm: "Seguro que deseas eliminar esta cita?" },
-                          class: "btn-soft btn-soft--danger" %>
+                          data: { turbo_method: :delete, turbo_confirm: "¿Seguro que deseas eliminar esta cita?" },
+                          class: "btn-soft btn-soft--danger"%>
             </div>
           </td>
         </tr>
