@@ -179,6 +179,15 @@
   margin: 0;
   font-weight: 700;
   color: $text-primary;
+
+  .doctor-link {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: $color-accent;
+    }
+  }
 }
 
 .item-body {
@@ -261,6 +270,50 @@
   form {
     margin: 0;
   }
+}
+
+.availability-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.availability-card {
+  border: 1px solid $border-light;
+  border-radius: 12px;
+  padding: 12px;
+  background: $color-primary-light;
+  box-shadow: $shadow-soft;
+
+  .slots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+}
+
+.slot-btn {
+  border: 1px solid $border-medium;
+  border-radius: 8px;
+  padding: 6px 10px;
+  background: $background-card;
+  color: $text-primary;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background: $color-accent;
+    color: $text-inverse;
+  }
+}
+
+.slot-booked {
+  background: rgba($color-danger, 0.1);
+  border-color: $color-danger;
+  color: $color-danger;
+  cursor: not-allowed;
 }
 
 .info-row {

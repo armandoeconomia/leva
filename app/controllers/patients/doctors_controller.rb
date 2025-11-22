@@ -32,5 +32,23 @@ class Patients::DoctorsController < Patients::BaseController
 
   def show
     @doctor = Doctor.includes(:medical_institute, :user).find(params[:id])
+    @upcoming_calendars = @doctor
+                          .calendars
+                          .includes(:hours)
+                          .where("date >= ?", Date.today)
+                          .order(:date)
+                          .limit(14)
+
+    relevant_dates = @upcoming_calendars.map(&:date)
+    @booked_slots = @doctor
+                    .appointments
+                    .where(date: relevant_dates)
+                    .where.not(status: Appointment.statuses[:cancelado])
+                    .each_with_object({}) do |appointment, hash|
+                      hour_key = appointment.hour&.strftime("%H:%M")
+                      next if hour_key.blank?
+
+                      hash[[appointment.date, hour_key]] = appointment
+                    end
   end
 end
