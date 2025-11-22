@@ -1,2 +1,14 @@
-<h1>Admin::Users#edit</h1>
-<p>Find me in app/views/admin/users/edit.html.erb</p>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Actualiza informacion</span>
+    <h1 class="admin-page-title">Editar usuario</h1>
+    <p class="admin-page-description">
+      Manten la informacion al dia para ofrecer una experiencia confiable a tus pacientes y doctores.
+    </p>
+  </div>
+  <div class="admin-actions">
+    <%= link_to "Ver usuario", admin_user_path(@user), class: "btn-leva-ghost" %>
+  </div>
+</div>
+
+<%= render "form" %>

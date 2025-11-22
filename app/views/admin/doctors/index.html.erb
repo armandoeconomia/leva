@@ -1,2 +1,56 @@
-<h1>Admin::Doctors#index</h1>
-<p>Find me in app/views/admin/doctors/index.html.erb</p>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Equipo medico</span>
+    <h1 class="admin-page-title">Doctores registrados</h1>
+    <p class="admin-page-description">
+      Supervisa especialidades, licencias y centros asociados para garantizar atencion confiable.
+    </p>
+  </div>
+  <div class="admin-actions">
+    <%= link_to "Agregar doctor", new_admin_doctor_path, class: "btn-leva-primary" %>
+    <%= link_to "Ver pacientes", admin_patients_path, class: "btn-leva-ghost" %>
+  </div>
+</div>
+
+<div class="admin-card">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Doctor</th>
+        <th>Correo</th>
+        <th>Instituto</th>
+        <th>Especialidad</th>
+        <th>Licencia</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @doctors.each do |doctor| %>
+        <tr>
+          <td>
+            <strong><%= doctor.user.name %> <%= doctor.user.last_name %></strong><br>
+            <small class="admin-row-meta">ID: <%= doctor.id %></small>
+          </td>
+          <td><%= doctor.user.email %></td>
+          <td><%= doctor.medical_institute&.name || "Sin instituto" %></td>
+          <td>
+            <span class="status-chip"><%= doctor.speciality.present? ? doctor.speciality.humanize : "Sin especialidad" %></span>
+          </td>
+          <td><%= doctor.medical_registration %></td>
+          <td>
+            <div class="admin-actions">
+              <%= link_to "Ver", admin_doctor_path(doctor), class: "btn-soft btn-soft--info" %>
+              <%= link_to "Editar", edit_admin_doctor_path(doctor), class: "btn-soft btn-soft--warning" %>
+              <%= link_to "Eliminar",
+                          admin_doctor_path(doctor),
+                          method: :delete,
+                          data: { confirm: "Seguro que deseas eliminar este doctor?" },
+                          class: "btn-soft btn-soft--danger" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

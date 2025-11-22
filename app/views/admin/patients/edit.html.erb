@@ -1,2 +1,14 @@
-<h1>Admin::Patients#edit</h1>
-<p>Find me in app/views/admin/patients/edit.html.erb</p>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Expedientes</span>
+    <h1 class="admin-page-title">Editar paciente</h1>
+    <p class="admin-page-description">
+      Actualiza contactos, seguros y antecedentes para mantener la continuidad del servicio.
+    </p>
+  </div>
+  <div class="admin-actions">
+    <%= link_to "Ver detalle", admin_patient_path(@patient), class: "btn-leva-ghost" %>
+  </div>
+</div>
+
+<%= render "form" %>

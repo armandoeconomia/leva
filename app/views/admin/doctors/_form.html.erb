@@ -1,0 +1,49 @@
+<div class="admin-card">
+  <%= form_with model: [:admin, @doctor], local: true, html: { class: "admin-form" } do |f| %>
+    <% if @doctor.errors.any? %>
+      <div class="admin-alert">
+        Revisa los siguientes campos:
+        <ul>
+          <% @doctor.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="field-group">
+      <%= f.label :user_id, "Usuario (email)" %>
+      <%= f.collection_select :user_id,
+                              User.all,
+                              :id,
+                              :email,
+                              { prompt: "Selecciona usuario" } %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :medical_institute_id, "Instituto medico" %>
+      <%= f.collection_select :medical_institute_id,
+                              MedicalInstitute.all,
+                              :id,
+                              :name,
+                              { prompt: "Selecciona instituto" } %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :speciality, "Especialidad" %>
+      <%= f.select :speciality,
+                   Doctor.specialities.keys.map { |s| [s.humanize, s] },
+                   { prompt: "Selecciona especialidad" } %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :medical_registration, "Licencia medica" %>
+      <%= f.text_field :medical_registration, placeholder: "Numero de colegiado" %>
+    </div>
+
+    <div class="admin-form-actions">
+      <%= f.submit "Guardar doctor", class: "btn-leva-primary" %>
+      <%= link_to "Cancelar", admin_doctors_path, class: "btn-leva-ghost" %>
+    </div>
+  <% end %>
+</div>

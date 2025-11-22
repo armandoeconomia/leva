@@ -1,2 +1,14 @@
-<h1>Admin::Appointments#new</h1>
-<p>Find me in app/views/admin/appointments/new.html.erb</p>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Coordinacion</span>
+    <h1 class="admin-page-title">Nueva cita</h1>
+    <p class="admin-page-description">
+      Agenda pacientes y doctores asegurando horarios claros y motivos definidos.
+    </p>
+  </div>
+  <div class="admin-actions">
+    <%= link_to "Volver al listado", admin_appointments_path, class: "btn-leva-ghost" %>
+  </div>
+</div>
+
+<%= render "form" %>

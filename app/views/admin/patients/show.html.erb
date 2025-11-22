@@ -1,2 +1,54 @@
-<h1>Admin::Patients#show</h1>
-<p>Find me in app/views/admin/patients/show.html.erb</p>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Ficha del paciente</span>
+    <h1 class="admin-page-title"><%= @patient.user&.name %> <%= @patient.user&.last_name %></h1>
+    <p class="admin-page-description">
+      Visualiza datos clinicos y contactos clave para anticipar necesidades de atencion.
+    </p>
+  </div>
+  <div class="admin-actions">
+    <span class="status-chip"><%= @patient.blood_type.present? ? @patient.blood_type.upcase : "Sin tipo" %></span>
+  </div>
+</div>
+
+<div class="admin-card">
+  <div class="admin-details">
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Correo</p>
+      <p class="admin-detail-value"><%= @patient.user&.email %></p>
+    </div>
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Contacto emergencia</p>
+      <p class="admin-detail-value"><%= @patient.emergency_contact.presence || "Sin registro" %></p>
+    </div>
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Seguro</p>
+      <p class="admin-detail-value"><%= @patient.medical_insurance.presence || "Sin registro" %></p>
+    </div>
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Estado civil</p>
+      <p class="admin-detail-value"><%= @patient.marital_status&.humanize || "No definido" %></p>
+    </div>
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Pagos acumulados</p>
+      <p class="admin-detail-value"><%= number_to_currency(@patient.payments || 0, unit: "$") %></p>
+    </div>
+    <div class="admin-detail-item admin-detail-item--full">
+      <p class="admin-detail-label">Alergias</p>
+      <div class="admin-detail-value"><%= simple_format(@patient.allergies.presence || "Sin informacion") %></div>
+    </div>
+    <div class="admin-detail-item admin-detail-item--full">
+      <p class="admin-detail-label">Historial medico</p>
+      <div class="admin-detail-value"><%= simple_format(@patient.medical_history.presence || "Sin informacion") %></div>
+    </div>
+    <div class="admin-detail-item admin-detail-item--full">
+      <p class="admin-detail-label">Patologia</p>
+      <div class="admin-detail-value"><%= simple_format(@patient.pathology.presence || "Sin informacion") %></div>
+    </div>
+  </div>
+
+  <div class="admin-form-actions">
+    <%= link_to "Editar", edit_admin_patient_path(@patient), class: "btn-leva-primary" %>
+    <%= link_to "Volver al listado", admin_patients_path, class: "btn-leva-ghost" %>
+  </div>
+</div>

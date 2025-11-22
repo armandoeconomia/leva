@@ -1,2 +1,57 @@
-<h1>Admin::Patients#index</h1>
-<p>Find me in app/views/admin/patients/index.html.erb</p>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Cuidado confiable</span>
+    <h1 class="admin-page-title">Pacientes activos</h1>
+    <p class="admin-page-description">
+      Controla historiales, contactos de emergencia y seguros para brindar respuestas rapidas.
+    </p>
+  </div>
+  <div class="admin-actions">
+    <%= link_to "Registrar paciente", new_admin_patient_path, class: "btn-leva-primary" %>
+    <%= link_to "Revisar doctores", admin_doctors_path, class: "btn-leva-ghost" %>
+  </div>
+</div>
+
+<div class="admin-card">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Paciente</th>
+        <th>Correo</th>
+        <th>Sangre</th>
+        <th>Seguro</th>
+        <th>Contacto</th>
+        <th>Pagos</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @patients.each do |patient| %>
+        <tr>
+          <td>
+            <strong><%= patient.user&.name %> <%= patient.user&.last_name %></strong><br>
+            <small class="admin-row-meta">ID: <%= patient.id %></small>
+          </td>
+          <td><%= patient.user&.email %></td>
+          <td>
+            <span class="status-chip"><%= patient.blood_type.present? ? patient.blood_type.upcase : "N/D" %></span>
+          </td>
+          <td><%= patient.medical_insurance.presence || "Sin registro" %></td>
+          <td><%= patient.emergency_contact.presence || "Sin contacto" %></td>
+          <td><%= number_to_currency(patient.payments || 0, unit: "$") %></td>
+          <td>
+            <div class="admin-actions">
+              <%= link_to "Ver", admin_patient_path(patient), class: "btn-soft btn-soft--info" %>
+              <%= link_to "Editar", edit_admin_patient_path(patient), class: "btn-soft btn-soft--warning" %>
+              <%= link_to "Eliminar",
+                          admin_patient_path(patient),
+                          method: :delete,
+                          data: { confirm: "Seguro que deseas eliminar este paciente?" },
+                          class: "btn-soft btn-soft--danger" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

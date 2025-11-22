@@ -1,0 +1,59 @@
+<div class="admin-card">
+  <%= form_with model: [:admin, @appointment], local: true, html: { class: "admin-form" } do |f| %>
+    <% if @appointment.errors.any? %>
+      <div class="admin-alert">
+        Revisa los siguientes campos:
+        <ul>
+          <% @appointment.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="field-group">
+      <%= f.label :patient_id, "Paciente" %>
+      <%= f.collection_select :patient_id,
+                              Patient.includes(:user).all,
+                              :id,
+                              ->(p) { "#{p.user.name} #{p.user.last_name} (#{p.user.email})" },
+                              { prompt: "Selecciona paciente" } %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :doctor_id, "Doctor" %>
+      <%= f.collection_select :doctor_id,
+                              Doctor.includes(:user).all,
+                              :id,
+                              ->(d) { "#{d.user.name} #{d.user.last_name} - #{d.speciality}" },
+                              { prompt: "Selecciona doctor" } %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :date, "Fecha" %>
+      <%= f.date_field :date %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :hour, "Hora" %>
+      <%= f.time_field :hour %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :reason_for_consultation, "Motivo de consulta" %>
+      <%= f.text_area :reason_for_consultation, rows: 2, placeholder: "Sintomas o contexto" %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :status, "Estado" %>
+      <%= f.select :status,
+                   Appointment.statuses.keys.map { |s| [s.humanize, s] },
+                   { prompt: "Selecciona estado" } %>
+    </div>
+
+    <div class="admin-form-actions">
+      <%= f.submit "Guardar cita", class: "btn-leva-primary" %>
+      <%= link_to "Cancelar", admin_appointments_path, class: "btn-leva-ghost" %>
+    </div>
+  <% end %>
+</div>

@@ -1,2 +1,14 @@
-<h1>Admin::Appointments#edit</h1>
-<p>Find me in app/views/admin/appointments/edit.html.erb</p>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Coordinacion</span>
+    <h1 class="admin-page-title">Editar cita</h1>
+    <p class="admin-page-description">
+      Ajusta horarios, motivos o estados para mantener informados a pacientes y especialistas.
+    </p>
+  </div>
+  <div class="admin-actions">
+    <%= link_to "Ver detalle", admin_appointment_path(@appointment), class: "btn-leva-ghost" %>
+  </div>
+</div>
+
+<%= render "form" %>

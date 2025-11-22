@@ -90,7 +90,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_15_164236) do
     t.text "medical_history"
     t.text "pathology"
     t.string "medical_insurance"
-    t.integer "marital_status"
+    t.integer "marital_status" default: 0
     t.float "payments"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

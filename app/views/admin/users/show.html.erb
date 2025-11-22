@@ -1,2 +1,38 @@
-<h1>Admin::Users#show</h1>
-<p>Find me in app/views/admin/users/show.html.erb</p>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Ficha del usuario</span>
+    <h1 class="admin-page-title"><%= @user.name %> <%= @user.last_name %></h1>
+    <p class="admin-page-description">
+      Informacion clave para coordinar citas, notificaciones y accesos dentro del equipo.
+    </p>
+  </div>
+  <div class="admin-actions">
+    <span class="status-chip"><%= @user.admin? ? "Administrador" : "Usuario estandar" %></span>
+  </div>
+</div>
+
+<div class="admin-card">
+  <div class="admin-details">
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Correo</p>
+      <p class="admin-detail-value"><%= @user.email %></p>
+    </div>
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Telefono</p>
+      <p class="admin-detail-value"><%= @user.phone_number.presence || "Sin numero" %></p>
+    </div>
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Genero</p>
+      <p class="admin-detail-value"><%= @user.gender&.humanize || "No especificado" %></p>
+    </div>
+    <div class="admin-detail-item">
+      <p class="admin-detail-label">Creado el</p>
+      <p class="admin-detail-value"><%= @user.created_at.strftime("%d %b %Y") %></p>
+    </div>
+  </div>
+
+  <div class="admin-form-actions">
+    <%= link_to "Editar", edit_admin_user_path(@user), class: "btn-leva-primary" %>
+    <%= link_to "Volver al listado", admin_users_path, class: "btn-leva-ghost" %>
+  </div>
+</div>

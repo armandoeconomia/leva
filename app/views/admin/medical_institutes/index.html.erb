@@ -1,2 +1,57 @@
-<h1>Admin::MedicalInstitutes#index</h1>
-<p>Find me in app/views/admin/medical_institutes/index.html.erb</p>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Red de atencion</span>
+    <h1 class="admin-page-title">Institutos medicos</h1>
+    <p class="admin-page-description">
+      Gestiona sedes, telefonos de emergencia y responsables para conectar pacientes con el lugar correcto.
+    </p>
+  </div>
+  <div class="admin-actions">
+    <%= link_to "Nuevo instituto", new_admin_medical_institute_path, class: "btn-leva-primary" %>
+    <%= link_to "Ver doctores", admin_doctors_path, class: "btn-leva-ghost" %>
+  </div>
+</div>
+
+<div class="admin-card">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Instituto</th>
+        <th>Direccion</th>
+        <th>Telefonos</th>
+        <th>Tipo</th>
+        <th>Administrador</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @medical_institutes.each do |mi| %>
+        <tr>
+          <td>
+            <strong><%= mi.name %></strong><br>
+            <small class="admin-row-meta">ID: <%= mi.id %></small>
+          </td>
+          <td><%= mi.address %></td>
+          <td>
+            <span class="admin-row-meta">Principal: <%= mi.phone_number %></span><br>
+            <span class="admin-row-meta">Emergencia: <%= mi.emergency_phone_number.presence || "N/D" %></span>
+          </td>
+          <td><span class="status-chip"><%= mi.institute_type&.humanize || "Sin tipo" %></span></td>
+          <td><%= mi.user&.email || "No asignado" %></td>
+          <td>
+            <div class="admin-actions">
+              <%= link_to "Ver", admin_medical_institute_path(mi), class: "btn-soft btn-soft--info" %>
+              <%= link_to "Editar", edit_admin_medical_institute_path(mi), class: "btn-soft btn-soft--warning" %>
+              <%= link_to "Eliminar",
+                          admin_medical_institute_path(mi),
+                          method: :delete,
+                          data: { confirm: "Seguro que deseas eliminar este instituto?" },
+                          class: "btn-soft btn-soft--danger" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

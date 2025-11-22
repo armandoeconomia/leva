@@ -1,0 +1,48 @@
+<div class="admin-card">
+  <%= form_with model: [:admin, @user], local: true, html: { class: "admin-form" } do |f| %>
+    <div class="field-group">
+      <%= f.label :name, "Nombre" %>
+      <%= f.text_field :name, placeholder: "Nombre de pila" %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :last_name, "Apellidos" %>
+      <%= f.text_field :last_name, placeholder: "Apellidos" %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :email, "Correo" %>
+      <%= f.email_field :email, placeholder: "correo@leva.com" %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :password, "Contrasena" %>
+      <%= f.password_field :password, placeholder: "********" %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :password_confirmation, "Confirmar contrasena" %>
+      <%= f.password_field :password_confirmation, placeholder: "Repite la contrasena" %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :phone_number, "Telefono" %>
+      <%= f.text_field :phone_number, placeholder: "+506 8888 8888" %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :gender, "Genero" %>
+      <%= f.select :gender, User.genders.keys.map { |g| [g.humanize, g] } %>
+    </div>
+
+    <div class="form-check">
+      <%= f.check_box :admin %>
+      <%= f.label :admin, "Usuario administrador" %>
+    </div>
+
+    <div class="admin-form-actions">
+      <%= f.submit "Guardar cambios", class: "btn-leva-primary" %>
+      <%= link_to "Cancelar", admin_users_path, class: "btn-leva-ghost" %>
+    </div>
+  <% end %>
+</div>

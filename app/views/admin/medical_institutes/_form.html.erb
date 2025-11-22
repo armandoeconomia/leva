@@ -1,0 +1,65 @@
+<div class="admin-card">
+  <%= form_with model: [:admin, @medical_institute], local: true, html: { class: "admin-form" } do |f| %>
+    <% if @medical_institute.errors.any? %>
+      <div class="admin-alert">
+        Revisa los siguientes campos:
+        <ul>
+          <% @medical_institute.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="field-group">
+      <%= f.label :user_id, "Usuario administrador" %>
+      <%= f.collection_select :user_id,
+                              User.all,
+                              :id,
+                              :email,
+                              { prompt: "Selecciona usuario" } %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :name, "Nombre del instituto" %>
+      <%= f.text_field :name, placeholder: "Clinica Central LEVA" %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :address, "Direccion" %>
+      <%= f.text_field :address, placeholder: "San Jose, Costa Rica" %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :phone_number, "Telefono principal" %>
+      <%= f.text_field :phone_number, placeholder: "+506 2222 2222" %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :emergency_phone_number, "Telefono de emergencia" %>
+      <%= f.text_field :emergency_phone_number, placeholder: "+506 911" %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :institute_type, "Tipo de instituto" %>
+      <%= f.select :institute_type,
+                   MedicalInstitute.institute_types.keys.map { |t| [t.humanize, t] },
+                   { prompt: "Selecciona tipo" } %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :latitude, "Latitud" %>
+      <%= f.number_field :latitude, step: 0.000001, placeholder: "9.9371" %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :longitude, "Longitud" %>
+      <%= f.number_field :longitude, step: 0.000001, placeholder: "-84.0915" %>
+    </div>
+
+    <div class="admin-form-actions">
+      <%= f.submit "Guardar instituto", class: "btn-leva-primary" %>
+      <%= link_to "Cancelar", admin_medical_institutes_path, class: "btn-leva-ghost" %>
+    </div>
+  <% end %>
+</div>

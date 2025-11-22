@@ -1,2 +1,32 @@
-<h1>Admin::Dashboard#show</h1>
-<p>Find me in app/views/admin/dashboard/show.html.erb</p>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Panel principal</span>
+    <h1 class="admin-page-title">Resumen operativo</h1>
+    <p class="admin-page-description">
+      Monitorea actividad diaria y navega rapidamente a usuarios, pacientes o citas para tomar accion.
+    </p>
+  </div>
+  <div class="admin-actions">
+    <%= link_to "Nueva cita", new_admin_appointment_path, class: "btn-leva-primary" %>
+    <%= link_to "Crear usuario", new_admin_user_path, class: "btn-leva-ghost" %>
+  </div>
+</div>
+
+<div class="admin-metrics">
+  <div class="admin-metric-card">
+    <p class="admin-metric-value"><%= @total_users %></p>
+    <p class="admin-metric-label">Usuarios</p>
+  </div>
+  <div class="admin-metric-card">
+    <p class="admin-metric-value"><%= @total_patients %></p>
+    <p class="admin-metric-label">Pacientes</p>
+  </div>
+  <div class="admin-metric-card">
+    <p class="admin-metric-value"><%= @total_doctors %></p>
+    <p class="admin-metric-label">Doctores</p>
+  </div>
+  <div class="admin-metric-card">
+    <p class="admin-metric-value"><%= @appointments_today %></p>
+    <p class="admin-metric-label">Citas hoy</p>
+  </div>
+</div>
