@@ -1,2 +1,440 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<style>
+  .leva-home {
+    background: linear-gradient(180deg, #f6f2ff 0%, #ffffff 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .leva-home::before,
+  .leva-home::after {
+    content: "";
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(169, 136, 255, 0.35) 0%, rgba(255, 255, 255, 0) 70%);
+    filter: blur(12px);
+    z-index: 0;
+  }
+
+  .leva-home::before {
+    top: -160px;
+    right: -90px;
+  }
+
+  .leva-home::after {
+    bottom: -160px;
+    left: -50px;
+  }
+
+  .mediapp-hero-card {
+    border-radius: 2rem;
+    box-shadow: 0 35px 55px rgba(105, 84, 255, 0.18);
+    background: #fff;
+  }
+
+  .mediapp-hero-btn {
+    background: linear-gradient(90deg, #b46bff, #786dff);
+    border: none;
+    box-shadow: 0 20px 35px rgba(120, 109, 255, 0.35);
+  }
+
+  .mediapp-outline-btn {
+    border: 1px solid rgba(122, 109, 255, 0.35);
+    color: #7a6dff;
+    background: #fff;
+  }
+
+  .mediapp-feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 1rem;
+    background-color: rgba(120, 109, 255, 0.1);
+    color: #7a6dff;
+    flex-shrink: 0;
+  }
+
+  .mediapp-feature-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .mediapp-service-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .mediapp-logo {
+    width: 46px;
+    height: 46px;
+    border-radius: 1rem;
+    box-shadow: 0 10px 20px rgba(122, 109, 255, 0.35);
+  }
+
+  .mediapp-hero-image {
+    border-radius: 1.75rem;
+    border: 6px solid #fff;
+  }
+
+  .mediapp-nav-link {
+    color: #4a4a4a;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .mediapp-nav-link:hover {
+    color: #7a6dff;
+  }
+
+  .mediapp-contact-btn {
+    background: #f3edff;
+    color: #7a6dff;
+    box-shadow: 0 10px 20px rgba(122, 109, 255, 0.2);
+    border: none;
+  }
+
+  .mediapp-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+    background: rgba(246, 242, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(122, 109, 255, 0.08);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  }
+
+  .mediapp-hero-badge {
+    background: rgba(122, 109, 255, 0.15);
+    color: #7a6dff;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 0.35rem 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .mediapp-gradient-card {
+    border-radius: 1.5rem;
+    border: 1px solid rgba(122, 109, 255, 0.08);
+    background: linear-gradient(180deg, #ffffff, #f6f2ff);
+    box-shadow: 0 25px 45px rgba(24, 16, 66, 0.12);
+  }
+
+  .mediapp-stat-value {
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: #1d1b3a;
+  }
+
+  .mediapp-floating-btn {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    border: none;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 25px rgba(122, 109, 255, 0.3);
+    background: linear-gradient(90deg, #c284ff, #9f7bff);
+    color: #fff;
+    padding: 0.95rem 1.5rem;
+    z-index: 1050;
+  }
+
+  section[id] {
+    scroll-margin-top: 200px;
+  }
+
+  .leva-home main {
+    padding-top: 1.5rem;
+  }
+</style>
+
+<div class="leva-home py-4 min-vh-100">
+  <div id="leva-home-top"></div>
+  <nav class="mediapp-nav w-100">
+    <div class="container d-flex flex-column flex-lg-row justify-content-between align-items-center gap-4 py-3">
+      <div class="d-flex align-items-center gap-3">
+        <%= link_to root_path, class: "d-inline-flex align-items-center gap-3 text-decoration-none" do %>
+          <%= image_tag "logo_leva.png", class: "mediapp-logo", alt: "Leva logo" %>
+          <span class="fw-semibold fs-4 text-dark mb-0">LEVA</span>
+        <% end %>
+      </div>
+      <div class="d-flex align-items-center gap-4 text-center flex-wrap">
+        <a class="mediapp-nav-link" href="#inicio" data-scroll-target="#inicio">Inicio</a>
+        <a class="mediapp-nav-link" href="#about" data-scroll-target="#about">Sobre Nosotros</a>
+        <a class="mediapp-nav-link" href="#servicios" data-scroll-target="#servicios">Servicios</a>
+        <a class="mediapp-nav-link" href="#testimonios" data-scroll-target="#testimonios">Testimonios</a>
+      </div>
+      <div class="d-flex align-items-center gap-3 flex-wrap justify-content-end">
+        <% if user_signed_in? %>
+          <div class="dropdown">
+            <a href="#" class="d-inline-block" id="levaNavbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <%= image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar", alt: "Menú de usuario" %>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2" aria-labelledby="levaNavbarDropdown">
+              <%= link_to "Action", "#", class: "dropdown-item" %>
+              <%= link_to "Another action", "#", class: "dropdown-item" %>
+              <%= link_to "Log out", destroy_user_session_path, data: { turbo_method: :delete }, class: "dropdown-item" %>
+            </div>
+          </div>
+        <% else %>
+          <%= link_to "Iniciar Sesión", new_user_session_path, class: "btn btn-sm text-white mediapp-hero-btn px-4" %>
+        <% end %>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section id="inicio" class="row align-items-center g-5 mb-5 position-relative">
+      <div class="col-lg-6">
+        <span class="mediapp-hero-badge mb-3">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 20s-6.5-4.35-6.5-9.5A4.5 4.5 0 0 1 10 6a4.3 4.3 0 0 1 2 1 4.3 4.3 0 0 1 2-1 4.5 4.5 0 0 1 4.5 4.5C18.5 15.65 12 20 12 20z" stroke="#7a6dff" stroke-width="1.5" fill="none"/>
+            <path d="M9 12h2l1-2 1 4 1-2h2" stroke="#7a6dff" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Cuidado confiable
+        </span>
+        <h1 class="display-4 fw-bold mb-3">Tu salud, a un clic de distancia</h1>
+        <p class="fs-5 text-secondary mb-4">
+          Agenda citas con tus especialistas de confianza de forma rápida y segura. Simplificamos la experiencia médica con tecnología humana.
+        </p>
+        <div class="d-flex flex-wrap gap-3">
+          <a class="btn btn-lg text-white mediapp-hero-btn" href="#">Agenda tu cita ahora</a>
+          <a class="btn btn-lg mediapp-outline-btn px-4" href="#">Ver plantilla medica</a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mediapp-hero-card bg-white text-center p-2">
+          <%= image_tag "logo_leva.png", class: "img-fluid mediapp-hero-image w-100", alt: "Logo Leva" %>
+        </div>
+      </div>
+    </section>
+
+    <section class="row row-cols-2 row-cols-md-4 g-4 mb-5">
+      <div class="col">
+        <div class="mediapp-gradient-card text-center p-3 h-100">
+          <div class="mediapp-stat-value">120K+</div>
+          <p class="text-secondary mb-0">Citas coordinadas</p>
+        </div>
+      </div>
+      <div class="col">
+        <div class="mediapp-gradient-card text-center p-3 h-100">
+          <div class="mediapp-stat-value">350</div>
+          <p class="text-secondary mb-0">Especialistas aliados</p>
+        </div>
+      </div>
+      <div class="col">
+        <div class="mediapp-gradient-card text-center p-3 h-100">
+          <div class="mediapp-stat-value">4.9/5</div>
+          <p class="text-secondary mb-0">Satisfacción promedio</p>
+        </div>
+      </div>
+      <div class="col">
+        <div class="mediapp-gradient-card text-center p-3 h-100">
+          <div class="mediapp-stat-value">24/7</div>
+          <p class="text-secondary mb-0">Soporte inteligente</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="py-5">
+      <div class="mb-4">
+        <h2 class="fw-bold">Sobre Nosotros</h2>
+        <p class="text-secondary fs-5 mb-0">
+          Nuestra misión es simplificar el acceso a la atención médica, conectando a pacientes y doctores de manera eficiente.
+          Creemos en un sistema de salud donde la tecnología facilita el cuidado, permitiéndote gestionar tus citas con total tranquilidad y seguridad.
+        </p>
+      </div>
+
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="fw-bold mb-0">Fácil y Rápido</h5>
+                <div class="mediapp-feature-icon mediapp-service-icon d-flex align-items-center justify-content-center">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M11 2 4 13h6l-1 9 7-11h-6z" />
+                  </svg>
+                </div>
+              </div>
+              <p class="text-secondary mb-0">Encuentra disponibilidad y agenda tu cita en menos de un minuto.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="fw-bold mb-0">Especialistas de Confianza</h5>
+                <div class="mediapp-feature-icon mediapp-service-icon d-flex align-items-center justify-content-center">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M5 4v7c0 4.42 3.13 8.84 7 10 3.87-1.16 7-5.58 7-10V4l-7-2-7 2zm7 15.09C9.38 17.68 7 13.92 7 11V6.3l5-1.43 5 1.43V11c0 2.91-2.38 6.68-5 8.09z"/>
+                    <path d="m11 12.59-1.29-1.3-1.42 1.42L11 15.41l4.71-4.71-1.42-1.41z"/>
+                  </svg>
+                </div>
+              </div>
+              <p class="text-secondary mb-0">Accede a una red verificada de profesionales médicos en diversas especialidades.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="fw-bold mb-0">Seguridad Garantizada</h5>
+                <div class="mediapp-feature-icon mediapp-service-icon d-flex align-items-center justify-content-center">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M17 10h-1V7a4 4 0 0 0-8 0v3H7a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2zm-6 7.73V18h2v-.27a1 1 0 1 0-2 0zM15 10H9V7a3 3 0 0 1 6 0z"/>
+                  </svg>
+                </div>
+              </div>
+              <p class="text-secondary mb-0">Tus datos personales y médicos están protegidos con los más altos estándares.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="servicios" class="py-5">
+      <div class="mb-4 text-center">
+        <h2 class="fw-bold">Servicios</h2>
+        <p class="text-secondary fs-5 mb-0">Planes flexibles diseñados para adaptarse a cada tipo de paciente o institución.</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="fw-bold mb-0">Planes anuales</h5>
+                <div class="mediapp-feature-icon mediapp-service-icon d-flex align-items-center justify-content-center">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z"/>
+                  </svg>
+                </div>
+              </div>
+              <p class="text-secondary mb-0">Cobertura completa durante todo el año con seguimiento y consultas ilimitadas.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="fw-bold mb-0">Planes por grupo médico</h5>
+                <div class="mediapp-feature-icon mediapp-service-icon d-flex align-items-center justify-content-center">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z"/>
+                  </svg>
+                </div>
+              </div>
+              <p class="text-secondary mb-0">Soluciones para clínicas y especialidades que necesitan coordinar agenda y pacientes.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="fw-bold mb-0">Planes personalizados</h5>
+                <div class="mediapp-feature-icon mediapp-service-icon d-flex align-items-center justify-content-center">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z"/>
+                  </svg>
+                </div>
+              </div>
+              <p class="text-secondary mb-0">Opciones ajustadas a tus necesidades específicas, con módulos y beneficios a medida.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="testimonios" class="py-5">
+      <div class="mb-4 text-center">
+        <h2 class="fw-bold">Testimonios</h2>
+        <p class="text-secondary fs-5 mb-0">Lo que nuestros pacientes dicen sobre su experiencia con LEVA.</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <p class="text-secondary mb-3">"Con LEVA pude agendar mi consulta en minutos. El proceso fue muy simple y seguro."</p>
+              <h6 class="fw-bold mb-0">Carolina M.</h6>
+              <small class="text-secondary">Paciente de Cardiología</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <p class="text-secondary mb-3">"Los especialistas verificados me dieron la confianza que necesitaba para hacer seguimiento."</p>
+              <h6 class="fw-bold mb-0">Tomás R.</h6>
+              <small class="text-secondary">Paciente de Neurología</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <p class="text-secondary mb-3">"La seguridad de mis datos y la atención personalizada son excelentes."</p>
+              <h6 class="fw-bold mb-0">Gabriela S.</h6>
+              <small class="text-secondary">Paciente de Pediatría</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto" class="py-5">
+      <div class="bg-white rounded-4 shadow-sm p-4 p-md-5 d-flex flex-column flex-md-row align-items-center justify-content-between">
+        <div class="mb-3 mb-md-0">
+          <h3 class="fw-bold mb-2">¿Necesitas ayuda personalizada?</h3>
+          <p class="text-secondary mb-0">Nuestro equipo está disponible para resolver tus dudas y coordinar la mejor atención para ti.</p>
+        </div>
+        <a href="mailto:soporte@leva.com" class="btn mediapp-hero-btn text-white px-4 py-3 fw-semibold">Contactar equipo</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container border-top pt-4 mt-4">
+    <div class="row gy-2 align-items-center">
+      <div class="col-md-8 text-center text-md-start">
+        <small class="text-secondary d-block">&copy; 2025 LEVA. Todos los derechos reservados.</small>
+        <small class="text-secondary">Contacto: <a href="mailto:soporte@leva.com" class="text-decoration-none text-secondary">soporte@leva.com</a> · +11 0000 0000</small>
+      </div>
+      <div class="col-md-4 text-center text-md-end">
+        <small class="text-secondary">Innovamos la experiencia médica digital.</small>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<button class="mediapp-floating-btn d-flex align-items-center gap-2">
+  <span class="d-inline-flex align-items-center justify-content-center bg-white bg-opacity-25 rounded-4 p-2">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="18" height="18" rx="6" fill="#fff" opacity="0.3"/>
+      <path d="M12 7c-2.8 0-5 2.01-5 4.5 0 1.54.97 2.88 2.44 3.63L9.1 17.5a.5.5 0 0 0 .74.57L12 17l2.16 1.07a.5.5 0 0 0 .74-.57l-.34-2.37C16.03 13.38 17 12.04 17 10.5 17 9.78 16.84 9.1 16.54 8.5c-.48.3-1.03.5-1.64.5-1.38 0-2.5-1.12-2.5-2.5 0-.49.15-.95.39-1.33-.26-.11-.54-.17-.83-.17z" fill="#7a6dff"/>
+    </svg>
+  </span>
+  <span class="fw-semibold">Consultas Rápidas</span>
+</button>
+
+<script>
+  const levaSmoothNav = () => {
+    document.querySelectorAll('[data-scroll-target]').forEach((link) => {
+      if (link.dataset.bound === 'true') return;
+      link.dataset.bound = 'true';
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const target = document.querySelector(link.dataset.scrollTarget);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  };
+
+  document.addEventListener('DOMContentLoaded', levaSmoothNav);
+  document.addEventListener('turbo:load', levaSmoothNav);
+</script>
