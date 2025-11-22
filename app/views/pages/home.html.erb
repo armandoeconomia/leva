@@ -147,7 +147,60 @@
   .leva-home main {
     padding-top: 1.5rem;
   }
+
+  .mediapp-map-card {
+    border-radius: 1.5rem;
+    background: #fff;
+    box-shadow: 0 25px 45px rgba(24, 16, 66, 0.12);
+    border: 1px solid rgba(122, 109, 255, 0.08);
+  }
+
+  #medical-institutes-map {
+    width: 100%;
+    height: 420px;
+    border-radius: 1.2rem;
+  }
+
+  .mediapp-location-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(122, 109, 255, 0.15);
+    color: #7a6dff;
+  }
+
+  .mediapp-location-item {
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    padding: 0;
+    border-radius: 1rem;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .mediapp-location-item:focus,
+  .mediapp-location-item:hover {
+    outline: none;
+    background: rgba(122, 109, 255, 0.07);
+    box-shadow: 0 10px 25px rgba(122, 109, 255, 0.1);
+  }
+
+  .mediapp-location-item + .mediapp-location-item {
+    margin-top: 0.75rem;
+  }
 </style>
+
+<% map_markers = (@medical_institutes || []).map do |institute|
+     {
+       id: institute.id,
+       name: institute.name,
+       address: institute.address,
+       latitude: institute.latitude,
+       longitude: institute.longitude
+     }
+   end %>
+<% map_center = map_markers.first ? [map_markers.first[:latitude], map_markers.first[:longitude]] : [-34.6037, -58.3816] %>
 
 <div class="leva-home py-4 min-vh-100">
   <div id="leva-home-top"></div>
@@ -200,13 +253,76 @@
           Agenda citas con tus especialistas de confianza de forma rápida y segura. Simplificamos la experiencia médica con tecnología humana.
         </p>
         <div class="d-flex flex-wrap gap-3">
-          <a class="btn btn-lg text-white mediapp-hero-btn" href="#">Ver ubicaciones</a>
+          <a class="btn btn-lg text-white mediapp-hero-btn" href="#ubicaciones">Ver ubicaciones</a>
           <a class="btn btn-lg mediapp-outline-btn px-4" href="#">Ver plantilla medica</a>
         </div>
       </div>
       <div class="col-lg-6">
         <div class="mediapp-hero-card bg-white text-center p-2">
           <%= image_tag "logo_leva.png", class: "img-fluid mediapp-hero-image w-100", alt: "Logo Leva" %>
+        </div>
+      </div>
+    </section>
+
+    <section id="ubicaciones" class="py-5">
+      <div class="row g-4 align-items-stretch">
+        <div class="col-lg-7">
+          <div class="mediapp-map-card p-3 h-100 d-flex flex-column gap-3">
+            <div>
+              <span class="mediapp-hero-badge mb-2">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 20s-6.5-4.35-6.5-9.5A4.5 4.5 0 0 1 10 6a4.3 4.3 0 0 1 2 1 4.3 4.3 0 0 1 2-1 4.5 4.5 0 0 1 4.5 4.5C18.5 15.65 12 20 12 20z" stroke="#7a6dff" stroke-width="1.5" fill="none"/>
+                  <path d="M11.5 9.5a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0-3 0" stroke="#7a6dff" stroke-width="1.5" fill="none"/>
+                </svg>
+                Clínicas cercanas
+              </span>
+              <h2 class="fw-bold mb-1">Mapa de Instituciones</h2>
+              <p class="text-secondary mb-0">Visualiza de un vistazo dónde están ubicadas nuestras clínicas registradas.</p>
+            </div>
+            <div
+              id="medical-institutes-map"
+              data-controller="map"
+              data-map-markers-value="<%= json_escape(map_markers.to_json) %>"
+              data-map-center-value="<%= json_escape(map_center.to_json) %>"
+              data-map-zoom-value="5"
+            ></div>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="card border-0 shadow-sm h-100 p-4">
+            <h3 class="fw-bold mb-3">Nuestras ubicaciones</h3>
+            <p class="text-secondary">Cada clínica cuenta con profesionales y especialidades listas para atenderte.</p>
+            <% if map_markers.present? %>
+              <ul class="list-unstyled mediapp-location-list mt-4">
+                <% @medical_institutes.each do |institute| %>
+                  <li>
+                    <button
+                      class="mediapp-location-item d-flex gap-3 align-items-start"
+                      type="button"
+                      data-action="click->map#focusMarker keypress->map#focusMarker"
+                      data-map-marker-id-param="<%= institute.id %>"
+                    >
+                      <div class="mediapp-location-icon d-flex align-items-center justify-content-center flex-shrink-0">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 20s-6.5-4.35-6.5-9.5A4.5 4.5 0 0 1 10 6a4.3 4.3 0 0 1 2 1 4.3 4.3 0 0 1 2-1 4.5 4.5 0 0 1 4.5 4.5C18.5 15.65 12 20 12 20z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                          <path d="M11.5 9.5a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0-3 0" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <h5 class="fw-semibold mb-1 text-dark"><%= institute.name %></h5>
+                        <p class="text-secondary mb-1"><%= institute.address %></p>
+                        <small class="text-muted"><strong>Tel:</strong> <%= institute.phone_number %></small>
+                      </div>
+                    </button>
+                  </li>
+                <% end %>
+              </ul>
+            <% else %>
+              <div class="alert alert-light border mt-4" role="alert">
+                Aún no hay ubicaciones con coordenadas disponibles. Actualiza las instituciones para mostrar el mapa.
+              </div>
+            <% end %>
+          </div>
         </div>
       </div>
     </section>
