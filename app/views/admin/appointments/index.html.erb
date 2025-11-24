@@ -48,7 +48,7 @@
             <span class="status-chip <%= status_chip_class %>"><%= appointment.status.humanize %></span>
           </td>
           <td>
-            <div class="admin-actions">
+            <div class="admin-actions admin-actions--stack">
               <%= link_to "Ver", admin_appointment_path(appointment), class: "btn-soft btn-soft--info" %>
               <%= link_to "Editar", edit_admin_appointment_path(appointment), class: "btn-soft btn-soft--warning" %>
               <%= link_to "Eliminar",
