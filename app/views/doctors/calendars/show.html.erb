@@ -1,2 +1,18 @@
-<h1>Doctors::Calendars#show</h1>
-<p>Find me in app/views/doctors/calendars/show.html.erb</p>
+<h1>Calendario para <%= @calendar.date.strftime("%d de %B de %Y") %></h1>
+
+<% if @appointments.any? %>
+  <ul>
+    <% @appointments.each do |appt| %>
+      <li>
+        <strong><%= "#{appt.patient.user.name} #{appt.patient.user.last_name}" %></strong> –
+        <%= appt.hour.strftime("%H:%M") %> –
+        <%= appt.status %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No hay citas para este día.</p>
+<% end %>
+
+<%= link_to "← Volver al calendario", doctors_calendars_path %>
+

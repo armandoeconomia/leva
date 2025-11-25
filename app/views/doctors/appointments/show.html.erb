@@ -1,10 +1,48 @@
-<h1>Detalle de cita</h1>
+<div class="container py-4 py-lg-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card shadow-sm border-0 rounded-4 mb-4">
+        <div class="card-body p-4 p-lg-5">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <p class="text-uppercase fw-semibold small mb-1 text-muted">Detalle de cita</p>
+              <h2 class="fw-bold mb-0">
+                <%= l(@appointment.date, format: :long) rescue @appointment.date %> ·
+                <%= @appointment.hour.strftime("%H:%M") rescue @appointment.hour %>
+              </h2>
+            </div>
+            <% status_class = case @appointment.status
+                             when "completado" then "success"
+                             when "cancelado" then "danger"
+                             else "warning"
+                             end %>
+            <span class="badge text-bg-<%= status_class %> px-3 py-2 text-capitalize"><%= @appointment.status %></span>
+          </div>
 
-<p><strong>Fecha:</strong> <%= @appointment.date %></p>
-<p><strong>Hora:</strong> <%= @appointment.hour %></p>
-<p><strong>Motivo:</strong> <%= @appointment.reason_for_consultation %></p>
-<p><strong>Estado:</strong> <%= @appointment.status %></p>
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="p-3 bg-light rounded-3 h-100">
+                <p class="text-muted mb-1 small">Paciente</p>
+                <h5 class="mb-0 fw-semibold"><%= @appointment.patient&.user&.name || @appointment.patient&.id || "Paciente sin nombre" %></h5>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-3 bg-light rounded-3 h-100">
+                <p class="text-muted mb-1 small">Motivo de consulta</p>
+                <p class="mb-0"><%= @appointment.reason_for_consultation.presence || "Sin motivo registrado" %></p>
+              </div>
+            </div>
+          </div>
 
-<%= link_to 'Confirmar', confirm_doctors_appointment_path(@appointment), method: :patch %> |
-<%= link_to 'Cancelar', cancel_doctors_appointment_path(@appointment), method: :patch %> |
-<%= link_to 'Volver', doctors_appointments_path %>
+          <div class="d-flex flex-wrap gap-2 mt-4">
+            <%= link_to 'Confirmar', confirm_doctors_appointment_path(@appointment), method: :patch, class: "btn btn-success" %>
+            <%= link_to 'Cancelar', cancel_doctors_appointment_path(@appointment), method: :patch, class: "btn btn-warning" %>
+            <%= link_to 'Editar', edit_doctors_appointment_path(@appointment), class: "btn btn-primary" %>
+            <%= link_to 'Eliminar', doctors_appointment_path(@appointment), method: :delete, data: { confirm: '¿Eliminar esta cita?' }, class: "btn btn-danger" %>
+            <%= link_to 'Volver', doctors_appointments_path, class: "btn btn-outline-secondary" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

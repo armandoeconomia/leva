@@ -1,2 +1,17 @@
-<h1>Doctors::Appointments#update</h1>
-<p>Find me in app/views/doctors/appointments/update.html.erb</p>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card shadow-sm border-0 rounded-4 text-center p-4">
+        <div class="card-body">
+          <p class="text-uppercase fw-semibold small mb-2 text-muted">Citas</p>
+          <h3 class="fw-bold mb-3">Cita actualizada</h3>
+          <p class="text-muted mb-4">Los cambios se guardaron exitosamente. Revisa el detalle o vuelve al listado para continuar gestionando tus pacientes.</p>
+          <div class="d-flex justify-content-center gap-2">
+            <%= link_to 'Ver detalle', doctors_appointment_path(@appointment), class: "btn btn-primary px-4" rescue nil %>
+            <%= link_to 'Regresar al listado', doctors_appointments_path, class: "btn btn-outline-secondary" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

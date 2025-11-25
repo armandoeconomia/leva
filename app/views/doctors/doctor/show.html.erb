@@ -1,0 +1,21 @@
+<div class="container mx-auto p-6">
+<h1 class="text-3xl font-bold mb-6">Perfil del Doctor</h1>
+
+
+<div class="bg-white rounded-lg shadow-md p-6">
+<h2 class="text-xl font-semibold mb-2">Datos Personales</h2>
+<p><strong>Nombre:</strong> <%= @doctor.user.name %> <%= @doctor.user.last_name %></p>
+<p><strong>Email:</strong> <%= @doctor.user.email %></p>
+<p><strong>Teléfono:</strong> <%= @doctor.user.phone_number %></p>
+<p><strong>Dirección:</strong> <%= @doctor.user.address %></p>
+
+
+<h2 class="text-xl font-semibold mt-6 mb-2">Datos Profesionales</h2>
+<p><strong>Especialidad:</strong> <%= @doctor.speciality %></p>
+<p><strong>Matrícula Médica:</strong> <%= @doctor.medical_registration %></p>
+<p><strong>Instituto Médico:</strong> <%= @doctor.medical_institute.name %></p>
+
+
+<%= link_to 'Editar Perfil', edit_doctors_doctor_path, class: "mt-6 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" %>
+</div>
+</div>

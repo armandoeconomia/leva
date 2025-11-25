@@ -1,2 +1,10 @@
-<h1>Doctors::Calendars#edit</h1>
-<p>Find me in app/views/doctors/calendars/edit.html.erb</p>
+<h1>Editar calendario</h1>
+
+<%= form_with model: @calendar, local: true do |form| %>
+  <div>
+    <%= form.label :date, "Fecha" %>
+    <%= form.date_field :date %>
+  </div>
+
+  <%= form.submit "Actualizar" %>
+<% end %>

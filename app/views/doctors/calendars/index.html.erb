@@ -1,2 +1,14 @@
-<h1>Doctors::Calendars#index</h1>
-<p>Find me in app/views/doctors/calendars/index.html.erb</p>
+<h1>Mis Calendarios</h1>
+
+<%= link_to "← Volver al Dashboard", doctors_dashboard_path %>
+
+<%= link_to "Nuevo Calendario", new_doctors_calendar_path %>
+
+<ul>
+  <% @calendars.each do |calendar| %>
+    <li>
+      <%= link_to l(calendar.date, format: :long), doctors_calendar_path(calendar) %>
+    </li>
+  <% end %>
+</ul>
+

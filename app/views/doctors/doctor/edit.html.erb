@@ -1,0 +1,28 @@
+<div class="container mx-auto p-6">
+<h1 class="text-3xl font-bold mb-6">Editar Perfil del Doctor</h1>
+
+
+<%= form_with(model: @doctor, url: doctors_doctor_path, method: :patch, local: true, class: "space-y-6") do |f| %>
+<div class="bg-white rounded-lg shadow-md p-6">
+<h2 class="text-xl font-semibold mb-4">Datos Profesionales</h2>
+
+
+<div class="mb-4">
+<%= f.label :speciality, "Especialidad", class: "block text-sm font-medium text-gray-700" %>
+<%= f.select :speciality, Doctor.specialities.keys.map { |s| [s.titleize, s] }, {}, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+</div>
+
+
+<div class="mb-4">
+<%= f.label :medical_registration, "Matrícula Médica", class: "block text-sm font-medium text-gray-700" %>
+<%= f.text_field :medical_registration, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+</div>
+
+
+<div>
+<%= f.submit "Guardar Cambios", class: "bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" %>
+<%= link_to "Cancelar", doctors_doctor_path, class: "ml-4 text-gray-600 hover:underline" %>
+</div>
+</div>
+<% end %>
+</div>
