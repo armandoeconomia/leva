@@ -16,6 +16,11 @@ Rails.application.routes.draw do
     # Dashboard del paciente
     get 'dashboard', to: 'dashboard#show', as: 'dashboard'
 
+    resource :assistant, only: [:show], controller: "assistants" do
+      post :message, on: :collection
+      post :upload_exam, on: :collection
+    end
+
     # Recursos para el paciente
     resources :medical_histories, only: [:index, :show] # Ver historial médico
     resources :doctors, only: [:index, :show] # Ver doctores (sus perfiles)
@@ -28,6 +33,10 @@ Rails.application.routes.draw do
   namespace :doctors do
     # Dashboard del doctor
     get 'dashboard', to: 'dashboards#show', as: 'dashboard'
+
+    resource :assistant, only: [:show], controller: "assistants" do
+      post :message, on: :collection
+    end
 
     # Ver perfil del doctor (él mismo)
     resource :doctor, only: [:show, :edit, :update]
@@ -59,6 +68,9 @@ Rails.application.routes.draw do
   namespace :admin do
     # Dashboard del administrador
     get 'dashboard', to: 'dashboard#show', as: 'dashboard'
+    resource :assistant, only: [:show], controller: "assistants" do
+      post :message, on: :collection
+    end
 
     # Gestión de Usuarios
     resources :users # 'users' aquí se refiere a la tabla USERS, que incluye doctores, pacientes, etc.

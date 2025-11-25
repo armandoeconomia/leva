@@ -1,0 +1,60 @@
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Asistente operativo</span>
+    <h1 class="admin-page-title">Copiloto de gestión</h1>
+    <p class="admin-page-description">
+      Pide datos como conteo de citas, pacientes o productividad y obtén respuestas al instante.
+    </p>
+  </div>
+  <div class="admin-actions">
+    <%= link_to "Volver al dashboard", admin_dashboard_path, class: "btn-leva-ghost" %>
+  </div>
+</div>
+
+<div class="ai-admin-grid">
+  <%= render "shared/chat_window",
+             messages: @messages,
+             form_path: message_admin_assistant_path,
+             placeholder: "Ej. \"¿Cuántas citas tenemos esta semana?\" o \"Resume el crecimiento de pacientes\"",
+             button_label: "Preguntar al copiloto",
+             user_label: "Administración",
+             empty_state: "Pide una estadística o resumen operativo para iniciar la conversación." %>
+
+  <div class="ai-panel-card">
+    <p class="eyebrow">Métricas clave</p>
+    <% totals = @assistant_context[:totales] || {} %>
+    <% ops = @assistant_context[:operaciones] || {} %>
+    <ul class="ai-metrics">
+      <li>
+        <span class="ai-metric-value"><%= totals[:pacientes] || 0 %></span>
+        <span class="ai-metric-label">Pacientes activos</span>
+      </li>
+      <li>
+        <span class="ai-metric-value"><%= totals[:doctores] || 0 %></span>
+        <span class="ai-metric-label">Doctores registrados</span>
+      </li>
+      <li>
+        <span class="ai-metric-value"><%= ops[:citas_hoy] || 0 %></span>
+        <span class="ai-metric-label">Citas hoy</span>
+      </li>
+      <li>
+        <span class="ai-metric-value"><%= ops[:citas_semana_actual] || 0 %></span>
+        <span class="ai-metric-label">Semana actual</span>
+      </li>
+    </ul>
+
+    <% institutes = Array(@assistant_context[:institutos_destacados]).reject(&:blank?) %>
+    <% if institutes.any? %>
+      <p class="eyebrow mt-4">Institutos destacados</p>
+      <ul class="ai-appointments">
+        <% institutes.each do |institute| %>
+          <li>
+            <strong><%= institute[:nombre] %></strong>
+            <p class="muted small mb-0"><%= institute[:doctores] || 0 %> doctores</p>
+            <p class="muted small"><%= institute[:administrador].presence || "Sin administrador" %></p>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</div>

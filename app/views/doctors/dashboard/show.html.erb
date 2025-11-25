@@ -1,18 +1,79 @@
 <div class="px-4 md:px-10 lg:px-20 xl:px-40 py-10 space-y-12 bg-background-main min-h-screen">
-  <div class="text-3xl font-black text-text-primary">Bienvenido/a Doctor</div>
+  <div class="flex items-center justify-between gap-4 flex-wrap">
+    <div>
+      <p class="text-sm uppercase tracking-wide text-text-secondary">Panel médico</p>
+      <div class="text-3xl font-black text-text-primary">
+        Bienvenido/a Dr. <%= @doctor.user.name %> <%= @doctor.user.last_name %>
+      </div>
+    </div>
+    <%= link_to "Abrir asistente IA", doctors_assistant_path, class: "btn-lilac" %>
+  </div>
 
   <section class="space-y-4">
-    <h2 class="text-2xl font-bold text-text-primary">Próximas citas</h2>
-    <div class="bg-background-card p-4 rounded-xl shadow-soft text-text-secondary">
-      No hay citas por el momento.
+    <div class="flex items-center justify-between flex-wrap gap-4">
+      <h2 class="text-2xl font-bold text-text-primary">Próximas citas</h2>
+      <%= link_to "Ver calendario completo", doctors_appointments_path, class: "link-lilac" %>
     </div>
+    <% if @upcoming_appointments.any? %>
+      <div class="space-y-4">
+        <% @upcoming_appointments.each do |appointment| %>
+          <article class="bg-background-card p-5 rounded-xl shadow-soft">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <p class="text-lg font-semibold text-text-primary">
+                  <%= appointment.patient.user.name %> <%= appointment.patient.user.last_name %>
+                </p>
+                <p class="text-sm text-text-secondary">
+                  <%= appointment.date&.strftime('%d %b %Y') %> · <%= appointment.hour&.strftime('%H:%M') %>
+                </p>
+              </div>
+              <span class="status-pill <%= appointment.status %>">
+                <%= appointment.status.titleize %>
+              </span>
+            </div>
+            <p class="text-text-secondary text-sm mt-3">
+              <%= truncate(appointment.reason_for_consultation, length: 120) %>
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <%= link_to "Ver cita", doctors_appointment_path(appointment), class: "btn-ghost-sm" %>
+              <%= link_to "Paciente", doctors_patient_path(appointment.patient), class: "btn-ghost-sm" %>
+            </div>
+          </article>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="bg-background-card p-4 rounded-xl shadow-soft text-text-secondary">
+        No hay citas por el momento.
+      </div>
+    <% end %>
   </section>
 
   <section class="space-y-4">
-    <h2 class="text-2xl font-bold text-text-primary">Pacientes activos</h2>
-    <div class="bg-background-card p-4 rounded-xl shadow-soft text-text-secondary">
-      No hay pacientes aún.
+    <div class="flex items-center justify-between flex-wrap gap-4">
+      <h2 class="text-2xl font-bold text-text-primary">Pacientes activos</h2>
+      <%= link_to "Ver todos", doctors_patients_path, class: "link-lilac" %>
     </div>
+    <% if @active_patients.any? %>
+      <ul class="bg-background-card divide-y divide-gray-100 rounded-xl shadow-soft">
+        <% @active_patients.each do |patient| %>
+          <li class="p-4 flex items-center justify-between flex-wrap gap-3">
+            <div>
+              <p class="font-semibold text-text-primary">
+                <%= patient.user.name %> <%= patient.user.last_name %>
+              </p>
+              <p class="text-sm text-text-secondary">
+                Tipo de sangre: <strong><%= patient.blood_type %></strong> · Estado civil: <%= patient.marital_status %>
+              </p>
+            </div>
+            <%= link_to "Ver paciente", doctors_patient_path(patient), class: "btn-ghost-sm" %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <div class="bg-background-card p-4 rounded-xl shadow-soft text-text-secondary">
+        No hay pacientes aún.
+      </div>
+    <% end %>
   </section>
 
   <section class="space-y-4">
@@ -26,28 +87,68 @@
         </tr>
       </thead>
       <tbody class="text-text-secondary">
-        <tr>
-          <td class="px-6 py-4">Lunes</td>
-          <td class="px-6 py-4">--:--</td>
-          <td class="px-6 py-4">--:--</td>
-        </tr>
+        <% if @work_hours.any? %>
+          <% @work_hours.each do |hour| %>
+            <tr>
+              <td class="px-6 py-4">
+                <%= hour.calendar.date&.strftime('%A %d/%m') %>
+              </td>
+              <td class="px-6 py-4"><%= hour.start_time&.strftime('%H:%M') %></td>
+              <td class="px-6 py-4"><%= hour.end_time&.strftime('%H:%M') %></td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td class="px-6 py-4" colspan="3">Aún no registras horarios activos.</td>
+          </tr>
+        <% end %>
       </tbody>
     </table>
   </section>
 
   <section class="space-y-4">
     <h2 class="text-2xl font-bold text-text-primary">Últimos historiales médicos</h2>
-    <div class="bg-background-card p-4 rounded-xl shadow-soft text-text-secondary">
-      Aún no se han registrado historiales.
-    </div>
+    <% if @latest_medical_histories.any? %>
+      <div class="grid gap-4 md:grid-cols-2">
+        <% @latest_medical_histories.each do |history| %>
+          <article class="bg-background-card p-4 rounded-xl shadow-soft">
+            <p class="font-semibold text-text-primary">
+              <%= history.patient.user.name %> <%= history.patient.user.last_name %>
+            </p>
+            <p class="text-sm text-text-secondary">
+              Registrado el <%= history.registration_date&.strftime('%d %b %Y') %>
+            </p>
+            <p class="text-text-secondary text-sm mt-2">
+              <%= truncate(history.diagnosis, length: 140) %>
+            </p>
+            <%= link_to "Ver historial", doctors_patient_medical_history_path(history.patient, history),
+                        class: "link-lilac mt-3 inline-block" %>
+          </article>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="bg-background-card p-4 rounded-xl shadow-soft text-text-secondary">
+        Aún no se han registrado historiales.
+      </div>
+    <% end %>
   </section>
 
   <section class="space-y-4">
     <h2 class="text-2xl font-bold text-text-primary">Instituto médico</h2>
-    <div class="bg-background-card p-4 rounded-xl shadow-soft text-text-secondary">
-      Nombre del Instituto<br/>
-      Dirección aquí
-    </div>
+    <% if @medical_institute.present? %>
+      <div class="bg-background-card p-4 rounded-xl shadow-soft text-text-secondary space-y-2">
+        <p class="text-lg font-semibold text-text-primary"><%= @medical_institute.name %></p>
+        <p><strong>Dirección:</strong> <%= @medical_institute.address %></p>
+        <p><strong>Teléfono:</strong> <%= @medical_institute.phone_number %></p>
+        <% if @medical_institute.emergency_phone_number.present? %>
+          <p><strong>Emergencias:</strong> <%= @medical_institute.emergency_phone_number %></p>
+        <% end %>
+        <p><strong>Tipo:</strong> <%= @medical_institute.institute_type %></p>
+      </div>
+    <% else %>
+      <div class="bg-background-card p-4 rounded-xl shadow-soft text-text-secondary">
+        Aún no tienes un instituto asignado.
+      </div>
+    <% end %>
   </section>
 </div>
-

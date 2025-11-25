@@ -1,0 +1,62 @@
+<div class="patient-page">
+  <div class="patient-container narrow">
+    <div class="ai-assistant-shell">
+      <div class="ai-assistant-header">
+        <p class="eyebrow">Copiloto clínico</p>
+        <h1>Asistente médico para doctores</h1>
+        <p class="muted">
+          Consulta protocolos, solicita resúmenes clínicos o pide métricas rápidas de tu agenda usando el mismo chat.
+        </p>
+      </div>
+
+      <div class="ai-assistant-grid">
+        <%= render "shared/chat_window",
+                   messages: @messages,
+                   form_path: message_doctors_assistant_path,
+                   placeholder: "Ej. \"¿Qué diagnósticos diferenciales consideras para dolor abdominal?\"",
+                   button_label: "Consultar a la IA",
+                   user_label: current_user.doctor&.user&.name || "Doctor",
+                   empty_state: "Describe tu caso clínico o pide un resumen de agenda para comenzar." %>
+
+        <div class="ai-side-panel">
+          <div class="ai-panel-card">
+            <p class="eyebrow">Agenda del día</p>
+            <% agenda = @assistant_context[:agenda] || {} %>
+            <h3><%= agenda[:citas_hoy] || 0 %> citas para hoy</h3>
+            <% if Array(agenda[:detalle_hoy]).any? %>
+              <ul class="ai-appointments">
+                <% agenda[:detalle_hoy].first(4).each do |slot| %>
+                  <li>
+                    <strong><%= slot[:hora] || "--:--" %></strong>
+                    <p class="muted small mb-0"><%= slot[:paciente].presence || "Paciente sin nombre" %></p>
+                    <p class="muted small"><%= slot[:motivo].presence || "Motivo no registrado" %></p>
+                  </li>
+                <% end %>
+              </ul>
+            <% else %>
+              <p class="muted">No hay citas programadas para hoy.</p>
+            <% end %>
+          </div>
+
+          <div class="ai-panel-card">
+            <p class="eyebrow">Resumen rápido</p>
+            <ul class="ai-metrics">
+              <li>
+                <span class="ai-metric-value"><%= agenda[:citas_7_dias] || 0 %></span>
+                <span class="ai-metric-label">Citas próximos 7 días</span>
+              </li>
+              <li>
+                <span class="ai-metric-value"><%= (@assistant_context.dig(:pacientes, :activos) || 0) %></span>
+                <span class="ai-metric-label">Pacientes activos</span>
+              </li>
+              <li>
+                <span class="ai-metric-value"><%= (@assistant_context.dig(:pacientes, :vistos_30_dias) || 0) %></span>
+                <span class="ai-metric-label">Pacientes vistos en 30 días</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

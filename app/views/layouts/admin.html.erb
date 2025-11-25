@@ -42,6 +42,10 @@
           <%= link_to "Appointments", admin_appointments_path,
                       class: "admin-nav-link #{'is-active' if controller_name == 'appointments'}" %>
         </li>
+        <li>
+          <%= link_to "Asistente IA", admin_assistant_path,
+                      class: "admin-nav-link #{'is-active' if controller_name == 'assistants'}" %>
+        </li>
       </ul>
     </aside>
 

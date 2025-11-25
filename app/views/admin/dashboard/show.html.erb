@@ -9,6 +9,7 @@
   <div class="admin-actions">
     <%= link_to "Nueva cita", new_admin_appointment_path, class: "btn-leva-primary" %>
     <%= link_to "Crear usuario", new_admin_user_path, class: "btn-leva-ghost" %>
+    <%= link_to "Asistente IA", admin_assistant_path, class: "btn-leva-ghost" %>
   </div>
 </div>
 
@@ -30,3 +31,50 @@
     <p class="admin-metric-label">Citas hoy</p>
   </div>
 </div>
+
+<section class="admin-card mt-8">
+  <div class="admin-card__header">
+    <div>
+      <p class="page-eyebrow">Seguimiento</p>
+      <h2 class="admin-card__title">Próximas citas</h2>
+      <p class="admin-card__description">
+        Visualiza las próximas reservas creadas por pacientes o administradores y toma acción inmediata.
+      </p>
+    </div>
+    <%= link_to "Ver todas", admin_appointments_path, class: "btn-leva-ghost" %>
+  </div>
+  <% if @upcoming_appointments.any? %>
+    <div class="admin-table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Paciente</th>
+            <th>Doctor</th>
+            <th>Estado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @upcoming_appointments.each do |appointment| %>
+            <tr>
+              <td><%= appointment.date&.strftime('%d %b %Y') %></td>
+              <td><%= appointment.hour&.strftime('%H:%M') %></td>
+              <td>
+                <strong><%= appointment.patient.user.name %> <%= appointment.patient.user.last_name %></strong>
+              </td>
+              <td><%= appointment.doctor.user.name %> <%= appointment.doctor.user.last_name %></td>
+              <td><span class="status-pill <%= appointment.status %>"><%= appointment.status.titleize %></span></td>
+              <td class="text-right">
+                <%= link_to "Abrir", admin_appointment_path(appointment), class: "btn-leva-link" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <p class="muted">Aún no se registran citas futuras.</p>
+  <% end %>
+</section>
