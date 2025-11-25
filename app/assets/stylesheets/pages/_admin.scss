@@ -1,113 +1,141 @@
 // Admin area theming inspired by marketing hero
 .admin-body {
-  background: $background-main;
+  background: linear-gradient(180deg, lighten($color-accent, 44%) 0%, lighten($color-accent, 35%) 100%);
   color: $text-primary;
   font-family: "Inter", "Helvetica", "Arial", sans-serif;
 }
 
-.admin-shell {
-  min-height: 100vh;
-  display: flex;
-  background: linear-gradient(180deg, $background-main 0%, lighten($background-main, 4%) 100%);
-}
-
-.admin-sidebar {
-  width: 280px;
-  background: linear-gradient(180deg, lighten($color-accent, 10%), darken($color-accent, 10%));
-  color: $text-inverse;
-  padding: 32px 28px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: $shadow-medium;
-}
-
-.admin-logo {
+.admin-topbar {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
-  font-weight: 700;
-  font-size: 1.1rem;
-  letter-spacing: 0.8px;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 32px 60px 16px;
+  flex-wrap: wrap;
+  background: rgba(lighten($color-accent, 25%), 0.8);
+  border-bottom: 1px solid rgba($color-accent, 0.12);
+  box-shadow: 0 20px 40px rgba(36, 2, 98, 0.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
-.admin-logo__icon {
-  width: 44px;
-  height: 44px;
+.admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.admin-brand__logo {
+  width: 52px;
+  height: 52px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.25);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.25);
+  box-shadow: $shadow-medium;
+  background: #fff;
+  object-fit: cover;
 }
 
-.admin-sidebar p {
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 8px;
-  font-size: 0.9rem;
-}
-
-.admin-menu {
-  list-style: none;
-  padding: 0;
+.admin-brand__eyebrow {
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: $color-accent;
 }
 
-.admin-nav-link {
+.admin-brand__title {
+  margin: 2px 0 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.admin-top-nav {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  color: rgba(255, 255, 255, 0.85);
+  gap: 18px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.admin-top-nav__link {
   text-decoration: none;
-  transition: background 0.2s ease, color 0.2s ease;
+  font-weight: 600;
+  color: $text-secondary;
+  padding: 8px 2px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s ease, border 0.2s ease;
 }
 
-.admin-nav-link:hover,
-.admin-nav-link.is-active {
-  background: rgba(255, 255, 255, 0.18);
-  color: #fff;
+.admin-top-nav__link:hover,
+.admin-top-nav__link.is-active {
+  color: $text-primary;
+  border-color: $color-accent;
+}
+
+.admin-top-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-top-actions form {
+  margin: 0;
+}
+
+.admin-logout-button {
+  min-width: 150px;
 }
 
 .admin-main {
-  flex: 1;
-  padding: 36px 56px;
-  background: radial-gradient(circle at top right, rgba(182, 156, 255, 0.25), transparent 55%), $background-main;
-  overflow-y: auto;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 10px 60px 80px;
 }
 
-.admin-navbar {
-  background: $background-card;
-  border-radius: 22px;
-  padding: 22px 28px;
+.admin-hero {
   display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
   justify-content: space-between;
-  align-items: center;
-  box-shadow: $shadow-soft;
-  margin-bottom: 32px;
+  background: linear-gradient(135deg, rgba($color-accent, 0.25), rgba($color-accent, 0.12));
+  border-radius: 32px;
+  padding: 40px;
+  box-shadow: $shadow-medium;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
 }
 
-.admin-navbar__title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 6px;
+.admin-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 80% 0%, rgba($color-accent, 0.18), transparent 50%);
+  pointer-events: none;
 }
 
-.admin-navbar__subtitle {
+.admin-hero__text {
+  flex: 1 1 380px;
+  position: relative;
+  z-index: 1;
+}
+
+.admin-hero__text h1 {
+  font-size: 2.4rem;
+  line-height: 1.1;
+  margin: 12px 0;
+}
+
+.admin-hero__text p {
+  max-width: 520px;
   color: $text-secondary;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
 }
 
-.admin-navbar__cta {
+.admin-hero__actions {
   display: flex;
-  gap: 10px;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
 }
 
 .btn-leva-primary,
@@ -128,9 +156,9 @@
 }
 
 .btn-leva-primary {
-  background: linear-gradient(120deg, lighten($color-accent, 8%), darken($color-accent, 6%));
+  background: linear-gradient(120deg, darken($color-accent, 5%), darken($color-accent, 20%));
   color: $text-inverse;
-  box-shadow: 0 12px 20px rgba(182, 156, 255, 0.35);
+  box-shadow: 0 12px 28px rgba(88, 53, 157, 0.45);
 }
 
 .btn-leva-primary:hover {
@@ -284,30 +312,41 @@
   gap: 10px;
 }
 
+.admin-actions--stack {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.admin-actions--stack .btn-soft {
+  min-width: 130px;
+  text-align: center;
+}
+
 .btn-soft {
-  border-radius: 12px;
-  padding: 8px 14px;
-  font-weight: 500;
+  border-radius: 18px;
+  padding: 10px 18px;
+  font-weight: 600;
   border: none;
   text-decoration: none;
-  color: $text-primary;
-  background: $background-card;
-  box-shadow: $shadow-soft;
+  color: darken($color-accent, 20%);
+  background: rgba($color-accent, 0.16);
+  box-shadow: 0 12px 24px rgba($color-accent, 0.15);
+  backdrop-filter: blur(8px);
 }
 
 .btn-soft--warning {
-  color: #a08809;
-  background: rgba($color-warning, 0.2);
+  color: darken($color-accent, 25%);
+  background: linear-gradient(120deg, lighten($color-accent, 32%), lighten($color-accent, 20%));
 }
 
 .btn-soft--danger {
-  color: #b03b40;
-  background: rgba($color-danger, 0.18);
+  color: $text-inverse;
+  background: linear-gradient(120deg, lighten($color-accent, 12%), darken($color-accent, 6%));
 }
 
 .btn-soft--info {
-  color: darken($color-accent, 15%);
-  background: rgba($color-accent, 0.18);
+  color: darken($color-accent, 30%);
+  background: linear-gradient(120deg, lighten($color-accent, 40%), lighten($color-accent, 28%));
 }
 
 .admin-details {
@@ -430,12 +469,31 @@
   font-weight: 500;
 }
 
-@media (max-width: 992px) {
-  .admin-sidebar {
-    display: none;
+@media (max-width: 1024px) {
+  .admin-main {
+    padding: 10px 24px 60px;
   }
 
-  .admin-main {
-    padding: 24px;
+  .admin-hero {
+    padding: 32px 26px;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-topbar {
+    padding: 24px 20px 16px;
+  }
+
+  .admin-top-nav {
+    justify-content: flex-start;
+  }
+
+  .admin-top-actions {
+    width: 100%;
+  }
+
+  .admin-hero-card__badge {
+    position: static;
+    margin-top: 16px;
   }
 }

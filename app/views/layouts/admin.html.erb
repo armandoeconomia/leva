@@ -10,65 +10,58 @@
 </head>
 
 <body class="admin-body">
-  <div class="admin-shell">
-    <aside class="admin-sidebar">
-      <div class="admin-logo">
-        <span class="admin-logo__icon">&#8599;</span>
-        LEVA Admin
+  <header class="admin-topbar">
+    <div class="admin-brand">
+      <%= image_tag "logo_leva.png", alt: "Leva logo", class: "admin-brand__logo" %>
+      <div>
+        <p class="admin-brand__eyebrow">Cuidado confiable</p>
+        <p class="admin-brand__title">LEVA Admin</p>
       </div>
-      <p>Cuidado confiable</p>
-      <ul class="admin-menu">
-        <li>
-          <%= link_to "Dashboard", admin_dashboard_path,
-                      class: "admin-nav-link #{'is-active' if current_page?(admin_dashboard_path)}" %>
-        </li>
-        <li>
-          <%= link_to "Users", admin_users_path,
-                      class: "admin-nav-link #{'is-active' if controller_name == 'users'}" %>
-        </li>
-        <li>
-          <%= link_to "Patients", admin_patients_path,
-                      class: "admin-nav-link #{'is-active' if controller_name == 'patients'}" %>
-        </li>
-        <li>
-          <%= link_to "Doctors", admin_doctors_path,
-                      class: "admin-nav-link #{'is-active' if controller_name == 'doctors'}" %>
-        </li>
-        <li>
-          <%= link_to "Medical Institutes", admin_medical_institutes_path,
-                      class: "admin-nav-link #{'is-active' if controller_name == 'medical_institutes'}" %>
-        </li>
-        <li>
-          <%= link_to "Appointments", admin_appointments_path,
-                      class: "admin-nav-link #{'is-active' if controller_name == 'appointments'}" %>
-        </li>
-        <li>
-          <%= link_to "Asistente IA", admin_assistant_path,
-                      class: "admin-nav-link #{'is-active' if controller_name == 'assistants'}" %>
-        </li>
-      </ul>
-    </aside>
+    </div>
+    <nav class="admin-top-nav">
+      <%= link_to "Dashboard", admin_dashboard_path,
+                  class: "admin-top-nav__link #{'is-active' if current_page?(admin_dashboard_path)}" %>
+      <%= link_to "Usuarios", admin_users_path,
+                  class: "admin-top-nav__link #{'is-active' if controller_name == 'users'}" %>
+      <%= link_to "Pacientes", admin_patients_path,
+                  class: "admin-top-nav__link #{'is-active' if controller_name == 'patients'}" %>
+      <%= link_to "Doctores", admin_doctors_path,
+                  class: "admin-top-nav__link #{'is-active' if controller_name == 'doctors'}" %>
+      <%= link_to "Instituciones", admin_medical_institutes_path,
+                  class: "admin-top-nav__link #{'is-active' if controller_name == 'medical_institutes'}" %>
+      <%= link_to "Citas", admin_appointments_path,
+                  class: "admin-top-nav__link #{'is-active' if controller_name == 'appointments'}" %>
+    </nav>
+    <div class="admin-top-actions">
+      <% if defined?(root_path) %>
+        <%= link_to "Ver landing", root_path, class: "btn-leva-ghost" %>
+      <% end %>
+      <%= button_to "Cerrar sesión",
+                    destroy_user_session_path,
+                    method: :delete,
+                    class: "btn-leva-primary admin-logout-button" %>
+    </div>
+  </header>
 
-    <main class="admin-main">
-      <div class="admin-navbar">
-        <div>
-          <p class="admin-navbar__title">Panel administrativo</p>
-          <p class="admin-navbar__subtitle">
-            Coordina usuarios, personal medico e instituciones en un solo lugar.
-          </p>
-        </div>
-        <div class="admin-navbar__cta">
-          <span class="page-eyebrow">Tu salud, a un clic de distancia</span>
-          <% if defined?(root_path) %>
-            <%= link_to "Ver landing", root_path, class: "btn-leva-plain" %>
-          <% end %>
+  <main class="admin-main">
+    <section class="admin-hero">
+      <div class="admin-hero__text">
+        <span class="page-eyebrow">Cuidado confiable</span>
+        <h1>Tu salud, a un clic de distancia</h1>
+        <p>
+          Agenda citas con tus especialistas de confianza de forma rápida y segura.
+          Simplificamos la experiencia médica con tecnología humana.
+        </p>
+        <div class="admin-hero__actions">
+          <%= link_to "Agenda tu cita ahora", admin_appointments_path, class: "btn-leva-primary" %>
+          <%= link_to "Ver plantilla médica", admin_medical_institutes_path, class: "btn-leva-ghost" %>
         </div>
       </div>
+    </section>
 
-      <div class="admin-page">
-        <%= yield %>
-      </div>
-    </main>
-  </div>
+    <div class="admin-page">
+      <%= yield %>
+    </div>
+  </main>
 </body>
 </html>
