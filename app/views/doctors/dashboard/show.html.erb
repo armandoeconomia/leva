@@ -1,154 +1,188 @@
-<div class="px-4 md:px-10 lg:px-20 xl:px-40 py-10 space-y-12 bg-background-main min-h-screen">
-  <div class="flex items-center justify-between gap-4 flex-wrap">
-    <div>
-      <p class="text-sm uppercase tracking-wide text-text-secondary">Panel médico</p>
-      <div class="text-3xl font-black text-text-primary">
-        Bienvenido/a Dr. <%= @doctor.user.name %> <%= @doctor.user.last_name %>
+<% doctor = @doctor %>
+<% upcoming = @upcoming_appointments || [] %>
+<% pending_requests = upcoming.select { |a| a.status == "pendiente" } %>
+<% patients = @active_patients || [] %>
+<% institute = @medical_institute %>
+<% work_hours = @work_hours || [] %>
+<% appointments_today = upcoming.count { |a| a.date == Date.today } %>
+
+<div class="admin-shell" style="padding: 32px 40px 56px; max-width: 1200px; margin: 0 auto;">
+  <!-- Hero estilo admin -->
+  <div class="admin-hero mb-5" style="background: linear-gradient(135deg, #D9D8E0 0%, #B69CFF 45%, #F8F7F9 100%); border-radius: 28px; padding: 32px 32px 36px; box-shadow: 0 24px 44px rgba(0,0,0,0.08);">
+    <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-3 justify-content-between">
+      <div class="flex-grow-1">
+        <p class="page-eyebrow text-dark">Cuidado confiable</p>
+        <h1 class="admin-page-title mb-2">Tu salud, a un clic de distancia</h1>
+        <p class="admin-page-description mb-0">Agenda y gestiona tus citas con tecnología humana. Mantén pacientes, horarios e instituto en un solo lugar.</p>
+      </div>
+      <div class="d-flex flex-column align-items-lg-end gap-3">
+        <div class="d-flex flex-wrap gap-2 justify-content-end">
+          <%= link_to "Mis citas", doctors_appointments_path, class: "btn-leva-primary" %>
+          <%= link_to "Mi perfil", edit_doctors_doctor_path, class: "btn-leva-ghost" %>
+          <%= link_to "Pacientes", doctors_patients_path, class: "btn-leva-ghost" %>
+          <%= link_to "Asistente IA", doctors_assistant_path, class: "btn-leva-ghost" %>
+        </div>
       </div>
     </div>
-    <%= link_to "Abrir asistente IA", doctors_assistant_path, class: "btn-lilac" %>
   </div>
 
-  <section class="space-y-4">
-    <div class="flex items-center justify-between flex-wrap gap-4">
-      <h2 class="text-2xl font-bold text-text-primary">Próximas citas</h2>
-      <%= link_to "Ver calendario completo", doctors_appointments_path, class: "link-lilac" %>
+  <div class="admin-page-header">
+    <div>
+      <span class="page-eyebrow">Panel principal</span>
+      <h1 class="admin-page-title">Resumen operativo</h1>
+      <p class="admin-page-description">
+        Monitorea tu actividad diaria: citas, pacientes, horarios y usa tu asistente IA.
+      </p>
     </div>
-    <% if @upcoming_appointments.any? %>
-      <div class="space-y-4">
-        <% @upcoming_appointments.each do |appointment| %>
-          <article class="bg-background-card p-5 rounded-xl shadow-soft">
-            <div class="flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <p class="text-lg font-semibold text-text-primary">
-                  <%= appointment.patient.user.name %> <%= appointment.patient.user.last_name %>
-                </p>
-                <p class="text-sm text-text-secondary">
-                  <%= appointment.date&.strftime('%d %b %Y') %> · <%= appointment.hour&.strftime('%H:%M') %>
-                </p>
-              </div>
-              <span class="status-pill <%= appointment.status %>">
-                <%= appointment.status.titleize %>
-              </span>
-            </div>
-            <p class="text-text-secondary text-sm mt-3">
-              <%= truncate(appointment.reason_for_consultation, length: 120) %>
-            </p>
-            <div class="mt-4 flex flex-wrap gap-2">
-              <%= link_to "Ver cita", doctors_appointment_path(appointment), class: "btn-ghost-sm" %>
-              <%= link_to "Paciente", doctors_patient_path(appointment.patient), class: "btn-ghost-sm" %>
-            </div>
-          </article>
-        <% end %>
-      </div>
-    <% else %>
-      <div class="bg-background-card p-4 rounded-xl shadow-soft text-text-secondary">
-        No hay citas por el momento.
-      </div>
-    <% end %>
-  </section>
+  </div>
 
-  <section class="space-y-4">
-    <div class="flex items-center justify-between flex-wrap gap-4">
-      <h2 class="text-2xl font-bold text-text-primary">Pacientes activos</h2>
-      <%= link_to "Ver todos", doctors_patients_path, class: "link-lilac" %>
+<div class="admin-metrics" style="gap: 14px; flex-wrap: wrap; margin-bottom: 20px;">
+  <div class="admin-metric-card" style="order: -1; border-radius: 14px; padding: 16px 18px; box-shadow: 0 14px 24px rgba(0,0,0,0.05); min-width: 220px;">
+    <p class="admin-metric-label">Instituto</p>
+    <p class="admin-metric-value" style="font-size: 20px;"><%= institute&.name || "N/D" %></p>
+  </div>
+  <div class="admin-metric-card" style="border-radius: 14px; padding: 16px 18px; box-shadow: 0 14px 24px rgba(0,0,0,0.05);">
+    <p class="admin-metric-value"><%= appointments_today %></p>
+    <p class="admin-metric-label">Citas hoy</p>
+  </div>
+  <div class="admin-metric-card" style="border-radius: 14px; padding: 16px 18px; box-shadow: 0 14px 24px rgba(0,0,0,0.05);">
+    <p class="admin-metric-value"><%= pending_requests.size %></p>
+    <p class="admin-metric-label">Pendientes</p>
+  </div>
+  <div class="admin-metric-card" style="border-radius: 14px; padding: 16px 18px; box-shadow: 0 14px 24px rgba(0,0,0,0.05);">
+    <p class="admin-metric-value"><%= patients.size %></p>
+    <p class="admin-metric-label">Pacientes</p>
+  </div>
+</div>
+
+<section class="admin-card mt-8" style="border-radius: 24px; box-shadow: 0 24px 44px rgba(0,0,0,0.06); padding: 24px;">
+  <div class="admin-card__header">
+    <div>
+      <p class="page-eyebrow">Seguimiento</p>
+      <h2 class="admin-card__title">Próximas citas</h2>
+      <p class="admin-card__description">
+        Visualiza tus próximas reservas y toma acción inmediata.
+      </p>
     </div>
-    <% if @active_patients.any? %>
-      <ul class="bg-background-card divide-y divide-gray-100 rounded-xl shadow-soft">
-        <% @active_patients.each do |patient| %>
-          <li class="p-4 flex items-center justify-between flex-wrap gap-3">
-            <div>
-              <p class="font-semibold text-text-primary">
-                <%= patient.user.name %> <%= patient.user.last_name %>
-              </p>
-              <p class="text-sm text-text-secondary">
-                Tipo de sangre: <strong><%= patient.blood_type %></strong> · Estado civil: <%= patient.marital_status %>
-              </p>
-            </div>
-            <%= link_to "Ver paciente", doctors_patient_path(patient), class: "btn-ghost-sm" %>
-          </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <div class="bg-background-card p-4 rounded-xl shadow-soft text-text-secondary">
-        No hay pacientes aún.
-      </div>
-    <% end %>
-  </section>
+    <%= link_to "Ver todas", doctors_appointments_path, class: "btn-leva-ghost" %>
+  </div>
+  <% if upcoming.any? %>
+    <div class="admin-table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Paciente</th>
+            <th>Estado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% upcoming.each do |appointment| %>
+            <tr>
+              <td><%= appointment.date&.strftime('%d %b %Y') %></td>
+              <td><%= appointment.hour&.strftime('%H:%M') %></td>
+              <td><strong><%= appointment.patient&.user&.name || "Paciente" %></strong></td>
+              <td><span class="status-pill <%= appointment.status %>"><%= appointment.status.to_s.titleize %></span></td>
+              <td class="text-right">
+                <div class="d-flex gap-2 justify-content-end">
+                  <%= link_to "Abrir", doctors_appointment_path(appointment), class: "btn-leva-link" %>
+                  <%= link_to "Aceptar", confirm_doctors_appointment_path(appointment), method: :patch, class: "btn btn-success btn-sm" %>
+                  <%= link_to "Rechazar", cancel_doctors_appointment_path(appointment), method: :patch, class: "btn btn-warning btn-sm" %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <p class="muted">Aún no se registran citas futuras.</p>
+  <% end %>
+</section>
 
-  <section class="space-y-4">
-    <h2 class="text-2xl font-bold text-text-primary">Horario de trabajo</h2>
-    <table class="min-w-full bg-background-card rounded-xl shadow-soft overflow-hidden text-left">
-      <thead class="bg-primary-light text-text-primary font-semibold">
+<section class="admin-card mt-4" style="border-radius: 24px; box-shadow: 0 24px 44px rgba(0,0,0,0.06); padding: 24px;">
+  <div class="admin-card__header">
+    <div>
+      <p class="page-eyebrow">Pacientes</p>
+      <h2 class="admin-card__title">Pacientes activos</h2>
+      <p class="admin-card__description">
+        Accede rápidamente a los perfiles e historiales de tus pacientes.
+      </p>
+    </div>
+    <%= link_to "Ver todos", doctors_patients_path, class: "btn-leva-ghost" %>
+  </div>
+  <% if patients.any? %>
+    <div class="admin-table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Historial</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% patients.each do |patient| %>
+            <% first_history = patient.medical_histories.first %>
+            <tr>
+              <td><strong><%= patient.user&.name || "Paciente ##{patient.id}" %></strong></td>
+              <td><%= patient.user&.phone_number.presence || "Sin teléfono" %></td>
+              <td>
+                <% if first_history %>
+                  <%= link_to "Ver historial", doctors_patient_medical_history_path(patient, first_history), class: "btn-leva-link" %>
+                <% else %>
+                  <span class="muted">Sin historial</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <p class="muted">Aún no tienes pacientes registrados.</p>
+  <% end %>
+</section>
+
+<section class="admin-card mt-4" style="border-radius: 24px; box-shadow: 0 24px 44px rgba(0,0,0,0.06); padding: 24px;">
+  <div class="admin-card__header">
+    <div>
+      <p class="page-eyebrow">Disponibilidad</p>
+      <h2 class="admin-card__title">Horas de trabajo</h2>
+      <p class="admin-card__description">
+        Revisa tus horarios activos por día.
+      </p>
+    </div>
+    <%= link_to "Gestionar horarios", doctors_calendars_path, class: "btn-leva-ghost" %>
+  </div>
+  <div class="admin-table-wrapper">
+    <table class="admin-table">
+      <thead>
         <tr>
-          <th class="px-6 py-3">Día</th>
-          <th class="px-6 py-3">Inicio</th>
-          <th class="px-6 py-3">Fin</th>
+          <th>Día</th>
+          <th>Inicio</th>
+          <th>Fin</th>
         </tr>
       </thead>
-      <tbody class="text-text-secondary">
-        <% if @work_hours.any? %>
-          <% @work_hours.each do |hour| %>
+      <tbody>
+        <% if work_hours.any? %>
+          <% work_hours.each do |hour| %>
             <tr>
-              <td class="px-6 py-4">
-                <%= hour.calendar.date&.strftime('%A %d/%m') %>
-              </td>
-              <td class="px-6 py-4"><%= hour.start_time&.strftime('%H:%M') %></td>
-              <td class="px-6 py-4"><%= hour.end_time&.strftime('%H:%M') %></td>
+              <td><%= hour.calendar.date&.strftime('%A %d/%m') %></td>
+              <td><%= hour.start_time&.strftime('%H:%M') %></td>
+              <td><%= hour.end_time&.strftime('%H:%M') %></td>
             </tr>
           <% end %>
         <% else %>
           <tr>
-            <td class="px-6 py-4" colspan="3">Aún no registras horarios activos.</td>
+            <td colspan="3" class="muted">Aún no registras horarios activos.</td>
           </tr>
         <% end %>
       </tbody>
     </table>
-  </section>
+  </div>
+</section>
 
-  <section class="space-y-4">
-    <h2 class="text-2xl font-bold text-text-primary">Últimos historiales médicos</h2>
-    <% if @latest_medical_histories.any? %>
-      <div class="grid gap-4 md:grid-cols-2">
-        <% @latest_medical_histories.each do |history| %>
-          <article class="bg-background-card p-4 rounded-xl shadow-soft">
-            <p class="font-semibold text-text-primary">
-              <%= history.patient.user.name %> <%= history.patient.user.last_name %>
-            </p>
-            <p class="text-sm text-text-secondary">
-              Registrado el <%= history.registration_date&.strftime('%d %b %Y') %>
-            </p>
-            <p class="text-text-secondary text-sm mt-2">
-              <%= truncate(history.diagnosis, length: 140) %>
-            </p>
-            <%= link_to "Ver historial", doctors_patient_medical_history_path(history.patient, history),
-                        class: "link-lilac mt-3 inline-block" %>
-          </article>
-        <% end %>
-      </div>
-    <% else %>
-      <div class="bg-background-card p-4 rounded-xl shadow-soft text-text-secondary">
-        Aún no se han registrado historiales.
-      </div>
-    <% end %>
-  </section>
-
-  <section class="space-y-4">
-    <h2 class="text-2xl font-bold text-text-primary">Instituto médico</h2>
-    <% if @medical_institute.present? %>
-      <div class="bg-background-card p-4 rounded-xl shadow-soft text-text-secondary space-y-2">
-        <p class="text-lg font-semibold text-text-primary"><%= @medical_institute.name %></p>
-        <p><strong>Dirección:</strong> <%= @medical_institute.address %></p>
-        <p><strong>Teléfono:</strong> <%= @medical_institute.phone_number %></p>
-        <% if @medical_institute.emergency_phone_number.present? %>
-          <p><strong>Emergencias:</strong> <%= @medical_institute.emergency_phone_number %></p>
-        <% end %>
-        <p><strong>Tipo:</strong> <%= @medical_institute.institute_type %></p>
-      </div>
-    <% else %>
-      <div class="bg-background-card p-4 rounded-xl shadow-soft text-text-secondary">
-        Aún no tienes un instituto asignado.
-      </div>
-    <% end %>
-  </section>
 </div>

@@ -1,10 +1,46 @@
-<h1>Detalle de cita</h1>
+<% appt = @appointment %>
+<% patient_name = appt.patient&.user&.name || "Paciente" %>
 
-<p><strong>Fecha:</strong> <%= @appointment.date %></p>
-<p><strong>Hora:</strong> <%= @appointment.hour %></p>
-<p><strong>Motivo:</strong> <%= @appointment.reason_for_consultation %></p>
-<p><strong>Estado:</strong> <%= @appointment.status %></p>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Cita</span>
+    <h1 class="admin-page-title">Detalle de cita</h1>
+    <p class="admin-page-description">Revisa la información de la cita y realiza acciones rápidas.</p>
+  </div>
+  <div class="admin-actions">
+    <%= link_to "Volver al listado", doctors_appointments_path, class: "btn-leva-ghost" %>
+  </div>
+</div>
 
-<%= link_to 'Confirmar', confirm_doctors_appointment_path(@appointment), method: :patch %> |
-<%= link_to 'Cancelar', cancel_doctors_appointment_path(@appointment), method: :patch %> |
-<%= link_to 'Volver', doctors_appointments_path %>
+<section class="admin-card mt-4">
+  <div class="admin-card__header">
+    <div>
+      <p class="page-eyebrow">Información</p>
+      <h2 class="admin-card__title"><%= patient_name %></h2>
+      <p class="admin-card__description">
+        <%= l(appt.date, format: '%d %b %Y') rescue appt.date %> · <%= appt.hour&.strftime('%H:%M') || appt.hour %>
+      </p>
+    </div>
+    <span class="status-pill <%= appt.status %>"><%= appt.status.to_s.titleize %></span>
+  </div>
+  <div class="admin-card__body">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <p class="text-muted mb-1 small">Paciente</p>
+        <p class="fw-semibold mb-0"><%= patient_name %></p>
+      </div>
+      <div class="col-md-6">
+        <p class="text-muted mb-1 small">Motivo</p>
+        <p class="mb-0"><%= appt.reason_for_consultation.presence || "Sin motivo registrado" %></p>
+      </div>
+    </div>
+  </div>
+  <div class="admin-card__footer">
+    <div class="d-flex flex-wrap gap-2">
+      <%= link_to 'Confirmar', confirm_doctors_appointment_path(appt), method: :patch, class: "btn btn-success btn-sm" %>
+      <%= link_to 'Cancelar', cancel_doctors_appointment_path(appt), method: :patch, class: "btn btn-warning btn-sm" %>
+      <%= link_to 'Editar', edit_doctors_appointment_path(appt), class: "btn btn-primary btn-sm" %>
+      <%= link_to 'Eliminar', doctors_appointment_path(appt), method: :delete, data: { confirm: '¿Eliminar esta cita?' }, class: "btn btn-danger btn-sm" %>
+    </div>
+  </div>
+</section>

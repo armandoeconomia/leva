@@ -1,2 +1,20 @@
-<h1>Doctors::Appointments#update</h1>
-<p>Find me in app/views/doctors/appointments/update.html.erb</p>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Citas</span>
+    <h1 class="admin-page-title">Cita actualizada</h1>
+    <p class="admin-page-description">Los cambios se guardaron correctamente.</p>
+  </div>
+  <div class="admin-actions">
+    <%= link_to "Volver al listado", doctors_appointments_path, class: "btn-leva-ghost" %>
+  </div>
+</div>
+
+<section class="admin-card mt-4">
+  <div class="admin-card__body text-center">
+    <p class="muted mb-4">Puedes revisar el detalle o seguir gestionando tus citas.</p>
+    <div class="d-flex justify-content-center gap-2">
+      <%= link_to 'Ver detalle', doctors_appointment_path(@appointment), class: "btn btn-primary" %>
+      <%= link_to 'Ir al listado', doctors_appointments_path, class: "btn btn-outline-secondary" %>
+    </div>
+  </div>
+</section>

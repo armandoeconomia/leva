@@ -1,0 +1,51 @@
+<div class="admin-shell" style="padding: 32px 40px 48px;">
+  <div class="admin-page-header">
+    <div>
+      <span class="page-eyebrow">Perfil</span>
+      <h1 class="admin-page-title">Editar perfil</h1>
+      <p class="admin-page-description">Actualiza tus datos personales y profesionales.</p>
+    </div>
+    <div class="admin-actions">
+      <%= link_to "Volver", doctors_doctor_path, class: "btn-leva-ghost" %>
+    </div>
+  </div>
+
+  <section class="admin-card mt-4" style="border-radius: 24px; box-shadow: 0 24px 44px rgba(0,0,0,0.06); padding: 24px;">
+    <%= form_with model: [:doctors, @doctor], local: true, class: "row g-3" do |f| %>
+      <div class="col-md-6">
+        <%= f.label :user_name, "Nombre", class: "form-label fw-semibold" %>
+        <%= text_field_tag "doctor[user_attributes][name]", @doctor.user&.name, class: "form-control rounded-3" %>
+      </div>
+      <div class="col-md-6">
+        <%= f.label :user_last_name, "Apellido", class: "form-label fw-semibold" %>
+        <%= text_field_tag "doctor[user_attributes][last_name]", @doctor.user&.last_name, class: "form-control rounded-3" %>
+      </div>
+      <div class="col-md-6">
+        <%= f.label :user_email, "Email", class: "form-label fw-semibold" %>
+        <%= email_field_tag "doctor[user_attributes][email]", @doctor.user&.email, class: "form-control rounded-3" %>
+      </div>
+      <div class="col-md-6">
+        <%= f.label :user_phone_number, "Teléfono", class: "form-label fw-semibold" %>
+        <%= text_field_tag "doctor[user_attributes][phone_number]", @doctor.user&.phone_number, class: "form-control rounded-3" %>
+      </div>
+
+      <div class="col-md-6">
+        <%= f.label :medical_registration, "Registro médico", class: "form-label fw-semibold" %>
+        <%= f.text_field :medical_registration, class: "form-control rounded-3" %>
+      </div>
+      <div class="col-md-6">
+        <%= f.label :speciality, "Especialidad", class: "form-label fw-semibold" %>
+        <%= f.select :speciality, Doctor.specialities.keys.map { |s| [s.humanize, s] }, {}, class: "form-select rounded-3" %>
+      </div>
+      <div class="col-md-12">
+        <%= f.label :medical_institute_id, "Instituto médico", class: "form-label fw-semibold" %>
+        <%= f.collection_select :medical_institute_id, MedicalInstitute.all, :id, :name, { prompt: "Selecciona un instituto" }, class: "form-select rounded-3" %>
+      </div>
+
+      <div class="col-12 d-flex gap-2 mt-2">
+        <%= f.submit "Guardar cambios", class: "btn btn-primary px-4" %>
+        <%= link_to "Cancelar", doctors_doctor_path, class: "btn btn-outline-secondary" %>
+      </div>
+    <% end %>
+  </section>
+</div>
