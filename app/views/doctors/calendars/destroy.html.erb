@@ -1,2 +1,16 @@
-<h1>Doctors::Calendars#destroy</h1>
-<p>Find me in app/views/doctors/calendars/destroy.html.erb</p>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card shadow-sm border-0 rounded-4 text-center p-4">
+        <div class="card-body">
+          <p class="text-uppercase fw-semibold small mb-2 text-muted">Calendario</p>
+          <h3 class="fw-bold mb-3">Día eliminado</h3>
+          <p class="text-muted mb-4">El día seleccionado fue eliminado de tu calendario.</p>
+          <div class="d-flex justify-content-center gap-2">
+            <%= link_to 'Volver al calendario', doctors_calendars_path, class: "btn btn-primary px-4" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

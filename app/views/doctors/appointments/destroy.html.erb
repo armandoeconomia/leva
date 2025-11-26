@@ -1,2 +1,17 @@
-<h1>Doctors::Appointments#destroy</h1>
-<p>Find me in app/views/doctors/appointments/destroy.html.erb</p>
+<div class="admin-page-header">
+  <div>
+    <span class="page-eyebrow">Citas</span>
+    <h1 class="admin-page-title">Cita eliminada</h1>
+    <p class="admin-page-description">La cita seleccionada fue eliminada.</p>
+  </div>
+  <div class="admin-actions">
+    <%= link_to "Volver al listado", doctors_appointments_path, class: "btn-leva-ghost" %>
+  </div>
+</div>
+
+<section class="admin-card mt-4">
+  <div class="admin-card__body text-center">
+    <p class="muted mb-4">Si necesitas recrearla, agenda una nueva con los datos correctos.</p>
+    <%= link_to 'Crear nueva cita', doctors_appointments_path, class: "btn btn-primary" %>
+  </div>
+</section>

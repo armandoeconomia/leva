@@ -1,2 +1,78 @@
-<h1>Doctors::Patients#show</h1>
-<p>Find me in app/views/doctors/patients/show.html.erb</p>
+<% patient = @patient || Patient.includes(:user, :medical_histories).find_by(id: params[:id]) %>
+<% histories = patient&.medical_histories&.order(registration_date: :desc) || [] %>
+
+<div class="container py-4 py-lg-5">
+  <% if patient.nil? %>
+    <div class="alert alert-warning">No se encontró al paciente.</div>
+  <% else %>
+    <div class="row g-4 mb-4">
+      <div class="col-lg-8">
+        <div class="card shadow-sm border-0 rounded-4 h-100">
+          <div class="card-body p-4">
+            <p class="text-uppercase fw-semibold small mb-1 text-muted">Perfil</p>
+            <h2 class="fw-bold mb-3"><%= patient.user&.name || "Paciente ##{patient.id}" %></h2>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <p class="text-muted mb-1 small">Email</p>
+                <p class="fw-semibold mb-0"><%= patient.user&.email || "Sin email" %></p>
+              </div>
+              <div class="col-md-6">
+                <p class="text-muted mb-1 small">Teléfono</p>
+                <p class="fw-semibold mb-0"><%= patient.user&.phone_number.presence || "Sin teléfono" %></p>
+              </div>
+              <div class="col-md-6">
+                <p class="text-muted mb-1 small">Tipo de sangre</p>
+                <p class="fw-semibold mb-0"><%= patient.blood_type || "N/D" %></p>
+              </div>
+              <div class="col-md-6">
+                <p class="text-muted mb-1 small">Estado civil</p>
+                <p class="fw-semibold mb-0"><%= patient.marital_status || "N/D" %></p>
+              </div>
+              <div class="col-12">
+                <p class="text-muted mb-1 small">Contacto de emergencia</p>
+                <p class="fw-semibold mb-0"><%= patient.emergency_contact.presence || "N/D" %></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card shadow-sm border-0 rounded-4 h-100">
+          <div class="card-body p-4">
+            <p class="text-uppercase fw-semibold small mb-1 text-muted">Acciones</p>
+            <div class="d-flex flex-column gap-2">
+              <%= link_to 'Volver a pacientes', doctors_patients_path, class: "btn btn-outline-secondary" %>
+              <%= link_to 'Ver citas', doctors_appointments_path, class: "btn btn-outline-secondary" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-4">
+      <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <p class="text-uppercase fw-semibold small mb-1 text-muted">Historiales médicos</p>
+            <h4 class="mb-0">Registros recientes</h4>
+          </div>
+        </div>
+        <% if histories.any? %>
+          <div class="row g-3">
+            <% histories.each do |history| %>
+              <div class="col-md-6 col-lg-4">
+                <div class="p-3 bg-light rounded-3 h-100">
+                  <p class="fw-semibold mb-1"><%= history.registration_date&.strftime('%d %b %Y') || "Sin fecha" %></p>
+                  <p class="text-muted small mb-2"><%= truncate(history.diagnosis, length: 120) %></p>
+                  <%= link_to "Ver historial", doctors_patient_medical_history_path(patient, history), class: "btn btn-sm btn-outline-primary" %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-muted mb-0">Aún no se han registrado historiales para este paciente.</p>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

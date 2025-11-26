@@ -32,14 +32,14 @@ Rails.application.routes.draw do
   # Rutas Específicas para DOCTORES
   namespace :doctors do
     # Dashboard del doctor
-    get 'dashboard', to: 'dashboards#show', as: 'dashboard'
+    get 'dashboard', to: 'dashboard#show', as: 'dashboard'
 
     resource :assistant, only: [:show], controller: "assistants" do
       post :message, on: :collection
     end
 
     # Ver perfil del doctor (él mismo)
-    resource :doctor, only: [:show, :edit, :update]
+    resource :doctor, only: [:show, :edit, :update], controller: "doctor"
 
     # Gestión de Calendario y Citas
     resources :calendars, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
