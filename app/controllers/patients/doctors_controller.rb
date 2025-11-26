@@ -1,3 +1,5 @@
+require "ostruct"
+
 class Patients::DoctorsController < Patients::BaseController
   def index
     @q = params[:q].to_s.strip
@@ -28,6 +30,20 @@ class Patients::DoctorsController < Patients::BaseController
     end
 
     @doctors = doctors.distinct
+    @speciality_options = Doctor.specialities.keys.map { |key| key.humanize }.sort
+    @location_options = MedicalInstitute.order(:name).pluck(:address).compact.uniq
+
+    selected_date = begin
+                      @date.present? ? Date.parse(@date) : Date.today
+                    rescue ArgumentError
+                      Date.today
+                    end
+    start_calendar = selected_date.beginning_of_month.beginning_of_week(:monday)
+    end_calendar = selected_date.end_of_month.end_of_week(:sunday)
+    @calendar_weeks = (start_calendar..end_calendar).to_a.each_slice(7).to_a
+    @calendar_month_label = selected_date.strftime("%B %Y")
+    @calendar_month = selected_date.month
+    @calendar_selected_date = selected_date
   end
 
   def show
@@ -50,5 +66,11 @@ class Patients::DoctorsController < Patients::BaseController
 
                       hash[[appointment.date, hour_key]] = appointment
                     end
+
+    @calendar_cards = if @upcoming_calendars.any?
+                        @upcoming_calendars
+                      else
+                        Array.new(5) { |i| OpenStruct.new(date: Date.today + i.days, hours: Hour.none) }
+                      end
   end
 end

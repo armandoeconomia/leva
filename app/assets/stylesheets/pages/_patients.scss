@@ -682,6 +682,141 @@
   margin-top: 12px;
 }
 
+.doctor-search-hero {
+  background: linear-gradient(135deg, rgba($color-accent, 0.08), $background-card);
+  .doctor-search-form {
+    width: 100%;
+  }
+}
+
+.doctor-hero-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+  gap: 16px;
+  align-items: stretch;
+
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.doctor-search-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.doctor-search-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.doctor-calendar-card {
+  background: $background-card;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.doctor-calendar-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.calendar-input {
+  border-radius: 12px;
+  border: 1px solid $border-light;
+}
+
+.doctor-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  text-align: center;
+  flex-grow: 1;
+  align-content: start;
+  width: 100%;
+}
+
+.calendar-weekday {
+  font-size: 12px;
+  font-weight: 600;
+  color: $text-light;
+  text-transform: uppercase;
+}
+
+.calendar-day {
+  border: 1px solid $border-light;
+  border-radius: 12px;
+  padding: 10px 0;
+  background: $background-card;
+  color: $text-primary;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  width: 100%;
+
+  &:hover {
+    background: rgba($color-accent, 0.15);
+    color: $text-primary;
+  }
+
+  &.is-out {
+    color: $text-light;
+    opacity: 0.6;
+  }
+
+  &.is-today {
+    border-color: rgba($color-accent, 0.45);
+  }
+
+  &.is-selected {
+    background: $color-accent;
+    color: $text-inverse;
+    border-color: $color-accent;
+    box-shadow: 0 10px 20px rgba($color-accent, 0.3);
+  }
+}
+
+.doctor-results-panel {
+  margin-top: 32px;
+}
+
+.doctor-result-card {
+  align-items: stretch;
+}
+
+.doctor-icon {
+  background: rgba($color-accent, 0.16);
+  color: $color-accent;
+}
+
+.doctor-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  i {
+    color: $color-accent;
+  }
+}
+
+.doctor-results-panel .btn-ghost-sm {
+  border-radius: 999px;
+  padding: 10px 18px;
+}
+
+.doctor-search-grid .search-submit {
+  align-self: stretch;
+}
+
 .input-shell {
   display: flex;
   align-items: center;
@@ -740,6 +875,10 @@
   padding: 12px;
   background: $color-primary-light;
   box-shadow: $shadow-soft;
+
+  &--empty {
+    background: $background-card;
+  }
 
   .slots {
     display: flex;
