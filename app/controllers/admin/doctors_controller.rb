@@ -32,7 +32,7 @@ class Admin::DoctorsController < Admin::BaseController
 
   def destroy
     @doctor.destroy
-    redirect_to admin_doctors_path, notice: "Doctor deleted"
+    redirect_to admin_doctors_path, notice: "Doctor deleted", status: :see_other
   end
 
   private

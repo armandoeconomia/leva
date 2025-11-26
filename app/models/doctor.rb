@@ -2,10 +2,10 @@ class Doctor < ApplicationRecord
   belongs_to :user
   belongs_to :medical_institute
 
-  has_many :appointments
-  has_many :medical_histories
-  has_many :calendars
-  has_many :hours, through: :calendars
+  has_many :appointments , dependent: :destroy
+  has_many :medical_histories , dependent: :destroy
+  has_many :calendars , dependent: :destroy
+  has_many :hours, through: :calendars , dependent: :destroy
 
   enum speciality: { cardiologia: 0, general: 1, "nutrición"=> 2}
   validates :speciality, presence: true

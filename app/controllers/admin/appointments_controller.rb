@@ -32,7 +32,7 @@ class Admin::AppointmentsController < Admin::BaseController
 
   def destroy
     @appointment.destroy
-    redirect_to admin_appointments_path, notice: "Appointment deleted"
+    redirect_to admin_appointments_path, notice: "Appointment deleted",status: :see_other
   end
 
   private
