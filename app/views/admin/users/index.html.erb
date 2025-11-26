@@ -41,11 +41,14 @@
             <div class="admin-actions">
               <%= link_to "Ver", admin_user_path(user), class: "btn-soft btn-soft--info" %>
               <%= link_to "Editar", edit_admin_user_path(user), class: "btn-soft btn-soft--warning" %>
-              <%= link_to "Eliminar",
+              <%#= link_to "Eliminar",
                           admin_user_path(user),
                           method: :delete,
                           data: { confirm: "Seguro que deseas eliminar este usuario?" },
                           class: "btn-soft btn-soft--danger" %>
+              <%= button_to "Eliminar",admin_user_path(user) ,
+                            method: :delete, confirm: "¿Seguro que deseas eliminar esta cita?",
+                            class: "btn-soft btn-soft--danger" %>
             </div>
           </td>
         </tr>

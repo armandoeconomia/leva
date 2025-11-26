@@ -175,6 +175,28 @@
   color: $text-secondary;
 }
 
+.btn-leva-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba($color-accent, 0.35);
+  background: #fff;
+  color: darken($color-accent, 25%);
+  box-shadow: 0 12px 30px rgba($color-accent, 0.15);
+  transition: color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-leva-link:hover {
+  color: darken($color-accent, 35%);
+  transform: translateY(-1px);
+  box-shadow: 0 16px 32px rgba($color-accent, 0.2);
+}
+
 .admin-page {
   max-width: 1200px;
   margin: 0 auto;

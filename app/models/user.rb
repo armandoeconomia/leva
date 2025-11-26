@@ -4,9 +4,9 @@ class User < ApplicationRecord
   devise :database_authenticatable,
          :recoverable, :rememberable, :validatable
 
-  has_many :medical_institutes
-  has_one :doctor
-  has_one :patient
+  has_many :medical_institutes , dependent: :destroy
+  has_one :doctor , dependent: :destroy
+  has_one :patient , dependent: :destroy
   has_many :ai_conversations, dependent: :destroy
   has_many :ai_messages, through: :ai_conversations
 

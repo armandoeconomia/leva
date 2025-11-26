@@ -1,6 +1,6 @@
 class Calendar < ApplicationRecord
   belongs_to :doctor
-  has_many  :hours
+  has_many  :hours , dependent: :destroy
 
   validates :date, presence: true
   validates :date, uniqueness: { scope: :doctor_id,

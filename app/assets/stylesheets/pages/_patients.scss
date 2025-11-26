@@ -631,16 +631,43 @@
 }
 
 .status-pill {
-  padding: 6px 10px;
-  border-radius: 10px;
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
   text-transform: capitalize;
-  border: 1px solid $border-light;
-  background: $color-primary-light;
+  letter-spacing: 0.02em;
+  border: 1px solid rgba($color-accent, 0.25);
+  background: #fff;
+  color: darken($color-accent, 20%);
+  box-shadow: 0 10px 24px rgba($color-accent, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 
-  &.pendiente { color: $text-primary; }
-  &.completado { color: $color-success; }
-  &.cancelado { color: $color-danger; }
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 28px rgba($color-accent, 0.15);
+  }
+
+  &.pendiente {
+    background: rgba($color-warning, 0.18);
+    border-color: rgba($color-warning, 0.45);
+    color: darken($color-warning, 25%);
+  }
+
+  &.completado {
+    background: rgba($color-success, 0.2);
+    border-color: rgba($color-success, 0.45);
+    color: darken($color-success, 12%);
+  }
+
+  &.cancelado {
+    background: rgba($color-danger, 0.18);
+    border-color: rgba($color-danger, 0.45);
+    color: darken($color-danger, 10%);
+  }
 }
 
 .doctor-body {
