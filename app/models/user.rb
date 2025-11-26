@@ -7,6 +7,8 @@ class User < ApplicationRecord
   has_many :medical_institutes
   has_one :doctor
   has_one :patient
+  has_many :ai_conversations, dependent: :destroy
+  has_many :ai_messages, through: :ai_conversations
 
   enum gender: { masculino: 0, femenino: 1, otro: 2 }
   validates :gender, presence: true
@@ -17,7 +19,7 @@ class User < ApplicationRecord
   validates :identification, uniqueness: true
 
   def doctor?
-    
+    doctor.present?
   end
 
 end

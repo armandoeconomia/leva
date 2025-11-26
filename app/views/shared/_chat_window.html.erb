@@ -1,0 +1,68 @@
+<% attachments_enabled = defined?(allows_attachments) ? allows_attachments : false %>
+<div class="ai-chat-card">
+  <div class="ai-chat-log">
+    <% if messages.any? %>
+      <% messages.each do |message| %>
+        <% label = message.assistant? ? "Asistente IA" : (defined?(user_label) ? user_label : "Usuario") %>
+        <div class="ai-message <%= message.sender %>">
+          <div class="ai-message-meta">
+            <span class="ai-message-author"><%= label %></span>
+            <span class="ai-message-time"><%= message.created_at.strftime("%d %b %H:%M") %></span>
+          </div>
+          <div class="ai-message-body">
+            <%= simple_format(message.content.presence || (message.assistant? ? "..." : "Sin texto proporcionado.")) %>
+            <% if message.documents.attached? %>
+              <div class="ai-attachments">
+                <p class="eyebrow mb-1">Archivos adjuntos</p>
+                <ul>
+                  <% message.documents.each do |doc| %>
+                    <li><%= link_to doc.filename.to_s, url_for(doc), target: "_blank", rel: "noopener" %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="ai-empty-state">
+        <p><%= defined?(empty_state) ? empty_state : "Aún no tienes mensajes. ¡Empieza la conversación!" %></p>
+      </div>
+    <% end %>
+  </div>
+
+  <%= form_with url: form_path,
+                scope: defined?(form_scope) ? form_scope : :chat,
+                local: true,
+                data: { turbo: false },
+                html: { class: "ai-chat-form", multipart: attachments_enabled } do |f| %>
+    <div class="form-field">
+      <%= f.text_area :content,
+                      placeholder: defined?(placeholder) ? placeholder : "Escribe tu mensaje...",
+                      rows: 4,
+                      class: "form-control" %>
+    </div>
+
+    <% if attachments_enabled %>
+      <div class="form-field">
+        <label class="form-label">Adjuntar archivos</label>
+        <%= f.file_field :documents, multiple: true, class: "form-control" %>
+        <small class="form-text text-muted">Puedes subir imágenes, PDFs o archivos de texto.</small>
+      </div>
+    <% end %>
+
+    <% if defined?(show_store_checkbox) && show_store_checkbox %>
+      <div class="form-check mb-3">
+        <%= f.check_box :store_in_history, class: "form-check-input", id: "chat_store_in_history" %>
+        <%= f.label :store_in_history,
+                    defined?(checkbox_label) ? checkbox_label : "Guardar en historial",
+                    class: "form-check-label" %>
+      </div>
+    <% end %>
+
+    <div class="ai-form-actions">
+      <%= f.submit defined?(button_label) ? button_label : "Enviar",
+                   class: defined?(button_class) ? button_class : "btn-lilac" %>
+    </div>
+  <% end %>
+</div>

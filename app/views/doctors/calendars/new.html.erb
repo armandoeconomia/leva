@@ -1,10 +1,24 @@
-<h1>Crear nuevo calendario</h1>
+<% calendar = @calendar || Calendar.new %>
 
-<%= form_with model: @calendar, url: doctors_calendars_path, local: true do |form| %>
-  <div>
-    <%= form.label :date, "Fecha" %>
-    <%= form.date_field :date %>
+<div class="container py-4 py-lg-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body p-4 p-lg-5">
+          <p class="text-uppercase fw-semibold small mb-1 text-muted">Calendario</p>
+          <h2 class="fw-bold mb-4">Crear día de disponibilidad</h2>
+          <%= form_with model: [:doctors, calendar], local: true, class: "row g-3" do |f| %>
+            <div class="col-12">
+              <%= f.label :date, "Fecha", class: "form-label fw-semibold" %>
+              <%= f.date_field :date, class: "form-control rounded-3" %>
+            </div>
+            <div class="col-12 d-flex gap-2 mt-2">
+              <%= f.submit "Crear", class: "btn btn-primary px-4" %>
+              <%= link_to 'Cancelar', doctors_calendars_path, class: "btn btn-outline-secondary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <%= form.submit "Crear" %>
-<% end %>
+</div>

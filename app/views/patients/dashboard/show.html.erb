@@ -8,6 +8,7 @@
         <div class="hero-actions">
           <%= link_to "Reservar cita", new_patients_appointment_path, class: "btn-lilac" %>
           <%= link_to "Ver doctores", patients_doctors_path, class: "btn-ghost" %>
+          <%= link_to "Asistente IA", patients_assistant_path, class: "btn-ghost" %>
         </div>
       </div>
       <div class="hero-card">
@@ -18,9 +19,9 @@
       </div>
     </section>
 
-    <section class="patient-grid">
-      <div class="patient-card">
-        <div class="section-header">
+    <section class="patient-panels">
+      <div class="panel panel-wide">
+        <div class="panel-header">
           <div>
             <p class="eyebrow">Próximas citas</p>
             <h2>Tus citas agendadas</h2>
@@ -28,25 +29,27 @@
           <%= link_to "Ver todas", patients_appointments_path, class: "link-lilac" %>
         </div>
         <% if @upcoming_appointments.any? %>
-          <div class="card-list">
+          <div class="timeline-list">
             <% @upcoming_appointments.first(3).each do |appointment| %>
-              <div class="item-card">
-                <div class="item-avatar">
-                  <i class="fa fa-user-md"></i>
+              <article class="timeline-card">
+                <div class="timeline-date">
+                  <span class="day"><%= appointment.date&.strftime('%d') %></span>
+                  <span class="month"><%= appointment.date&.strftime('%b') %></span>
+                  <span class="time"><%= appointment.hour&.strftime('%H:%M') %></span>
                 </div>
-                <div class="item-body">
-                  <p class="item-title">
+                <div class="timeline-body">
+                  <p class="timeline-title">
                     <%= link_to "#{appointment.doctor.user.name} #{appointment.doctor.user.last_name}",
                                 patients_doctor_path(appointment.doctor),
                                 class: "doctor-link" %>
                   </p>
-                  <p class="muted"><%= appointment.doctor.speciality.humanize %> · <%= appointment.date&.strftime('%d %b %Y') %> · <%= appointment.hour&.strftime('%H:%M') %></p>
+                  <p class="muted small"><%= appointment.doctor.speciality.humanize %></p>
+                  <div class="timeline-actions">
+                    <span class="status-pill <%= appointment.status %>"><%= appointment.status %></span>
+                    <%= link_to "Ver", patients_appointment_path(appointment), class: "btn-ghost-sm" %>
+                  </div>
                 </div>
-                <div class="item-actions">
-                  <span class="status-pill <%= appointment.status %>"><%= appointment.status %></span>
-                  <%= link_to "Ver", patients_appointment_path(appointment), class: "btn-ghost-sm" %>
-                </div>
-              </div>
+              </article>
             <% end %>
           </div>
         <% else %>
@@ -54,34 +57,68 @@
         <% end %>
       </div>
 
-      <div class="patient-card">
-        <div class="section-header">
-          <div>
-            <p class="eyebrow">Tu salud</p>
-            <h2>Historial médico reciente</h2>
+      <div class="panel-grid">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Tu salud</p>
+              <h2>Historial médico reciente</h2>
+            </div>
+            <%= link_to "Ver historial", patients_medical_histories_path, class: "link-lilac" %>
           </div>
-          <%= link_to "Ver historial", patients_medical_histories_path, class: "link-lilac" %>
+          <% if @recent_medical_histories.any? %>
+            <div class="stacked-cards">
+              <% @recent_medical_histories.each do |history| %>
+                <article class="stacked-card">
+                  <div class="card-icon">
+                    <i class="fa fa-file-medical-alt"></i>
+                  </div>
+                  <div class="stacked-body">
+                    <p class="stacked-title"><%= history.diagnosis.truncate(40) %></p>
+                    <p class="muted small"><%= history.registration_date&.strftime('%d %b %Y') %> · <%= history.doctor.user.name %></p>
+                  </div>
+                  <%= link_to "Ver detalle", patients_medical_history_path(history), class: "link-lilac stacked-link" %>
+                </article>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="muted">Aún no hay registros médicos.</p>
+          <% end %>
         </div>
-        <% if @recent_medical_histories.any? %>
-          <div class="card-list">
-            <% @recent_medical_histories.each do |history| %>
-              <div class="item-card">
-                <div class="item-avatar">
-                  <i class="fa fa-file-medical-alt"></i>
-                </div>
-                <div class="item-body">
-                  <p class="item-title"><%= history.diagnosis.truncate(40) %></p>
-                  <p class="muted"><%= history.registration_date&.strftime('%d %b %Y') %> · <%= history.doctor.user.name %></p>
-                </div>
-                <div class="item-actions">
-                  <%= link_to "Ver detalle", patients_medical_history_path(history), class: "btn-ghost-sm" %>
-                </div>
-              </div>
-            <% end %>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Archivos subidos</p>
+              <h2>Exámenes recientes</h2>
+            </div>
+            <%= link_to "Abrir asistente", patients_assistant_path, class: "link-lilac" %>
           </div>
-        <% else %>
-          <p class="muted">Aún no hay registros médicos.</p>
-        <% end %>
+          <% if @recent_exam_uploads.any? %>
+            <div class="stacked-cards">
+              <% @recent_exam_uploads.each do |message| %>
+                <article class="stacked-card">
+                  <div class="card-icon neutral">
+                    <i class="fa fa-file-medical"></i>
+                  </div>
+                  <div class="stacked-body">
+                    <p class="stacked-title"><%= message.created_at.strftime("%d %b %Y") %></p>
+                    <p class="muted small"><%= truncate(message.content, length: 80) %></p>
+                    <% if message.documents.attached? %>
+                      <ul class="ai-attachments small">
+                        <% message.documents.each do |doc| %>
+                          <li><%= link_to doc.filename.to_s, url_for(doc), target: "_blank", rel: "noopener" %></li>
+                        <% end %>
+                      </ul>
+                    <% end %>
+                  </div>
+                </article>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="muted">Todavía no has guardado exámenes en tu historial.</p>
+          <% end %>
+        </div>
       </div>
     </section>
   </div>

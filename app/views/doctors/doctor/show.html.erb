@@ -1,21 +1,63 @@
-<div class="container mx-auto p-6">
-<h1 class="text-3xl font-bold mb-6">Perfil del Doctor</h1>
+<div class="admin-shell" style="padding: 32px 40px 48px;">
+  <div class="admin-page-header">
+    <div>
+      <span class="page-eyebrow">Perfil</span>
+      <h1 class="admin-page-title">Mi perfil</h1>
+      <p class="admin-page-description">Revisa tus datos personales y profesionales.</p>
+    </div>
+    <div class="admin-actions">
+      <%= link_to "Editar perfil", edit_doctors_doctor_path, class: "btn-leva-primary" %>
+      <%= link_to "Volver al dashboard", doctors_dashboard_path, class: "btn-leva-ghost" %>
+    </div>
+  </div>
 
+  <section class="admin-card mt-4" style="border-radius: 24px; box-shadow: 0 24px 44px rgba(0,0,0,0.06); padding: 24px;">
+    <div class="admin-card__header">
+      <div>
+        <p class="page-eyebrow">Datos personales</p>
+        <h2 class="admin-card__title"><%= [@doctor.user&.name, @doctor.user&.last_name].compact.join(" ") %></h2>
+        <p class="admin-card__description">Información básica del perfil.</p>
+      </div>
+    </div>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <p class="text-muted mb-1 small">Email</p>
+        <p class="fw-semibold mb-0"><%= @doctor.user&.email || "Sin email" %></p>
+      </div>
+      <div class="col-md-6">
+        <p class="text-muted mb-1 small">Teléfono</p>
+        <p class="fw-semibold mb-0"><%= @doctor.user&.phone_number.presence || "Sin teléfono" %></p>
+      </div>
+    </div>
+  </section>
 
-<div class="bg-white rounded-lg shadow-md p-6">
-<h2 class="text-xl font-semibold mb-2">Datos Personales</h2>
-<p><strong>Nombre:</strong> <%= @doctor.user.name %> <%= @doctor.user.last_name %></p>
-<p><strong>Email:</strong> <%= @doctor.user.email %></p>
-<p><strong>Teléfono:</strong> <%= @doctor.user.phone_number %></p>
-<p><strong>Dirección:</strong> <%= @doctor.user.address %></p>
-
-
-<h2 class="text-xl font-semibold mt-6 mb-2">Datos Profesionales</h2>
-<p><strong>Especialidad:</strong> <%= @doctor.speciality %></p>
-<p><strong>Matrícula Médica:</strong> <%= @doctor.medical_registration %></p>
-<p><strong>Instituto Médico:</strong> <%= @doctor.medical_institute.name %></p>
-
-
-<%= link_to 'Editar Perfil', edit_doctors_doctor_path, class: "mt-6 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" %>
-</div>
+  <section class="admin-card mt-4" style="border-radius: 24px; box-shadow: 0 24px 44px rgba(0,0,0,0.06); padding: 24px;">
+    <div class="admin-card__header">
+      <div>
+        <p class="page-eyebrow">Datos profesionales</p>
+        <h2 class="admin-card__title">Información médica</h2>
+        <p class="admin-card__description">Registro, especialidad e instituto.</p>
+      </div>
+      <span class="status-pill info"><%= @doctor.speciality&.titleize || "Sin especialidad" %></span>
+    </div>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <p class="text-muted mb-1 small">Registro médico</p>
+        <p class="fw-semibold mb-0"><%= @doctor.medical_registration.presence || "No especificado" %></p>
+      </div>
+      <div class="col-md-6">
+        <p class="text-muted mb-1 small">Especialidad</p>
+        <p class="fw-semibold mb-0"><%= @doctor.speciality&.humanize || "No definida" %></p>
+      </div>
+      <div class="col-md-12">
+        <p class="text-muted mb-1 small">Instituto médico</p>
+        <% if @doctor.medical_institute %>
+          <p class="fw-semibold mb-0"><%= @doctor.medical_institute.name %></p>
+          <p class="text-muted mb-0 small"><%= @doctor.medical_institute.address.presence || "Sin dirección" %></p>
+        <% else %>
+          <p class="fw-semibold mb-0">Sin instituto asignado</p>
+        <% end %>
+      </div>
+    </div>
+  </section>
 </div>

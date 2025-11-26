@@ -7,16 +7,19 @@
 // General style
 $font-family-sans-serif: $body-font;
 $headings-font-family:   $headers-font;
-$body-bg:                $light-gray;
+$body-bg:                #F8F7F9; // background-main
 $font-size-base:         1rem;
 
-// Colors
-$body-color: $gray;
-$primary:    $blue;
-$success:    $green;
-$info:       $yellow;
-$danger:     $red;
-$warning:    $orange;
+// Colors (LEVA palette)
+$body-color: #2A2A2A;          // text-primary
+$primary:    #B69CFF;          // accent
+$secondary:  #6F6F6F;          // text-secondary
+$success:    #5DD39E;          // color-success
+$info:       #D9D8E0;          // color-primary
+$danger:     #FF595E;          // color-danger
+$warning:    #FFCA3A;          // color-warning
+$light:      #F8F7F9;          // color-primary-light
+$dark:       #2A2A2A;          // text-primary
 
 // Buttons & inputs' radius
 $border-radius-sm:            .0625rem;

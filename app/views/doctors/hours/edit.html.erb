@@ -1,2 +1,74 @@
-<h1>Doctors::Hours#edit</h1>
-<p>Find me in app/views/doctors/hours/edit.html.erb</p>
+<% doctor = current_user&.doctor %>
+<% calendar = @calendar || Calendar.find_by(id: params[:calendar_id]) || doctor&.calendars&.order(date: :asc)&.first %>
+<% hour = @hour || Hour.find_by(id: params[:id]) || Hour.new %>
+<% hours = calendar ? calendar.hours.order(:start_time) : [] %>
+
+<div class="container py-4 py-lg-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body p-4 p-lg-5">
+          <p class="text-uppercase fw-semibold small mb-1 text-muted">Disponibilidad</p>
+          <h2 class="fw-bold mb-3">Editar horas de trabajo</h2>
+          <% if calendar %>
+            <div class="mb-3">
+              <span class="badge text-bg-primary px-3 py-2">Día: <%= l(calendar.date, format: :long) rescue calendar.date %></span>
+              <%= link_to 'Cambiar día', doctors_calendars_path, class: "btn btn-link btn-sm text-decoration-none" %>
+            </div>
+            <%= form_with model: [:doctors, calendar, hour], local: true, class: "row g-3" do |f| %>
+              <div class="col-md-6">
+                <%= f.label :start_time, "Inicio", class: "form-label fw-semibold" %>
+                <%= f.time_field :start_time, class: "form-control rounded-3" %>
+              </div>
+              <div class="col-md-6">
+                <%= f.label :end_time, "Fin", class: "form-label fw-semibold" %>
+                <%= f.time_field :end_time, class: "form-control rounded-3" %>
+              </div>
+              <div class="col-12 d-flex gap-2 mt-2">
+                <%= f.submit "Actualizar", class: "btn btn-primary px-4" %>
+                <%= link_to 'Volver', doctors_calendar_path(calendar), class: "btn btn-outline-secondary" %>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="alert alert-warning">Primero crea un día en el calendario para asignar horas.</div>
+            <%= link_to 'Ir al calendario', doctors_calendars_path, class: "btn btn-primary" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% if calendar %>
+    <div class="row justify-content-center mt-4">
+      <div class="col-lg-8">
+        <div class="card shadow-sm border-0 rounded-4">
+          <div class="card-body p-4">
+            <p class="text-uppercase fw-semibold small mb-1 text-muted">Horas registradas</p>
+            <% if hours.any? %>
+              <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-muted small">Inicio</th>
+                      <th class="text-muted small">Fin</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% hours.each do |h| %>
+                      <tr>
+                        <td><%= h.start_time&.strftime('%H:%M') %></td>
+                        <td><%= h.end_time&.strftime('%H:%M') %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            <% else %>
+              <p class="text-muted mb-0">Aún no registras horas para este día.</p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

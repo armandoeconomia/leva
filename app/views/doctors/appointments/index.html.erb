@@ -1,111 +1,88 @@
-<div class="container py-4 py-lg-5">
-  <div class="row align-items-center g-4 mb-4">
-    <div class="col-lg-7">
-      <div class="p-4 p-lg-5 rounded-4 shadow-sm" style="background: linear-gradient(135deg, #D9D8E0 0%, #B69CFF 35%, #F8F7F9 100%);">
-        <p class="text-uppercase fw-semibold small mb-2 text-dark">Cuidado confiable</p>
-        <h1 class="fw-bold mb-3">Tus citas, a un clic de distancia</h1>
-        <p class="text-muted mb-4">Revisa y gestiona tus citas programadas. Confirma, reprograma o cancela con una experiencia simple y humana.</p>
-        <div class="d-flex flex-wrap gap-2">
-          <%= link_to 'Agenda tu cita ahora', new_doctors_appointment_path, class: "btn btn-primary fw-semibold px-4 py-2 shadow-sm" rescue nil %>
-          <%= link_to 'Ver disponibilidad', doctors_appointments_path, class: "btn btn-outline-light text-dark fw-semibold px-4 py-2" %>
-        </div>
-      </div>
+<% appointments = @appointments || [] %>
+<% pending = appointments.select { |a| a.status == "pendiente" } %>
+
+<div class="admin-shell" style="padding: 32px 40px 48px;">
+  <div class="admin-page-header">
+    <div>
+      <span class="page-eyebrow">Citas</span>
+      <h1 class="admin-page-title">Citas asignadas</h1>
+      <p class="admin-page-description">
+        Gestiona tus citas: revisa, edita, confirma o cancela con la misma estética del panel.
+      </p>
     </div>
-    <div class="col-lg-5">
-      <div class="row g-3">
-        <div class="col-12">
-          <div class="card shadow-sm border-0 rounded-4">
-            <div class="card-body d-flex justify-content-between align-items-center">
-              <div>
-                <p class="text-muted mb-1">Citas agendadas</p>
-                <h4 class="fw-bold mb-0"><%= @appointments.size %></h4>
-              </div>
-              <span class="badge text-bg-primary px-3 py-2">Hoy</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="card shadow-sm border-0 rounded-4">
-            <div class="card-body">
-              <p class="text-muted mb-1">Pendientes</p>
-              <h5 class="fw-bold mb-0"><%= @appointments.select { |a| a.status == "pendiente" }.count %></h5>
-            </div>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="card shadow-sm border-0 rounded-4">
-            <div class="card-body">
-              <p class="text-muted mb-1">Completadas</p>
-              <h5 class="fw-bold mb-0"><%= @appointments.select { |a| a.status == "completado" }.count %></h5>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="admin-actions">
+      <%= link_to "Actualizar", doctors_appointments_path, class: "btn-leva-ghost" %>
     </div>
   </div>
 
-  <div class="card shadow-sm border-0 rounded-4">
-    <div class="card-body p-4">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <div>
-          <p class="text-uppercase fw-semibold small mb-1 text-muted">Lista de citas</p>
-          <h4 class="mb-0">Citas asignadas</h4>
-        </div>
-        <div class="d-flex gap-2">
-          <%= link_to 'Crear cita', new_doctors_appointment_path, class: "btn btn-primary fw-semibold px-3" rescue nil %>
-          <%= link_to 'Actualizar', doctors_appointments_path, class: "btn btn-outline-secondary" %>
-        </div>
-      </div>
+  <div class="admin-metrics" style="gap: 18px; flex-wrap: wrap;">
+    <div class="admin-metric-card" style="border-radius: 24px; box-shadow: 0 18px 32px rgba(0,0,0,0.06);">
+      <p class="admin-metric-value"><%= appointments.size %></p>
+      <p class="admin-metric-label">Total citas</p>
+    </div>
+    <div class="admin-metric-card" style="border-radius: 24px; box-shadow: 0 18px 32px rgba(0,0,0,0.06);">
+      <p class="admin-metric-value"><%= pending.size %></p>
+      <p class="admin-metric-label">Pendientes</p>
+    </div>
+    <div class="admin-metric-card" style="border-radius: 24px; box-shadow: 0 18px 32px rgba(0,0,0,0.06);">
+      <p class="admin-metric-value"><%= appointments.count { |a| a.status == "completado" } %></p>
+      <p class="admin-metric-label">Completadas</p>
+    </div>
+    <div class="admin-metric-card" style="border-radius: 24px; box-shadow: 0 18px 32px rgba(0,0,0,0.06);">
+      <p class="admin-metric-value"><%= appointments.count { |a| a.status == "cancelado" } %></p>
+      <p class="admin-metric-label">Canceladas</p>
+    </div>
+  </div>
 
-      <% if @appointments.any? %>
-        <div class="row g-3">
-          <% @appointments.each do |appt| %>
-            <% status_class = case appt.status
-                             when "completado" then "success"
-                             when "cancelado" then "danger"
-                             else "warning"
-                             end %>
-            <% patient_name = appt.patient&.user&.name || appt.patient&.id || "Paciente sin nombre" %>
-            <div class="col-12">
-              <div class="card border-0 shadow-sm rounded-4 h-100">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-start mb-2">
-                    <div>
-                      <p class="text-muted mb-1 small">Fecha y hora</p>
-                      <h5 class="fw-bold mb-0">
-                        <%= l(appt.date, format: :long) rescue appt.date %> · <%= appt.hour.strftime("%H:%M") rescue appt.hour %>
-                      </h5>
-                    </div>
-                    <span class="badge text-bg-<%= status_class %> px-3 py-2 text-capitalize"><%= appt.status %></span>
-                  </div>
-                  <div class="row g-2 mb-3">
-                    <div class="col-md-6">
-                      <p class="text-muted mb-1 small">Paciente</p>
-                      <p class="mb-0 fw-semibold"><%= patient_name %></p>
-                    </div>
-                    <div class="col-md-6">
-                      <p class="text-muted mb-1 small">Motivo</p>
-                      <p class="mb-0"><%= appt.reason_for_consultation.presence || "Sin motivo registrado" %></p>
-                    </div>
-                  </div>
-                  <div class="d-flex flex-wrap gap-2">
-                    <%= link_to 'Ver detalle', doctors_appointment_path(appt), class: "btn btn-outline-secondary btn-sm" %>
-                    <%= link_to 'Editar', edit_doctors_appointment_path(appt), class: "btn btn-primary btn-sm" %>
-                    <%= link_to 'Confirmar', confirm_doctors_appointment_path(appt), method: :patch, class: "btn btn-success btn-sm" %>
-                    <%= link_to 'Cancelar', cancel_doctors_appointment_path(appt), method: :patch, class: "btn btn-warning btn-sm" %>
-                    <%= link_to 'Eliminar', doctors_appointment_path(appt), method: :delete, data: { confirm: '¿Eliminar esta cita?' }, class: "btn btn-danger btn-sm" %>
-                  </div>
+<section class="admin-card mt-8" style="border-radius: 24px; box-shadow: 0 24px 44px rgba(0,0,0,0.06); padding: 24px;">
+  <div class="admin-card__header">
+    <div>
+      <p class="page-eyebrow">Listado</p>
+      <h2 class="admin-card__title">Citas agendadas</h2>
+      <p class="admin-card__description">
+        Visualiza tus citas con estado y acciones rápidas.
+      </p>
+    </div>
+  </div>
+
+  <% if appointments.any? %>
+    <div class="admin-table-wrapper" style="border-radius: 18px; overflow: hidden;">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Paciente</th>
+            <th>Motivo</th>
+            <th>Estado</th>
+            <th class="text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% appointments.each do |appt| %>
+            <% patient_name = appt.patient&.user&.name || "Paciente" %>
+            <tr>
+              <td><%= l(appt.date, format: '%d %b %Y') rescue appt.date %></td>
+              <td><%= appt.hour&.strftime('%H:%M') || appt.hour %></td>
+              <td><strong><%= patient_name %></strong></td>
+              <td class="text-muted"><%= appt.reason_for_consultation.presence || "Sin motivo" %></td>
+              <td><span class="status-pill <%= appt.status %>"><%= appt.status.to_s.titleize %></span></td>
+              <td class="text-right">
+                <div class="d-flex gap-2 justify-content-end flex-wrap">
+                  <%= link_to "Ver", doctors_appointment_path(appt), class: "btn-leva-link" %>
+                  <%= link_to "Editar", edit_doctors_appointment_path(appt), class: "btn btn-primary btn-sm" %>
+                  <%= link_to "Confirmar", confirm_doctors_appointment_path(appt), method: :patch, class: "btn btn-success btn-sm" %>
+                  <%= link_to "Cancelar", cancel_doctors_appointment_path(appt), method: :patch, class: "btn btn-warning btn-sm" %>
+                  <%= link_to "Eliminar", doctors_appointment_path(appt), method: :delete, data: { confirm: "¿Eliminar esta cita?" }, class: "btn btn-danger btn-sm" %>
                 </div>
-              </div>
-            </div>
+              </td>
+            </tr>
           <% end %>
-        </div>
-      <% else %>
-        <div class="text-center py-5">
-          <p class="text-muted mb-3">No hay citas asignadas todavía.</p>
-          <%= link_to 'Crear la primera cita', new_doctors_appointment_path, class: "btn btn-primary px-4" rescue nil %>
-        </div>
-      <% end %>
+        </tbody>
+      </table>
     </div>
-  </div>
+  <% else %>
+    <p class="muted">No hay citas asignadas todavía.</p>
+  <% end %>
+</section>
 </div>

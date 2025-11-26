@@ -1,0 +1,148 @@
+<div class="patient-page">
+  <div class="patient-container">
+    <% appointments = Array(@assistant_context[:proximas_citas]).reject(&:blank?) %>
+    <% next_appointment = appointments.first %>
+
+    <section class="patient-hero ai-hero">
+      <div>
+        <p class="eyebrow">Asistente inteligente</p>
+        <h1>Tu copiloto médico personal</h1>
+        <p class="muted">
+          Pregunta sobre síntomas, medicamentos o prepara tus citas. También puedes subir exámenes
+          para interpretarlos y guardarlos en tu historial.
+        </p>
+        <div class="hero-actions">
+          <%= link_to "Ver historial", patients_medical_histories_path, class: "btn-ghost" %>
+          <%= link_to "Reservar cita", new_patients_appointment_path, class: "btn-lilac" %>
+        </div>
+      </div>
+      <div class="hero-card ai-highlight">
+        <% if next_appointment.present? %>
+          <p class="eyebrow">Tu próxima cita</p>
+          <h3><%= next_appointment[:doctor].presence || "Sin doctor asignado" %></h3>
+          <p class="muted"><%= next_appointment[:especialidad].presence || "General" %></p>
+          <p class="muted"><strong><%= next_appointment[:fecha]&.strftime("%d %b %Y") || "--" %></strong> · <%= next_appointment[:hora] || "--:--" %></p>
+        <% else %>
+          <p class="eyebrow">Sin citas programadas</p>
+          <p class="muted">Reserva una cita para que el asistente pueda ayudarte a hacer seguimiento.</p>
+        <% end %>
+      </div>
+    </section>
+
+    <section class="assistant-panels">
+      <div class="panel panel-wide panel-chat">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Conversación</p>
+            <h2>Habla con tu asistente</h2>
+          </div>
+          <div class="ai-panel-actions">
+            <%= link_to "Volver al dashboard", patients_dashboard_path, class: "btn-ghost-sm" %>
+            <%= link_to "Ver doctores", patients_doctors_path, class: "btn-lilac" %>
+          </div>
+        </div>
+        <%= render "shared/chat_window",
+                   messages: @messages,
+                   form_path: message_patients_assistant_path,
+                   placeholder: "Cuéntame cómo te sientes, qué dice tu examen o qué dudas médicas tienes.",
+                   button_label: "Preguntar al asistente",
+                   user_label: current_user.name || "Paciente",
+                   allows_attachments: true,
+                   show_store_checkbox: true,
+                   checkbox_label: "Guardar estos archivos en mi historial médico",
+                   empty_state: "Comienza contándole al asistente sobre tus síntomas o adjunta un examen." %>
+      </div>
+
+      <div class="panel-grid assistant-side">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Historial digital</p>
+              <h2>Exámenes guardados</h2>
+            </div>
+          </div>
+          <% if @stored_exam_messages.any? %>
+            <div class="stacked-cards">
+              <% @stored_exam_messages.each do |message| %>
+                <article class="stacked-card compact">
+                  <div class="card-icon neutral">
+                    <i class="fa fa-file-medical"></i>
+                  </div>
+                  <div class="stacked-body">
+                    <p class="stacked-title"><%= message.created_at.strftime("%d %b %Y") %></p>
+                    <p class="muted small"><%= truncate(message.content, length: 90) %></p>
+                    <% if message.documents.attached? %>
+                      <ul class="ai-attachments small">
+                        <% message.documents.each do |doc| %>
+                          <li><%= link_to doc.filename.to_s, url_for(doc), target: "_blank", rel: "noopener" %></li>
+                        <% end %>
+                      </ul>
+                    <% end %>
+                  </div>
+                </article>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="muted">Aún no guardas exámenes en tu historial.</p>
+          <% end %>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Subir examen</p>
+              <h2>Guardar sin chatear</h2>
+            </div>
+          </div>
+          <%= form_with url: upload_exam_patients_assistant_path,
+                        scope: :exam,
+                        local: true,
+                        data: { turbo: false },
+                        html: { multipart: true, class: "ai-upload-form" } do |f| %>
+            <div class="form-field">
+              <%= f.label :notes, "Notas opcionales", class: "form-label" %>
+              <%= f.text_field :notes, class: "form-control", placeholder: "Ej. Hemograma de control" %>
+            </div>
+            <div class="form-field">
+              <%= f.label :documents, "Adjuntar archivos", class: "form-label" %>
+              <%= f.file_field :documents, multiple: true, class: "form-control" %>
+            </div>
+            <div class="ai-form-actions">
+              <%= f.submit "Guardar en historial", class: "btn-lilac w-100" %>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Agenda</p>
+              <h2>Tus próximas citas</h2>
+            </div>
+          </div>
+          <% if appointments.any? %>
+            <div class="stacked-cards">
+              <% appointments.first(4).each do |appointment| %>
+                <article class="stacked-card compact">
+                  <div class="card-icon date-badge">
+                    <span class="day"><%= appointment[:fecha]&.strftime("%d") || "--" %></span>
+                    <span class="month"><%= appointment[:fecha]&.strftime("%b") || "--" %></span>
+                  </div>
+                  <div class="stacked-body">
+                    <p class="stacked-title"><%= appointment[:doctor].presence || "Sin doctor" %></p>
+                    <p class="muted small"><%= appointment[:especialidad].presence || "General" %></p>
+                  </div>
+                  <div class="stacked-meta">
+                    <span><%= appointment[:hora] || "--:--" %></span>
+                  </div>
+                </article>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="muted">No tienes citas registradas en los próximos días.</p>
+          <% end %>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

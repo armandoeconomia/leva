@@ -1,14 +1,72 @@
-<h1>Mis Calendarios</h1>
+<% doctor = current_user&.doctor %>
+<% month_param = params[:month].presence %>
+<% current_month = (Date.parse(month_param) rescue Date.current).beginning_of_month %>
+<% start_range = current_month.beginning_of_week(:monday) %>
+<% end_range = current_month.end_of_month.end_of_week(:monday) %>
+<% days = (start_range..end_range).to_a.each_slice(7).to_a %>
+<% appointments = doctor ? doctor.appointments.includes(patient: :user).where(date: start_range..end_range).order(:date, :hour) : [] %>
 
-<%= link_to "← Volver al Dashboard", doctors_dashboard_path %>
+<div class="container py-4 py-lg-5">
+  <div class="row align-items-center g-4 mb-4">
+    <div class="col-lg-8">
+      <div class="p-4 p-lg-5 rounded-4 shadow-sm" style="background: linear-gradient(135deg, #D9D8E0 0%, #B69CFF 35%, #F8F7F9 100%);">
+        <p class="text-uppercase fw-semibold small mb-2 text-dark">Calendario</p>
+        <h1 class="fw-bold mb-3">Calendario mensual</h1>
+        <p class="text-muted mb-0">Visualiza las citas de <%= l current_month, format: "%B %Y" %>, navega entre meses y accede a los detalles.</p>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card shadow-sm border-0 rounded-4 h-100">
+        <div class="card-body">
+          <p class="text-muted mb-1 small">Citas en el mes</p>
+          <h3 class="fw-bold mb-0"><%= appointments.size %></h3>
+          <p class="text-muted mb-0 small">Incluye pendientes, confirmadas y canceladas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<%= link_to "Nuevo Calendario", new_doctors_calendar_path %>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex align-items-center gap-2">
+      <%= link_to "◀", doctors_calendars_path(month: current_month.prev_month.to_s), class: "btn btn-outline-secondary btn-sm" %>
+      <span class="fw-semibold"><%= l current_month, format: "%B %Y" %></span>
+      <%= link_to "▶", doctors_calendars_path(month: current_month.next_month.to_s), class: "btn btn-outline-secondary btn-sm" %>
+    </div>
+    <%= link_to 'Ver citas', doctors_appointments_path, class: "btn btn-outline-secondary btn-sm" %>
+  </div>
 
-<ul>
-  <% @calendars.each do |calendar| %>
-    <li>
-      <%= link_to l(calendar.date, format: :long), doctors_calendar_path(calendar) %>
-    </li>
-  <% end %>
-</ul>
-
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-body p-3 p-lg-4">
+      <div class="row text-center fw-semibold text-muted small mb-2">
+        <% %w[Lun Mar Mié Jue Vie Sáb Dom].each do |day_name| %>
+          <div class="col text-uppercase"><%= day_name %></div>
+        <% end %>
+      </div>
+      <% days.each do |week| %>
+        <div class="row g-2 mb-2">
+          <% week.each do |day| %>
+            <% day_appts = appointments.select { |a| a.date == day } %>
+            <div class="col">
+              <div class="p-2 rounded-3 <%= day.month == current_month.month ? 'bg-light' : 'bg-body-secondary' %> h-100">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="fw-semibold small"><%= day.day %></span>
+                  <% if day_appts.any? %>
+                    <span class="badge text-bg-primary"><%= day_appts.size %></span>
+                  <% end %>
+                </div>
+                <% day_appts.first(2).each do |appt| %>
+                  <div class="small text-muted">
+                    <span class="fw-semibold"><%= appt.hour&.strftime("%H:%M") || appt.hour %></span> - <%= appt.patient&.user&.name || "Paciente" %>
+                  </div>
+                <% end %>
+                <% if day_appts.size > 2 %>
+                  <div class="small text-primary">+<%= day_appts.size - 2 %> más</div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
