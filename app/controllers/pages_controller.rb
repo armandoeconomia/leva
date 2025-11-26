@@ -9,5 +9,6 @@ class PagesController < ApplicationController
     end
 
     @medical_institutes = MedicalInstitute.where.not(latitude: nil, longitude: nil)
+    @featured_doctors = Doctor.includes(:user, :medical_institute).order(created_at: :desc).limit(9)
   end
 end
