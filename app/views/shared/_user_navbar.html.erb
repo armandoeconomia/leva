@@ -4,8 +4,8 @@
       <%= image_tag "logo_leva.png", alt: "Leva logo", width: 36, class: "rounded-3" %>
       <span class="fw-semibold text-dark mb-0">LEVA</span>
     <% end %>
-    <div class="d-flex align-items-center gap-3">
-      <%= link_to "Dashboard", root_path, class: "btn btn-outline-secondary" %>
+    <div class="d-flex align-items-center gap-3 flex-wrap">
+      <%= link_to "Dashboard", root_path, class: "navbar-soft-pill" %>
       <% assistant_path = if current_user&.patient
                             patients_assistant_path
                           elsif current_user&.doctor
@@ -14,11 +14,11 @@
                             admin_assistant_path
                           end %>
       <% if assistant_path %>
-        <%= link_to "Asistente IA", assistant_path, class: "btn btn-outline-secondary" %>
+        <%= link_to "Asistente IA", assistant_path, class: "navbar-soft-pill" %>
       <% end %>
       <%= link_to "Cerrar sesión", destroy_user_session_path,
                   data: { turbo_method: :delete },
-                  class: "btn text-white px-4 mediapp-hero-btn" %>
+                  class: "navbar-soft-pill" %>
     </div>
   </div>
 </nav>
