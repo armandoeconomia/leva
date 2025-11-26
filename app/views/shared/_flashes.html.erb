@@ -1,14 +1,29 @@
 <% if notice %>
-  <div class="alert alert-info alert-dismissible fade show m-1" role="alert">
+  <div class="alert alert-info alert-dismissible fade show m-1 leva-auto-dismiss" role="alert">
     <%= notice %>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
     </button>
   </div>
 <% end %>
 <% if alert %>
-  <div class="alert alert-warning alert-dismissible fade show m-1" role="alert">
+  <div class="alert alert-warning alert-dismissible fade show m-1 leva-auto-dismiss" role="alert">
     <%= alert %>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
     </button>
   </div>
 <% end %>
+<script>
+  const levaAutoDismissFlashes = () => {
+    document.querySelectorAll('.leva-auto-dismiss').forEach((element) => {
+      if (element.dataset.dismissBound === 'true') return;
+      element.dataset.dismissBound = 'true';
+      setTimeout(() => {
+        const alertInstance = bootstrap.Alert.getOrCreateInstance(element);
+        alertInstance.close();
+      }, 5000);
+    });
+  };
+
+  document.addEventListener('DOMContentLoaded', levaAutoDismissFlashes);
+  document.addEventListener('turbo:load', levaAutoDismissFlashes);
+</script>
