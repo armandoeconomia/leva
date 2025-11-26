@@ -28,13 +28,12 @@
         </div>
       </div>
 
-      <% if @upcoming_calendars.any? %>
-        <div class="availability-grid">
-          <% @upcoming_calendars.each do |calendar| %>
-            <% available_hours = calendar.hours.order(:start_time) %>
-            <% next if available_hours.empty? %>
-            <div class="availability-card">
-              <p class="item-title"><%= calendar.date.strftime("%A %d %B") %></p>
+      <div class="availability-grid">
+        <% @calendar_cards.each do |calendar| %>
+          <% available_hours = calendar.hours.order(:start_time) %>
+          <div class="availability-card <%= 'availability-card--empty' if available_hours.none? %>">
+            <p class="item-title"><%= calendar.date.strftime("%A %d %B") %></p>
+            <% if available_hours.any? %>
               <div class="slots">
                 <% available_hours.each do |slot_hour| %>
                   <% formatted_hour = slot_hour.start_time.strftime("%H:%M") %>
@@ -56,12 +55,12 @@
                   <% end %>
                 <% end %>
               </div>
-            </div>
-          <% end %>
-        </div>
-      <% else %>
-        <p class="muted">Este doctor aún no tiene horarios disponibles.</p>
-      <% end %>
+            <% else %>
+              <p class="muted small">Aún no se cargaron horarios para esta fecha.</p>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>

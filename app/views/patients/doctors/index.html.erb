@@ -1,57 +1,103 @@
 <div class="patient-page">
   <div class="patient-container">
-    <%= form_with url: patients_doctors_path, method: :get, local: true, class: "patient-hero search-form" do |f| %>
-      <div>
-        <p class="eyebrow">Paso 1 de 3: Búsqueda y selección</p>
-        <h1>Encuentra tu especialista y reserva tu cita</h1>
-        <p class="muted">Busca por especialidad o nombre y elige el doctor que más te convenga.</p>
-        <div class="search-grid">
-          <div class="input-shell">
-            <i class="fa fa-search"></i>
-            <%= f.search_field :q, value: @q, placeholder: "Ej. Cardiología o nombre del doctor" %>
+    <section class="patient-hero doctor-search-hero">
+      <%= form_with url: patients_doctors_path, method: :get, local: true, class: "doctor-search-form" do |f| %>
+        <div class="doctor-hero-layout">
+          <div class="doctor-search-pane">
+            <p class="eyebrow">Paso 1 de 3 · Búsqueda y selección</p>
+            <h1>Encuentra tu especialista y reserva tu cita</h1>
+            <p class="muted">Busca por especialidad, ciudad o nombre y elige el doctor que más te convenga.</p>
+            <div class="doctor-search-grid">
+              <label class="input-shell">
+                <i class="fa fa-search"></i>
+                <%= f.search_field :q,
+                                    value: @q,
+                                    placeholder: "Ej. Cardiología o nombre del doctor",
+                                    list: "speciality-options",
+                                    autocomplete: "off" %>
+              </label>
+              <label class="input-shell">
+                <i class="fa fa-map-marker-alt"></i>
+                <%= f.search_field :city,
+                                    value: @city,
+                                    placeholder: "Ej. Ciudad, Código Postal",
+                                    list: "city-options",
+                                    autocomplete: "off" %>
+              </label>
+              <%= f.submit "Buscar", class: "btn-lilac search-submit" %>
+            </div>
+            <div class="hero-actions">
+              <%= link_to "Volver al dashboard", patients_dashboard_path, class: "btn-ghost-sm" %>
+            </div>
           </div>
-          <div class="input-shell">
-            <i class="fa fa-map-marker-alt"></i>
-            <%= f.search_field :city, value: @city, placeholder: "Ej. Ciudad, Código Postal" %>
+          <div class="hero-card doctor-calendar-card">
+            <div class="doctor-calendar-header">
+              <p class="eyebrow">Selecciona una fecha</p>
+              <h3><%= @calendar_month_label %></h3>
+              <%= f.date_field :date, value: @calendar_selected_date, class: "form-control calendar-input" %>
+              <p class="muted small">Filtra doctores con disponibilidad ese día.</p>
+            </div>
+            <div class="doctor-calendar-grid">
+              <% %w[Lu Ma Mi Ju Vi Sa Do].each do |day_name| %>
+                <span class="calendar-weekday"><%= day_name %></span>
+              <% end %>
+              <% @calendar_weeks.each do |week| %>
+                <% week.each do |day| %>
+                  <% classes = ["calendar-day"] %>
+                  <% classes << "is-out" if day.month != @calendar_month %>
+                  <% classes << "is-today" if day == Date.today %>
+                  <% classes << "is-selected" if @calendar_selected_date == day %>
+                  <button type="submit"
+                          name="date"
+                          value="<%= day %>"
+                          class="<%= classes.join(' ') %>"><%= day.day %></button>
+                <% end %>
+              <% end %>
+            </div>
           </div>
-          <%= f.submit "Buscar", class: "btn-lilac" %>
         </div>
-        <div class="hero-actions">
-          <%= link_to "Volver al dashboard", patients_dashboard_path, class: "btn-ghost-sm" %>
-        </div>
-      </div>
-      <div class="hero-card calendar-card">
-        <p class="eyebrow">Selecciona una fecha</p>
-        <div class="date-picker">
-          <%= f.date_field :date, value: @date, class: "form-control" %>
-          <p class="muted small">Filtra doctores con disponibilidad ese día.</p>
-        </div>
-      </div>
-    <% end %>
 
-    <div class="section-header">
-      <div>
-        <p class="eyebrow">Resultados de la búsqueda</p>
-        <h2><%= pluralize(@doctors.count, 'Doctor', 'Doctores') %></h2>
-      </div>
-    </div>
-
-    <div class="card-list vertical">
-      <% @doctors.each do |doctor| %>
-        <div class="doctor-card">
-          <div class="doctor-avatar">
-            <i class="fa fa-user-md"></i>
-          </div>
-          <div class="doctor-body">
-            <p class="item-title">Dr(a). <%= doctor.user.name %> <%= doctor.user.last_name %></p>
-            <p class="muted"><%= doctor.speciality.humanize %> · <%= doctor.medical_institute.name %></p>
-            <p class="muted small"><i class="fa fa-map-marker-alt"></i> <%= doctor.medical_institute.address %></p>
-          </div>
-          <div class="doctor-actions">
-            <%= link_to "Ver horarios", patients_doctor_path(doctor), class: "btn-ghost" %>
-          </div>
-        </div>
+        <datalist id="speciality-options">
+          <% @speciality_options.each do |option| %>
+            <option value="<%= option %>"></option>
+          <% end %>
+        </datalist>
+        <datalist id="city-options">
+          <% @location_options.each do |option| %>
+            <option value="<%= option %>"></option>
+          <% end %>
+        </datalist>
       <% end %>
-    </div>
+    </section>
+
+    <section class="panel doctor-results-panel">
+      <div class="panel-header">
+        <div>
+          <p class="eyebrow">Resultados de la búsqueda</p>
+          <h2><%= pluralize(@doctors.count, 'Doctor', 'Doctores') %></h2>
+        </div>
+      </div>
+      <% if @doctors.any? %>
+        <div class="stacked-cards">
+          <% @doctors.each do |doctor| %>
+            <article class="stacked-card doctor-result-card">
+              <div class="card-icon doctor-icon">
+                <i class="fa fa-user-md"></i>
+              </div>
+              <div class="stacked-body">
+                <p class="stacked-title">Dr(a). <%= doctor.user.name %> <%= doctor.user.last_name %></p>
+                <p class="muted small"><%= doctor.speciality.humanize %> · <%= doctor.medical_institute.name %></p>
+                <p class="muted small doctor-location"><i class="fa fa-map-marker-alt"></i> <%= doctor.medical_institute.address %></p>
+              </div>
+              <div class="stacked-meta">
+                <%= link_to "Ver horarios", patients_doctor_path(doctor), class: "btn-ghost-sm" %>
+              </div>
+            </article>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="muted">No encontramos doctores para tu búsqueda. Intenta cambiar los filtros.</p>
+      <% end %>
+    </section>
   </div>
 </div>
