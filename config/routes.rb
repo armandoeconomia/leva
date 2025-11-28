@@ -49,8 +49,8 @@ Rails.application.routes.draw do
     # Citas (puede ser un listado general de sus citas, diferente al del paciente)
     resources :appointments, only: [:index, :show, :edit, :update, :destroy] do
       member do
-        patch 'confirm' # Confirmar una cita
-        patch 'cancel'  # Cancelar una cita
+        match 'confirm', via: [:patch, :get] # Confirmar una cita
+        match 'cancel',  via: [:patch, :get] # Cancelar una cita
         # Otras acciones de gestión de citas
       end
     end

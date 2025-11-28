@@ -86,10 +86,10 @@
               <td><strong><%= appointment.patient&.user&.name || "Paciente" %></strong></td>
               <td><span class="status-pill <%= appointment.status %>"><%= appointment.status.to_s.titleize %></span></td>
               <td class="text-right">
-                <div class="d-flex gap-2 justify-content-end">
-                  <%= link_to "Abrir", doctors_appointment_path(appointment), class: "btn-leva-link" %>
-                  <%= link_to "Aceptar", confirm_doctors_appointment_path(appointment), method: :patch, class: "btn btn-success btn-sm" %>
-                  <%= link_to "Rechazar", cancel_doctors_appointment_path(appointment), method: :patch, class: "btn btn-warning btn-sm" %>
+                <div class="d-flex gap-2 justify-content-end flex-wrap">
+                  <%= link_to "Abrir", doctors_appointment_path(appointment), class: "btn-leva-ghost", style: "padding: 8px 14px; border-radius: 12px;" %>
+                  <%= link_to "Aceptar", confirm_doctors_appointment_path(appointment), method: :patch, class: "btn-leva-primary", style: "padding: 8px 14px; border-radius: 12px;" %>
+                  <%= link_to "Rechazar", cancel_doctors_appointment_path(appointment), method: :patch, class: "btn-leva-ghost", style: "padding: 8px 14px; border-radius: 12px; background: rgba(255,202,58,0.18); color: #2A2A2A;" %>
                 </div>
               </td>
             </tr>

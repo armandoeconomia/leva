@@ -1,37 +1,39 @@
-<div class="admin-page-header">
-  <div>
-    <span class="page-eyebrow">Cita</span>
-    <h1 class="admin-page-title">Editar cita</h1>
-    <p class="admin-page-description">Actualiza fecha, hora, motivo o estado.</p>
+<div class="admin-shell" style="padding: 32px 40px 48px; max-width: 900px; margin: 0 auto;">
+  <div class="admin-page-header">
+    <div>
+      <span class="page-eyebrow">Cita</span>
+      <h1 class="admin-page-title">Editar cita</h1>
+      <p class="admin-page-description">Actualiza fecha, hora, motivo o estado.</p>
+    </div>
+    <div class="admin-actions">
+      <%= link_to "Volver al listado", doctors_appointments_path, class: "btn-leva-ghost" %>
+    </div>
   </div>
-  <div class="admin-actions">
-    <%= link_to "Volver al listado", doctors_appointments_path, class: "btn-leva-ghost" %>
-  </div>
-</div>
 
-<section class="admin-card mt-4">
-  <div class="admin-card__body">
-    <%= form_with model: [:doctors, @appointment], local: true, class: "row g-3" do |form| %>
-      <div class="col-md-6">
-        <%= form.label :date, "Fecha", class: "form-label fw-semibold" %>
-        <%= form.date_field :date, class: "form-control rounded-3" %>
-      </div>
-      <div class="col-md-6">
-        <%= form.label :hour, "Hora", class: "form-label fw-semibold" %>
-        <%= form.time_field :hour, class: "form-control rounded-3" %>
-      </div>
-      <div class="col-12">
-        <%= form.label :reason_for_consultation, "Motivo de la consulta", class: "form-label fw-semibold" %>
-        <%= form.text_area :reason_for_consultation, rows: 3, class: "form-control rounded-3" %>
-      </div>
-      <div class="col-md-6">
-        <%= form.label :status, "Estado", class: "form-label fw-semibold" %>
-        <%= form.select :status, Appointment.statuses.keys.map { |s| [s.humanize, s] }, {}, class: "form-select rounded-3" %>
-      </div>
-      <div class="col-12 d-flex gap-2 mt-3">
-        <%= form.submit "Guardar cambios", class: "btn btn-primary px-4" %>
-        <%= link_to 'Cancelar', doctors_appointments_path, class: "btn btn-outline-secondary" %>
-      </div>
-    <% end %>
-  </div>
-</section>
+  <section class="admin-card mt-4" style="border-radius: 16px; box-shadow: 0 18px 32px rgba(0,0,0,0.06); padding: 22px;">
+    <div class="admin-card__body">
+      <%= form_with model: [:doctors, @appointment], local: true, class: "row g-3" do |form| %>
+        <div class="col-md-6">
+          <%= form.label :date, "Fecha", class: "form-label fw-semibold" %>
+          <%= form.date_field :date, class: "form-control rounded-3" %>
+        </div>
+        <div class="col-md-6">
+          <%= form.label :hour, "Hora", class: "form-label fw-semibold" %>
+          <%= form.time_field :hour, class: "form-control rounded-3" %>
+        </div>
+        <div class="col-12">
+          <%= form.label :reason_for_consultation, "Motivo de la consulta", class: "form-label fw-semibold" %>
+          <%= form.text_area :reason_for_consultation, rows: 3, class: "form-control rounded-3" %>
+        </div>
+        <div class="col-md-6">
+          <%= form.label :status, "Estado", class: "form-label fw-semibold" %>
+          <%= form.select :status, Appointment.statuses.keys.map { |s| [s.humanize, s] }, {}, class: "form-select rounded-3" %>
+        </div>
+        <div class="col-12 d-flex gap-2 mt-3">
+          <%= form.submit "Guardar cambios", class: "btn btn-primary px-4" %>
+          <%= link_to 'Cancelar', doctors_appointments_path, class: "btn btn-outline-secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </section>
+</div>

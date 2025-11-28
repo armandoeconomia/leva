@@ -1,8 +1,9 @@
 class Doctors::AppointmentsController < ApplicationController
+  before_action :require_doctor!
   before_action :set_appointment, only: [:show, :edit, :update, :destroy, :confirm, :cancel]
 
   def index
-    @appointments = Appointment.where(doctor: current_user.doctor).order(date: :asc)
+    @appointments = current_user.doctor.appointments.order(date: :asc)
   end
 
   def show
@@ -37,7 +38,11 @@ class Doctors::AppointmentsController < ApplicationController
   private
 
   def set_appointment
-    @appointment = Appointment.find(params[:id])
+    @appointment = current_user.doctor.appointments.find(params[:id])
+  end
+
+  def require_doctor!
+    redirect_to root_path, alert: "No tienes acceso como doctor" unless current_user&.doctor.present?
   end
 
   def appointment_params
