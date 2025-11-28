@@ -116,6 +116,10 @@ module Ai
                  Estás atendiendo a un paciente. Explica conceptos médicos de forma sencilla y da
                  recomendaciones preventivas. Si detectas señales de alarma, sugiere acudir a urgencias
                  o contactar a su médico tratante. Resume los archivos adjuntos en lenguaje claro.
+
+                 Cuando el paciente solicite una cita, revisa la clave `disponibilidad_especialidades` del
+                 contexto. Filtra las especialidades que coincidan con lo que pide, sugiere doctores y horarios,
+                 y menciona el enlace `agenda_path` si está disponible para que pueda reservar.
                PROMPT
              end
 
@@ -171,7 +175,8 @@ module Ai
             notas: message.content,
             archivos: message.documents.map { |doc| doc.filename.to_s }
           }
-        end
+        end,
+        disponibilidad_especialidades: availability_by_speciality
       }
     end
 
@@ -247,6 +252,84 @@ module Ai
 
     def current_date
       Time.zone ? Time.zone.today : Date.today
+    end
+
+    def availability_by_speciality
+      start_date = current_date
+      end_date = start_date + 14.days
+
+      doctors = Doctor.includes(:user, :medical_institute, calendars: :hours)
+                      .where(calendars: { date: start_date..end_date })
+                      .references(:calendars)
+
+      return [] if doctors.blank?
+
+      busy_slots = Appointment
+                   .where(date: start_date..end_date)
+                   .where.not(status: Appointment.statuses[:cancelado])
+                   .each_with_object({}) do |appointment, hash|
+                     formatted_hour = appointment.hour&.strftime("%H:%M")
+                     next if formatted_hour.blank?
+
+                     hash[[appointment.doctor_id, appointment.date, formatted_hour]] = true
+                   end
+
+      doctors_with_availability = doctors.filter_map do |doctor|
+        slots = available_slots_for(doctor, start_date, end_date, busy_slots)
+        next if slots.empty?
+
+        {
+          especialidad: doctor.speciality&.humanize || "General",
+          doctor_id: doctor.id,
+          doctor: [doctor.user.name, doctor.user.last_name].compact.join(" "),
+          institucion: doctor.medical_institute&.name,
+          ubicacion: doctor.medical_institute&.address,
+          proximos_horarios: slots.first(5)
+        }
+      end
+
+      doctors_with_availability
+        .group_by { |entry| entry[:especialidad] }
+        .map do |speciality, doctors_for_speciality|
+          {
+            especialidad: speciality,
+            doctores: doctors_for_speciality.first(5)
+          }
+        end
+    end
+
+    def available_slots_for(doctor, start_date, end_date, busy_slots)
+      relevant_calendars = doctor.calendars.select do |calendar|
+        calendar.date.present? && calendar.date >= start_date && calendar.date <= end_date
+      end
+
+      slots = relevant_calendars.flat_map do |calendar|
+        calendar.hours.sort_by(&:start_time).filter_map do |hour|
+          formatted_hour = hour.start_time&.strftime("%H:%M")
+          next if formatted_hour.blank?
+          next if busy_slots[[doctor.id, calendar.date, formatted_hour]]
+
+          {
+            fecha: calendar.date,
+            fecha_legible: calendar.date.strftime("%A %d %B"),
+            hora: formatted_hour,
+            hora_fin: hour.end_time&.strftime("%H:%M"),
+            agenda_path: booking_path_for(doctor.id, calendar.date, formatted_hour)
+          }
+        end
+      end
+
+      slots.sort_by { |slot| [slot[:fecha], slot[:hora]] }
+    end
+
+    def booking_path_for(doctor_id, date, hour)
+      Rails.application.routes.url_helpers.new_patients_appointment_path(
+        doctor_id: doctor_id,
+        date: date,
+        hour: hour
+      )
+    rescue StandardError
+      nil
     end
   end
 end
