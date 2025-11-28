@@ -3,9 +3,11 @@ class Doctors::DoctorController < ApplicationController
   before_action :set_doctor
 
   def show
+    @doctor = current_user.doctor
   end
 
   def edit
+    @doctor = current_user.doctor
   end
 
   def update
