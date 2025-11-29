@@ -233,6 +233,31 @@
     z-index: 1;
   }
 
+  .mediapp-social-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 999px;
+    border: 1px solid rgba(74, 74, 74, 0.2);
+    background-color: #fff;
+    color: #1f152c;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 8px 18px rgba(17, 12, 34, 0.12);
+  }
+
+  .mediapp-social-btn:hover,
+  .mediapp-social-btn:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(17, 12, 34, 0.18);
+  }
+
+  .mediapp-social-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
   .mediapp-contact-badge {
     background: rgba(122, 109, 255, 0.15);
     color: #7362ff;
@@ -457,7 +482,7 @@
   .mediapp-floating-btn {
     position: fixed;
     right: 1.5rem;
-    bottom: 4rem;
+    bottom: 6.5rem;
     z-index: 1050;
     border: none;
     background-image: linear-gradient(115deg, #c47bff, #786dff);
@@ -1057,7 +1082,7 @@
     <section id="testimonios" class="py-5">
       <div class="mb-4 text-center">
         <h2 class="fw-bold">Testimonios</h2>
-        <p class="text-secondary fs-5 mb-0">Lo que nuestros pacientes dicen sobre su experiencia con LEVA.</p>
+        <p class="text-secondary fs-5 mb-0">Lo que nuestros usuarios dicen sobre su experiencia con LEVA.</p>
       </div>
       <div class="mediapp-testimonial-shell p-4 p-md-5">
         <div id="levaTestimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="7000" data-bs-touch="true">
@@ -1350,6 +1375,25 @@
         <small class="text-secondary">Contacto: <a href="mailto:leva.soporte@gmail.com" class="text-decoration-none text-secondary">leva.soporte@gmail.com</a> · +11 0000 0000</small>
       </div>
       <div class="col-md-4 text-center text-md-end">
+        <div class="d-flex justify-content-center justify-content-md-end gap-2 mb-2">
+          <a class="btn mediapp-social-btn" href="https://x.com" target="_blank" rel="noopener" aria-label="X">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M18.27 2H21l-6.24 7.1L22 22h-5.93l-4.29-6-4.95 6H3.21l6.79-7.76L2.5 2h6.02l4.03 5.5L18.27 2z"/>
+            </svg>
+          </a>
+          <a class="btn mediapp-social-btn" href="https://www.linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-9 15H7v-7h3v7zm-1.5-8.1a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5zM20 18h-3v-3.5c0-2.1-2.25-1.93-2.25 0V18h-3v-7h3v1.1c1.4-2.58 5.25-2.77 5.25 2.46V18z"/>
+            </svg>
+          </a>
+          <a class="btn mediapp-social-btn" href="https://www.instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2A3.2 3.2 0 1 1 12 8a3.2 3.2 0 0 1 0 6.2z"/>
+              <path d="M17.5 2h-11A4.5 4.5 0 0 0 2 6.5v11A4.5 4.5 0 0 0 6.5 22h11a4.5 4.5 0 0 0 4.5-4.5v-11A4.5 4.5 0 0 0 17.5 2zm2.7 15.5a2.7 2.7 0 0 1-2.7 2.7h-11a2.7 2.7 0 0 1-2.7-2.7v-11a2.7 2.7 0 0 1 2.7-2.7h11a2.7 2.7 0 0 1 2.7 2.7v11z"/>
+              <circle cx="17.4" cy="6.6" r="1.1"/>
+            </svg>
+          </a>
+        </div>
         <small class="text-secondary">Innovamos la experiencia médica digital.</small>
       </div>
     </div>
