@@ -534,8 +534,35 @@
     box-shadow: 0 10px 25px rgba(122, 109, 255, 0.1);
   }
 
-  .mediapp-location-item + .mediapp-location-item {
-    margin-top: 0.75rem;
+  .mediapp-location-details .text-secondary {
+    margin-bottom: 0.1rem !important;
+  }
+
+  .mediapp-location-details small {
+    display: block;
+    margin-top: 0;
+    line-height: 1.2;
+  }
+
+  .mediapp-plan-price {
+    border-top: 1px solid rgba(122, 109, 255, 0.12);
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .mediapp-plan-price .amount {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2c2359;
+  }
+
+  .mediapp-plan-price .billing {
+    font-size: 0.95rem;
+    color: #6c6a8a;
+    font-weight: 600;
   }
 
 
@@ -696,7 +723,7 @@
             <% if map_markers.present? %>
               <ul class="list-unstyled mediapp-location-list mt-4">
                 <% @medical_institutes.each do |institute| %>
-                  <li>
+                  <li class="mb-4">
                     <button
                       class="mediapp-location-item d-flex gap-3 align-items-start"
                       type="button"
@@ -709,7 +736,7 @@
                           <path d="M11.5 9.5a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0-3 0" stroke="currentColor" stroke-width="1.5" fill="none"/>
                         </svg>
                       </div>
-                      <div>
+                      <div class="mediapp-location-details">
                         <h5 class="fw-semibold mb-1 text-dark"><%= institute.name %></h5>
                         <p class="text-secondary mb-1"><%= institute.address %></p>
                         <small class="text-muted"><strong>Tel:</strong> <%= institute.phone_number %></small>
@@ -960,6 +987,10 @@
             <p class="text-secondary mb-0">
               Cobertura completa durante todo el año con seguimiento y consultas ilimitadas.
             </p>
+            <div class="mediapp-plan-price">
+              <span class="amount">2700 U$S</span>
+              <span class="billing text-uppercase small fw-semibold">Pago anual</span>
+            </div>
           </div>
         </div>
       </div>
@@ -984,6 +1015,10 @@
             <p class="text-secondary mb-0">
               Soluciones para clínicas y especialidades que necesitan coordinar agenda y pacientes.
             </p>
+            <div class="mediapp-plan-price">
+              <span class="amount">250 U$S</span>
+              <span class="billing text-uppercase small fw-semibold">Por mes</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1007,6 +1042,10 @@
             <p class="text-secondary mb-0">
               Opciones ajustadas a tus necesidades específicas, con módulos y beneficios a medida.
             </p>
+            <div class="mediapp-plan-price">
+              <span class="amount">320 U$S</span>
+              <span class="billing text-uppercase small fw-semibold">Por mes</span>
+            </div>
           </div>
         </div>
       </div>
