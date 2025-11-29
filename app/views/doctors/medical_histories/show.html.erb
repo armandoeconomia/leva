@@ -1,2 +1,120 @@
-<h1>Doctors::MedicalHistories#show</h1>
-<p>Find me in app/views/doctors/medical_histories/show.html.erb</p>
+<div class="admin-shell" style="padding: 32px 40px 48px; max-width: 1100px; margin: 0 auto;">
+  <div class="admin-page-header">
+    <div>
+      <span class="page-eyebrow">Historiales</span>
+      <h1 class="admin-page-title">Historiales médicos de <%= @patient.user&.name || "Paciente ##{@patient.id}" %></h1>
+      <p class="admin-page-description">Explora los registros de este paciente. Si no tiene registros, puedes ver historiales de otros pacientes.</p>
+    </div>
+    <div class="admin-actions">
+      <%= link_to "Volver a pacientes", doctors_patients_path, class: "btn-leva-ghost" %>
+      <%= link_to "Ver citas", doctors_appointments_path, class: "btn-leva-plain" %>
+    </div>
+  </div>
+
+  <section class="admin-card mt-4" style="border-radius: 18px; box-shadow: 0 18px 32px rgba(0,0,0,0.06); padding: 22px;">
+    <% if @history.present? && @history.patient_id == @patient.id %>
+      <div class="admin-card__header">
+        <div>
+          <p class="page-eyebrow">Detalle</p>
+          <h2 class="admin-card__title"><%= @history.registration_date&.strftime('%d %b %Y') || "Sin fecha" %></h2>
+          <p class="admin-card__description">Diagnóstico y tratamiento seleccionados.</p>
+        </div>
+        <span class="status-pill info"><%= @history.doctor&.user&.name || "Doctor" %></span>
+      </div>
+      <div class="admin-card__body">
+        <div class="mb-3">
+        <p class="text-muted small mb-1">Diagnóstico</p>
+        <p class="fw-semibold mb-0"><%= @history.diagnosis.presence || "Sin diagnóstico" %></p>
+        </div>
+        <div class="mb-3">
+          <p class="text-muted small mb-1">Tratamiento</p>
+          <p class="mb-0"><%= @history.treatment.presence || "Sin tratamiento" %></p>
+        </div>
+        <div class="mb-3">
+          <p class="text-muted small mb-1">Prescripción</p>
+          <p class="mb-0"><%= @history.prescription.presence || "Sin prescripción" %></p>
+        </div>
+      </div>
+    <% else %>
+      <div class="admin-card__body">
+        <p class="muted mb-3">Este paciente no cuenta con historial médico.</p>
+        <%= link_to "Ver historiales de otros pacientes",
+                    doctors_patient_medical_history_path(@patient, 0, show_others: true),
+                    class: "btn-leva-ghost", style: "padding: 8px 14px; border-radius: 12px;" %>
+      </div>
+    <% end %>
+  </section>
+
+  <section class="admin-card mt-4" style="border-radius: 18px; box-shadow: 0 18px 32px rgba(0,0,0,0.06); padding: 22px;">
+    <div class="admin-card__header">
+      <div>
+        <p class="page-eyebrow">Listado</p>
+        <h2 class="admin-card__title">Todos los historiales</h2>
+        <p class="admin-card__description">Selecciona cualquier registro para ver su detalle.</p>
+      </div>
+    </div>
+    <% if @histories.any? %>
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Doctor</th>
+              <th>Diagnóstico</th>
+              <th class="text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @histories.each do |history| %>
+              <tr>
+                <td><%= history.registration_date&.strftime('%d %b %Y') || "Sin fecha" %></td>
+                <td><%= history.doctor&.user&.name || "Doctor" %></td>
+                <td class="text-muted"><%= truncate(history.diagnosis, length: 80) %></td>
+                <td class="text-right">
+                  <%= link_to "Ver", doctors_patient_medical_history_path(@patient, history), class: "btn-leva-ghost", style: "padding: 8px 14px; border-radius: 12px;" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <p class="muted mb-3">Este paciente no cuenta con historiales médicos.</p>
+      <%= link_to "Ver historiales de otros pacientes",
+                  doctors_patient_medical_history_path(@patient, params[:id] || 0, show_others: true),
+                  class: "btn-leva-ghost", style: "padding: 8px 14px; border-radius: 12px;" %>
+    <% end %>
+  </section>
+
+  <% if @other_histories.present? %>
+    <section class="admin-card mt-4" style="border-radius: 18px; box-shadow: 0 18px 32px rgba(0,0,0,0.06); padding: 22px;">
+      <div class="admin-card__header">
+        <div>
+          <p class="page-eyebrow">Otros pacientes</p>
+          <h2 class="admin-card__title">Historiales recientes</h2>
+          <p class="admin-card__description">Referencias de otros pacientes (solo lectura).</p>
+        </div>
+      </div>
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Paciente</th>
+              <th>Fecha</th>
+              <th>Diagnóstico</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @other_histories.each do |history| %>
+              <tr>
+                <td><%= history.patient&.user&.name || "Paciente" %></td>
+                <td><%= history.registration_date&.strftime('%d %b %Y') || "Sin fecha" %></td>
+                <td class="text-muted"><%= truncate(history.diagnosis, length: 80) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  <% end %>
+</div>

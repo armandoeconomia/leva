@@ -70,7 +70,10 @@
             <% end %>
           </div>
         <% else %>
-          <p class="text-muted mb-0">Aún no se han registrado historiales para este paciente.</p>
+          <p class="text-muted mb-3">Este paciente no cuenta con historiales médicos.</p>
+          <%= link_to "Ver historiales de otros pacientes",
+                      doctors_patient_medical_history_path(patient, 0, show_others: true),
+                      class: "btn btn-sm btn-outline-primary" %>
         <% end %>
       </div>
     </div>
