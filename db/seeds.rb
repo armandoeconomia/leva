@@ -284,6 +284,49 @@ end
 
 puts "✅ 10 citas creadas."
 
+puts "📈 Generando citas históricas para nutrir el dashboard..."
+
+historical_months = 5
+historical_months.downto(1) do |months_ago|
+  month_reference = months_ago.months.ago
+  month_range = month_reference.beginning_of_month..month_reference.end_of_month
+  month_total = rand(10..18)
+
+  month_total.times do
+    institute = medical_institutes.sample
+    doctor = doctors_by_institute[institute].sample
+    patient = patients_by_institute[institute].sample
+    next unless doctor && patient
+
+    hour_int = rand(8..18)
+    minute = [0, 30].sample
+    hour_time = Time.parse("#{format('%02d', hour_int)}:#{format('%02d', minute)}")
+
+    reason = [
+      "Control evolutivo de tratamiento.",
+      "Consulta preventiva general.",
+      "Seguimiento de laboratorio.",
+      "Evaluación prequirúrgica.",
+      "Chequeo periódico integral."
+    ].sample
+
+    appointment = Appointment.create!(
+      patient: patient,
+      doctor: doctor,
+      date: rand(month_range),
+      hour: hour_time,
+      reason_for_consultation: reason,
+      status: Appointment.statuses.keys.sample
+    )
+
+    appointments << appointment
+  end
+
+  puts "  ➤ #{month_reference.strftime('%B %Y')} • #{month_total} citas generadas."
+end
+
+puts "✅ Historial mensual adicional creado."
+
 puts "📁 Creando historias clínicas (5 por paciente)..."
 
 patients_by_institute.values.flatten.each do |patient|
