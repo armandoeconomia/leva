@@ -19,8 +19,6 @@
       </div>
     </div>
     <nav class="admin-top-nav">
-      <%= link_to "Dashboard", admin_dashboard_path,
-                  class: "admin-top-nav__link #{'is-active' if current_page?(admin_dashboard_path)}" %>
       <%= link_to "Usuarios", admin_users_path,
                   class: "admin-top-nav__link #{'is-active' if controller_name == 'users'}" %>
       <%= link_to "Pacientes", admin_patients_path,
@@ -33,9 +31,7 @@
                   class: "admin-top-nav__link #{'is-active' if controller_name == 'appointments'}" %>
     </nav>
     <div class="admin-top-actions">
-      <% if defined?(root_path) %>
-        <%= link_to "Ver landing", root_path, class: "btn-leva-ghost" %>
-      <% end %>
+      <%= link_to "Dashboard", admin_dashboard_path, class: "btn-leva-ghost" %>
       <%= button_to "Cerrar sesión",
                     destroy_user_session_path,
                     method: :delete,
