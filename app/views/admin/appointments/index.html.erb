@@ -12,6 +12,53 @@
   </div>
 </div>
 
+<% filters_active = @filter_params.to_h.values.any?(&:present?) %>
+<div class="admin-card admin-filter-card">
+  <%= form_with url: admin_appointments_path, method: :get, local: true, html: { class: "admin-filter-form" } do %>
+    <div class="admin-filter-grid">
+      <div class="admin-filter-group">
+        <%= label_tag :patient_query, "Paciente" %>
+        <%= text_field_tag :patient_query,
+                           @filter_params[:patient_query],
+                           placeholder: "Nombre o correo",
+                           class: "admin-filter-input" %>
+      </div>
+      <div class="admin-filter-group">
+        <%= label_tag :doctor_query, "Doctor" %>
+        <%= text_field_tag :doctor_query,
+                           @filter_params[:doctor_query],
+                           placeholder: "Nombre o especialidad",
+                           class: "admin-filter-input" %>
+      </div>
+      <div class="admin-filter-group">
+        <%= label_tag :date_from, "Desde" %>
+        <%= date_field_tag :date_from,
+                           @filter_params[:date_from],
+                           class: "admin-filter-input" %>
+      </div>
+      <div class="admin-filter-group">
+        <%= label_tag :date_to, "Hasta" %>
+        <%= date_field_tag :date_to,
+                           @filter_params[:date_to],
+                           class: "admin-filter-input" %>
+      </div>
+      <div class="admin-filter-group">
+        <%= label_tag :hour, "Hora" %>
+        <%= time_field_tag :hour,
+                           @filter_params[:hour],
+                           class: "admin-filter-input",
+                           placeholder: "HH:MM" %>
+      </div>
+    </div>
+    <div class="admin-filter-actions">
+      <%= submit_tag "Aplicar filtros", class: "btn-leva-primary" %>
+      <% if filters_active %>
+        <%= link_to "Limpiar filtros", admin_appointments_path, class: "btn-leva-ghost" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
 <div class="admin-card">
   <table class="admin-table">
     <thead>

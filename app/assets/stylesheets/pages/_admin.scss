@@ -269,6 +269,55 @@
   margin-top: 22px;
 }
 
+.admin-filter-card {
+  padding-bottom: 20px;
+}
+
+.admin-filter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.admin-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.admin-filter-group label {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: $text-light;
+  margin-bottom: 6px;
+}
+
+.admin-filter-input {
+  width: 100%;
+  border: 1px solid $border-light;
+  border-radius: 16px;
+  padding: 10px 14px;
+  background: $background-main;
+  font-size: 0.95rem;
+  color: $text-primary;
+}
+
+.admin-filter-input:focus {
+  outline: none;
+  border-color: $color-accent;
+  box-shadow: 0 0 0 2px rgba($color-accent, 0.15);
+}
+
+.admin-filter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
 .admin-table {
   width: 100%;
   border-collapse: separate;
