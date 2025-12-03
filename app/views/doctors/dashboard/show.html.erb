@@ -155,29 +155,33 @@
         Revisa tus horarios activos por día.
       </p>
     </div>
-    <%= link_to "Gestionar horarios", doctors_calendars_path, class: "btn-leva-ghost" %>
+    <div class="d-flex gap-2">
+      <%= link_to "Gestionar horarios", doctors_hours_path, class: "btn-leva-ghost" %>
+      <%= link_to "Ver mi calendario", doctors_calendars_path, class: "btn-leva-plain" %>
+    </div>
   </div>
+  <% grouped_hours = work_hours.group_by { |h| h.calendar.date }.to_a.sort_by(&:first).first(7) %>
   <div class="admin-table-wrapper">
     <table class="admin-table">
       <thead>
         <tr>
           <th>Día</th>
-          <th>Inicio</th>
-          <th>Fin</th>
+          <th>Rango</th>
         </tr>
       </thead>
       <tbody>
-        <% if work_hours.any? %>
-          <% work_hours.each do |hour| %>
+        <% if grouped_hours.any? %>
+          <% grouped_hours.each do |date, hours| %>
+            <% sorted = hours.sort_by(&:start_time) %>
+            <% range_label = "#{sorted.first.start_time.strftime('%H:%M')} - #{sorted.last.end_time.strftime('%H:%M')}" %>
             <tr>
-              <td><%= hour.calendar.date&.strftime('%A %d/%m') %></td>
-              <td><%= hour.start_time&.strftime('%H:%M') %></td>
-              <td><%= hour.end_time&.strftime('%H:%M') %></td>
+              <td><%= date&.strftime('%A %d/%m') %></td>
+              <td><%= range_label %></td>
             </tr>
           <% end %>
         <% else %>
           <tr>
-            <td colspan="3" class="muted">Aún no registras horarios activos.</td>
+            <td colspan="2" class="muted">Aún no registras horarios activos.</td>
           </tr>
         <% end %>
       </tbody>

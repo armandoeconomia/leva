@@ -1,7 +1,7 @@
 <% doctor = current_user&.doctor %>
-<% calendar = @calendar || Calendar.find_by(id: params[:calendar_id]) || doctor&.calendars&.order(date: :asc)&.first %>
+<% calendar = @calendar %>
 <% hour = @hour || Hour.new %>
-<% hours = calendar ? calendar.hours.order(:start_time) : [] %>
+<% hours = @hours || [] %>
 
 <div class="container py-4 py-lg-5">
   <div class="row justify-content-center">
@@ -13,18 +13,23 @@
           <p class="text-muted mb-4">Selecciona el día (calendario) y define los rangos horarios en los que estarás disponible.</p>
 
           <% if calendar %>
-            <div class="mb-3">
+            <div class="mb-3 d-flex flex-wrap gap-2 align-items-center">
               <span class="badge text-bg-primary px-3 py-2">Día: <%= l(calendar.date, format: :long) rescue calendar.date %></span>
-              <%= link_to 'Cambiar día', doctors_calendars_path, class: "btn btn-link btn-sm text-decoration-none" %>
+              <%= form_with url: new_doctors_calendar_hour_path, method: :get, local: true, class: "d-flex align-items-center gap-2" do %>
+                <%= select_tag :calendar_id,
+                               options_from_collection_for_select(doctor.calendars.order(date: :asc), :id, :date, calendar.id),
+                               class: "form-select form-select-sm" %>
+                <%= submit_tag "Cambiar día", class: "btn btn-outline-secondary btn-sm" %>
+              <% end %>
             </div>
             <%= form_with model: [:doctors, calendar, hour], local: true, class: "row g-3" do |f| %>
               <div class="col-md-6">
                 <%= f.label :start_time, "Inicio", class: "form-label fw-semibold" %>
-                <%= f.time_field :start_time, class: "form-control rounded-3" %>
+                <%= f.time_field :start_time, class: "form-control rounded-3", step: 900, placeholder: "HH:MM", value: hour.start_time&.strftime('%H:%M') %>
               </div>
               <div class="col-md-6">
                 <%= f.label :end_time, "Fin", class: "form-label fw-semibold" %>
-                <%= f.time_field :end_time, class: "form-control rounded-3" %>
+                <%= f.time_field :end_time, class: "form-control rounded-3", step: 900, placeholder: "HH:MM", value: hour.end_time&.strftime('%H:%M') %>
               </div>
               <div class="col-12 d-flex gap-2 mt-2">
                 <%= f.submit "Guardar hora", class: "btn btn-primary px-4" %>
@@ -53,6 +58,7 @@
                     <tr>
                       <th class="text-muted small">Inicio</th>
                       <th class="text-muted small">Fin</th>
+                      <th class="text-muted small text-end">Acciones</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -60,6 +66,11 @@
                       <tr>
                         <td><%= h.start_time&.strftime('%H:%M') %></td>
                         <td><%= h.end_time&.strftime('%H:%M') %></td>
+                        <td class="text-end">
+                          <%= button_to "Eliminar", doctors_calendar_hour_path(calendar, h), method: :delete,
+                                        data: { confirm: "¿Eliminar este rango?" },
+                                        class: "btn btn-sm btn-outline-danger" %>
+                        </td>
                       </tr>
                     <% end %>
                   </tbody>
