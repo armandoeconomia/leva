@@ -89,4 +89,9 @@ Rails.application.routes.draw do
     resources :medical_institutes
   end
 
+  namespace :public do
+    resource :assistant, only: [] do
+      post :message, on: :collection
+    end
+  end
 end

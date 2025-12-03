@@ -607,6 +607,140 @@
     gap: 0.4rem;
   }
 
+  .landing-chat {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1050;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+  }
+
+  .landing-chat__panel {
+    width: min(360px, 92vw);
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px solid rgba(122, 109, 255, 0.18);
+    box-shadow: 0 20px 60px rgba(29, 27, 58, 0.18);
+    padding: 18px;
+    margin-bottom: 12px;
+    transform: translateY(15px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .landing-chat__panel.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .landing-chat__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .landing-chat__title {
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .landing-chat__messages {
+    max-height: 320px;
+    overflow-y: auto;
+    display: grid;
+    gap: 10px;
+    padding-bottom: 6px;
+  }
+
+  .landing-chat__message {
+    border-radius: 16px;
+    padding: 12px 14px;
+    font-size: 0.94rem;
+    line-height: 1.35;
+    box-shadow: 0 10px 25px rgba(24, 16, 66, 0.08);
+  }
+
+  .landing-chat__message--assistant {
+    background: rgba(122, 109, 255, 0.1);
+    border: 1px solid rgba(122, 109, 255, 0.18);
+  }
+
+  .landing-chat__message--user {
+    background: linear-gradient(120deg, #9c7bff, #7c78ff);
+    color: #fff;
+    border: none;
+    justify-self: end;
+    text-align: right;
+  }
+
+  .landing-chat__message-author {
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 0.8rem;
+    color: #7a6dff;
+  }
+
+  .landing-chat__message--user .landing-chat__message-author {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .landing-chat__message-body {
+    color: #3d3d4e;
+    margin: 0;
+  }
+
+  .landing-chat__form textarea {
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 12px;
+    padding: 10px 12px;
+    resize: none;
+    min-height: 70px;
+  }
+
+  .landing-chat__error {
+    color: #d9534f;
+    font-size: 0.85rem;
+    min-height: 18px;
+    margin-top: 4px;
+  }
+
+  .landing-chat__submit {
+    width: 100%;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #b46bff, #786dff);
+    padding: 10px 16px;
+    color: #fff;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+
+  .landing-chat__submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .landing-chat .mediapp-floating-btn {
+    position: relative;
+    inset: 0;
+    bottom: unset;
+    right: unset;
+  }
+
+  @media (max-width: 576px) {
+    .landing-chat {
+      right: 12px;
+      bottom: 12px;
+    }
+  }
+
 </style>
 
 <% map_markers = (@medical_institutes || []).map do |institute|
@@ -1325,14 +1459,42 @@
   </footer>
 </div>
 
-<button type="button" class="btn btn-primary rounded-pill shadow mediapp-floating-btn d-inline-flex align-items-center gap-2 px-3 py-2" aria-label="Consultas rápidas">
-  <span class="fw-semibold text-white text-uppercase small">Asistente IA</span>
-  <span class="mediapp-floating-arrow rounded-circle ms-2">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 5l-1.41 1.41L15.17 11H6v2h9.17l-4.58 4.59L12 19l7-7z" fill="currentColor"/>
-    </svg>
-  </span>
-</button>
+<div class="landing-chat" data-controller="landing-chat">
+  <div class="landing-chat__panel" data-landing-chat-target="panel" aria-live="polite">
+    <div class="landing-chat__header">
+      <div>
+        <p class="landing-chat__title mb-0">Agenda inteligente</p>
+        <small class="text-secondary">Consulta horarios disponibles</small>
+      </div>
+      <button type="button" class="btn btn-link text-decoration-none p-0 text-secondary" data-action="landing-chat#toggle" aria-label="Cerrar chat">
+        ×
+      </button>
+    </div>
+    <div class="landing-chat__messages" data-landing-chat-target="messages">
+      <div class="landing-chat__message landing-chat__message--assistant" data-initial-message="true" data-message="Hola 👋 ¿Deseas conocer horarios disponibles o agendar una cita? Indica la especialidad que necesitas.">
+        <p class="landing-chat__message-author mb-1">Asistente LEVA</p>
+        <p class="landing-chat__message-body mb-0">Hola 👋 ¿Deseas conocer horarios disponibles o agendar una cita? Indica la especialidad que necesitas.</p>
+      </div>
+    </div>
+    <div class="landing-chat__error" data-landing-chat-target="error"></div>
+    <form class="landing-chat__form" data-action="submit->landing-chat#send" data-landing-chat-target="form">
+      <label for="landing_chat_input" class="visually-hidden">Escribe tu mensaje</label>
+      <textarea id="landing_chat_input" placeholder="Ej. Necesito cardiólogo para la próxima semana" data-landing-chat-target="input"></textarea>
+      <button type="submit" class="landing-chat__submit" data-landing-chat-target="submit">Preguntar al asistente</button>
+    </form>
+  </div>
+  <button type="button"
+          class="btn btn-primary rounded-pill shadow mediapp-floating-btn d-inline-flex align-items-center gap-2 px-3 py-2"
+          aria-label="Consultas rápidas"
+          data-action="landing-chat#toggle">
+    <span class="fw-semibold text-white text-uppercase small">Asistente IA</span>
+    <span class="mediapp-floating-arrow rounded-circle ms-2">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 5l-1.41 1.41L15.17 11H6v2h9.17l-4.58 4.59L12 19l7-7z" fill="currentColor"/>
+      </svg>
+    </span>
+  </button>
+</div>
 
 <script>
   const levaSmoothNav = () => {
