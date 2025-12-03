@@ -45,6 +45,7 @@ Rails.application.routes.draw do
     resources :calendars, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
       resources :hours, only: [:new, :create, :edit, :update, :destroy]
     end
+    resources :hours, only: [:index]
 
     # Citas (puede ser un listado general de sus citas, diferente al del paciente)
     resources :appointments, only: [:index, :show, :edit, :update, :destroy] do
