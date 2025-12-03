@@ -657,6 +657,23 @@
   </nav>
 
   <main class="container">
+    <% avatar_icon_sets = {
+      patient: [
+        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgcng9IjY0IiBmaWxsPSIjZjVmMWZmIi8+PHBhdGggZD0iTTU4IDI4aDEydjcySDU4eiIgZmlsbD0iIzdhNmRmZiIvPjxwYXRoIGQ9Ik0yOCA1OGg3MnYxMkgyOHoiIGZpbGw9IiM3YTZkZmYiLz48L3N2Zz4=',
+        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgcng9IjY0IiBmaWxsPSIjZmRmMmY4Ii8+PHBhdGggZD0iTTU2IDMwaDE2djY4SDU2eiIgZmlsbD0iI2ZmN2ViOSIvPjxwYXRoIGQ9Ik0zMCA1Nmg2OHYxNkgzMHoiIGZpbGw9IiNmZjdlYjkiLz48L3N2Zz4=',
+        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgcng9IjMyIiBmaWxsPSIjZWVmOGZmIi8+PHBhdGggZD0iTTY0IDI2Yy00Ljk3IDAtOSA0LjAzLTkgOXYxN0gzOGMtNC45NyAwLTkgNC4wMy05IDl2Nmg3MHYtNmMwLTQuOTctNC4wMy05LTktOUg3M1YzNWMwLTQuOTctNC4wMy05LTktOXpNMjkgNzN2MjloNzBWNzNIMjl6bTE4IDEwaDh2MTJoLThWODN6bTI0IDBoOHYxMmgtOFY4M3oiIGZpbGw9IiMxZDliZjAiLz48L3N2Zz4='
+      ],
+      doctor: [
+        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgcng9IjI4IiBmaWxsPSIjZWRmMWZmIi8+PGNpcmNsZSBjeD0iNDQiIGN5PSI0OCIgcj0iMTYiIGZpbGw9IiM3YTZkZmYiLz48cGF0aCBkPSJNNDQgNjR2MjBjMCAxMS4wNDYgOC45NTQgMjAgMjAgMjBzMjAtOC45NTQgMjAtMjB2LThINzB2OGMwIDMuMzE0LTIuNjg2IDYtNiA2cy02LTIuNjg2LTYtNlY2NGgtMTR6IiBmaWxsPSIjN2E2ZGZmIi8+PHBhdGggZD0iTTcyIDMyaDE0djMySDcyeiIgZmlsbD0iI2M3YmVmZCIvPjwvc3ZnPg==',
+        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgcng9IjQwIiBmaWxsPSIjZThmYmZmIi8+PGNpcmNsZSBjeD0iNjQiIGN5PSI0MCIgcj0iMTgiIGZpbGw9IiMwMGJjZDQiLz48cGF0aCBkPSJNMzIgODhjMC0xMy4yNTUgMTAuNzQ1LTI0IDI0LTI0aDE2YzEzLjI1NSAwIDI0IDEwLjc0NSAyNCAyNHYxMkgzMlY4OHoiIGZpbGw9IiMwMGJjZDQiLz48cGF0aCBkPSJNODAgOTJhOCA4IDAgMSAxLTE2IDAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI2IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiLz48Y2lyY2xlIGN4PSI4OCIgY3k9IjkyIiByPSIxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBiY2Q0IiBzdHJva2Utd2lkdGg9IjYiLz48Y2lyY2xlIGN4PSI4OCIgY3k9IjkyIiByPSI0IiBmaWxsPSIjMDBiY2Q0Ii8+PC9zdmc+',
+        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgcng9IjI4IiBmaWxsPSIjZmZmNGU2Ii8+PGNpcmNsZSBjeD0iNjQiIGN5PSI0NCIgcj0iMTgiIGZpbGw9IiNmZjk4MDAiLz48cGF0aCBkPSJNMjggOTZjMC0xOS44ODIgMTYuMTE4LTM2IDM2LTM2czM2IDE2LjExOCAzNiAzNnY4SDI4di04eiIgZmlsbD0iI2ZmOTgwMCIvPjxwYXRoIGQ9Ik05MiA3NmwxMiAxMi0xMiAxMiIgc3Ryb2tlPSIjZmY5ODAwIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZmlsbD0ibm9uZSIvPjwvc3ZnPg=='
+      ],
+      clinic: [
+        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgcng9IjI0IiBmaWxsPSIjZjNmZmYzIi8+PHJlY3QgeD0iMjgiIHk9IjQ0IiB3aWR0aD0iNzIiIGhlaWdodD0iNTYiIHJ4PSI2IiBmaWxsPSIjNGNhZjUwIi8+PHJlY3QgeD0iNTYiIHk9IjMyIiB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIGZpbGw9IiM0Y2FmNTAiLz48cGF0aCBkPSJNNTAgNjJoMjh2OEg1MHpNNTAgNzhoMjh2OEg1MHoiIGZpbGw9IiNjOGY3YzUiLz48L3N2Zz4=',
+        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgcng9IjMyIiBmaWxsPSIjZWVmMmZmIi8+PHJlY3QgeD0iMjQiIHk9IjQ4IiB3aWR0aD0iODAiIGhlaWdodD0iNDgiIHJ4PSI4IiBmaWxsPSIjNWM2YmMwIi8+PHJlY3QgeD0iNDgiIHk9IjMyIiB3aWR0aD0iMzIiIGhlaWdodD0iMTYiIGZpbGw9IiM1YzZiYzAiLz48cGF0aCBkPSJNNDAgNjRoMTZ2MjRINDB6TTcyIDY0aDE2djI0SDcyeiIgZmlsbD0iI2JmYzRmZiIvPjwvc3ZnPg==',
+        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgcng9IjI4IiBmaWxsPSIjZmVmNmVkIi8+PHJlY3QgeD0iMjAiIHk9IjUyIiB3aWR0aD0iODgiIGhlaWdodD0iNDQiIHJ4PSIxMCIgZmlsbD0iI2ZmYjc0ZCIvPjxyZWN0IHg9IjUyIiB5PSIzMCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjIyIiBmaWxsPSIjZmZiNzRkIi8+PHBhdGggZD0iTTQ2IDcwaDEydjE4SDQ2ek03MCA3MGgxMnYxOEg3MHoiIGZpbGw9IiNmZmUwYjIiLz48L3N2Zz4='
+      ]
+    } %>
     <section id="inicio" class="mb-5 position-relative">
       <div class="mediapp-hero-shell">
         <div class="row align-items-center g-5">
@@ -793,20 +810,8 @@
 
       <div class="mediapp-testimonial-shell p-4 p-md-5">
         <% if @featured_doctors.present? %>
-          <% male_avatar_urls = [
-            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=256&h=256&q=80",
-            "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=256&h=256&q=80",
-            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=256&h=256&q=80"
-          ] %>
-          <% female_avatar_urls = [
-            "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=256&h=256&q=80",
-            "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=256&h=256&q=80",
-            "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=256&h=256&q=80"
-          ] %>
-          <% neutral_avatar_urls = [
-            "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=256&h=256&q=80",
-            "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=256&h=256&q=80"
-          ] %>
+          <% doctor_avatar_icons = avatar_icon_sets[:doctor] %>
+          <% doctor_groups = @featured_doctors.each_slice(3).to_a %>
           <div
             id="levaDoctorsCarousel"
             class="carousel slide"
@@ -815,73 +820,66 @@
             data-bs-touch="true"
           >
             <div class="carousel-indicators">
-              <% @featured_doctors.each_with_index do |doctor, index| %>
-                <% doctor_name = "#{doctor.user&.name} #{doctor.user&.last_name}".strip %>
+              <% doctor_groups.each_with_index do |group, index| %>
+                <% label = group.map { |doctor| ("#{doctor.user&.name} #{doctor.user&.last_name}".strip.presence || 'Doctor') }.join(", ") %>
                 <button
                   type="button"
                   data-bs-target="#levaDoctorsCarousel"
                   data-bs-slide-to="<%= index %>"
                   class="<%= 'active' if index.zero? %>"
                   aria-current="<%= index.zero? %>"
-                  aria-label="<%= doctor_name.presence || 'Doctor' %>"
+                  aria-label="<%= label %>"
                 ></button>
               <% end %>
             </div>
             <div class="carousel-inner px-2 px-md-5">
-              <% @featured_doctors.each_with_index do |doctor, index| %>
-                <% doctor_name = "#{doctor.user&.name} #{doctor.user&.last_name}".strip %>
-                <% speciality = doctor.speciality&.humanize %>
-                <% institute = doctor.medical_institute %>
-                <% gender = doctor.user&.gender %>
-                <% avatar_pool =
-                  case gender
-                  when "femenino" then female_avatar_urls
-                  when "masculino" then male_avatar_urls
-                  else neutral_avatar_urls
-                  end
-                %>
-                <% avatar_url = avatar_pool[doctor.id % avatar_pool.size] %>
-                <% initials = [doctor.user&.name&.first, doctor.user&.last_name&.first].compact.join %>
-                <% institute_name = institute&.name || 'Instituto disponible' %>
-                <% institute_address = institute&.address || 'Sin dirección registrada' %>
-                <% doctor_registration = doctor.medical_registration.presence || 'Sin datos' %>
-                <% phone_number = institute&.phone_number %>
-                <div class="carousel-item <%= 'active' if index.zero? %>">
-                  <div class="mediapp-testimonial-card mediapp-doctor-card mx-auto p-4 p-md-5">
-                    <div class="mediapp-doctor-header d-flex align-items-center gap-3 mb-4">
-                      <div class="mediapp-testimonial-avatar">
-                        <% if avatar_url.present? %>
-                          <img src="<%= avatar_url %>" alt="Foto del Dr. <%= doctor_name.presence || initials.presence || 'LEVA' %>" loading="lazy">
-                        <% else %>
-                          <div class="w-100 h-100 d-flex align-items-center justify-content-center text-uppercase">
-                            <span class="fw-bold text-secondary"><%= initials.presence || 'DR' %></span>
+              <% doctor_groups.each_with_index do |group, group_index| %>
+                <div class="carousel-item <%= 'active' if group_index.zero? %>">
+                  <div class="row g-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
+                    <% group.each do |doctor| %>
+                      <% doctor_name = "#{doctor.user&.name} #{doctor.user&.last_name}".strip %>
+                      <% speciality = doctor.speciality&.humanize %>
+                      <% institute = doctor.medical_institute %>
+                      <% avatar_options = doctor_avatar_icons.presence || avatar_icon_sets[:patient] %>
+                      <% avatar_url = avatar_options.sample %>
+                      <% initials = [doctor.user&.name&.first, doctor.user&.last_name&.first].compact.join %>
+                      <% institute_name = institute&.name || 'Instituto disponible' %>
+                      <% institute_address = institute&.address || 'Sin dirección registrada' %>
+                      <% doctor_registration = doctor.medical_registration.presence || 'Sin datos' %>
+                      <% phone_number = institute&.phone_number %>
+                      <div class="col d-flex">
+                        <div class="mediapp-testimonial-card mediapp-doctor-card mx-auto p-4 p-md-5 w-100 h-100">
+                          <div class="mediapp-doctor-header d-flex align-items-center gap-3 mb-4">
+                            <div class="mediapp-testimonial-avatar">
+                              <img src="<%= avatar_url %>" alt="Ícono del profesional <%= doctor_name.presence || initials.presence || 'LEVA' %>" loading="lazy">
+                            </div>
+                            <div>
+                              <h5 class="mb-1 fw-bold"><%= doctor_name.presence || 'Doctor disponible' %></h5>
+                              <div class="mediapp-doctor-speciality"><%= speciality || 'Especialidad no registrada' %></div>
+                            </div>
                           </div>
-                        <% end %>
-                      </div>
-                      <div>
-                        <h5 class="mb-1 fw-bold"><%= doctor_name.presence || 'Doctor disponible' %></h5>
-                        <div class="mediapp-doctor-speciality"><%= speciality || 'Especialidad no registrada' %></div>
-                      </div>
-                    </div>
-                    <p class="mediapp-doctor-location mb-4">
-                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <path d="M12 20s-6.5-4.35-6.5-9.5A4.5 4.5 0 0 1 10 6a4.3 4.3 0 0 1 2 1 4.3 4.3 0 0 1 2-1 4.5 4.5 0 0 1 4.5 4.5C18.5 15.65 12 20 12 20z" stroke="currentColor" stroke-width="1.6" fill="none"/>
-                        <circle cx="12" cy="10.5" r="1.6" stroke="currentColor" stroke-width="1.6" fill="none"/>
-                      </svg>
-                      <span>Atiende en <strong><%= institute_name %></strong> · <span class="text-secondary"><%= institute_address %></span></span>
-                    </p>
-                    <div class="d-flex flex-wrap gap-3">
-                      <div class="mediapp-doctor-chip">
-                        Matrícula
-                        <strong><%= doctor_registration %></strong>
-                      </div>
-                      <% if phone_number.present? %>
-                        <div class="mediapp-doctor-chip">
-                          Tel
-                          <strong><%= phone_number %></strong>
+                          <p class="mediapp-doctor-location mb-4">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                              <path d="M12 20s-6.5-4.35-6.5-9.5A4.5 4.5 0 0 1 10 6a4.3 4.3 0 0 1 2 1 4.3 4.3 0 0 1 2-1 4.5 4.5 0 0 1 4.5 4.5C18.5 15.65 12 20 12 20z" stroke="currentColor" stroke-width="1.6" fill="none"/>
+                              <circle cx="12" cy="10.5" r="1.6" stroke="currentColor" stroke-width="1.6" fill="none"/>
+                            </svg>
+                            <span>Atiende en <strong><%= institute_name %></strong> · <span class="text-secondary"><%= institute_address %></span></span>
+                          </p>
+                          <div class="d-flex flex-wrap gap-3">
+                            <div class="mediapp-doctor-chip">
+                              Matrícula
+                              <strong><%= doctor_registration %></strong>
+                            </div>
+                            <% if phone_number.present? %>
+                              <div class="mediapp-doctor-chip">
+                                Tel
+                                <strong><%= phone_number %></strong>
+                              </div>
+                            <% end %>
+                          </div>
                         </div>
-                      <% end %>
-                    </div>
+                      </div>
+                    <% end %>
                   </div>
                 </div>
               <% end %>
@@ -1084,186 +1082,113 @@
         <h2 class="fw-bold">Testimonios</h2>
         <p class="text-secondary fs-5 mb-0">Lo que nuestros usuarios dicen sobre su experiencia con LEVA.</p>
       </div>
+      <% testimonials = [
+        {
+          name: "Carolina M.",
+          role: "Paciente de Cardiología",
+          quote: "\"Con LEVA pude agendar mi consulta en minutos. El proceso fue muy simple y seguro.\"",
+          label: "Carolina",
+          type: :patient
+        },
+        {
+          name: "Tomás R.",
+          role: "Paciente de Neurología",
+          quote: "\"Los especialistas verificados me dieron la confianza que necesitaba para hacer seguimiento.\"",
+          label: "Tomás",
+          type: :patient
+        },
+        {
+          name: "Gabriela S.",
+          role: "Paciente de Pediatría",
+          quote: "\"La seguridad de mis datos y la atención personalizada son excelentes.\"",
+          label: "Gabriela",
+          type: :patient
+        },
+        {
+          name: "Dra. Valeria Ruiz",
+          role: "Cardióloga pediátrica",
+          quote: "\"Con LEVA puedo hacer seguimiento remoto a mis pacientes y compartir informes con sus familias en segundos.\"",
+          label: "Valeria",
+          type: :doctor
+        },
+        {
+          name: "Dr. Miguel Núñez",
+          role: "Director médico NeuroPlus",
+          quote: "\"La sincronización con nuestro sistema de historias clínicas redujo tiempos de espera y mejoró la adherencia a tratamientos.\"",
+          label: "Miguel",
+          type: :doctor
+        },
+        {
+          name: "Clínica Aurora",
+          role: "Centro integral asociado",
+          quote: "\"Coordinamos cirugías y turnos ambulatorios con mayor precisión. Nuestro equipo administrativo ganó horas valiosas.\"",
+          label: "Clínica Aurora",
+          type: :clinic
+        },
+        {
+          name: "Red Salud Viva",
+          role: "Clínica aliada",
+          quote: "\"Integramos todas nuestras sedes en un mismo panel y los pacientes reservan con cualquier especialidad desde el celular.\"",
+          label: "Red Salud Viva",
+          type: :clinic
+        }
+      ] %>
+      <% testimonial_avatar_pools = avatar_icon_sets %>
+      <% testimonial_chunks = testimonials.each_slice(3).to_a %>
       <div class="mediapp-testimonial-shell p-4 p-md-5">
         <div id="levaTestimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="7000" data-bs-touch="true">
           <div class="carousel-indicators">
-            <button type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Carolina"></button>
-            <button type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide-to="1" aria-label="Tomás"></button>
-            <button type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide-to="2" aria-label="Gabriela"></button>
-            <button type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide-to="3" aria-label="Dra. Valeria"></button>
-            <button type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide-to="4" aria-label="Dr. Miguel"></button>
-            <button type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide-to="5" aria-label="Clínica Aurora"></button>
-            <button type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide-to="6" aria-label="Red Salud Viva"></button>
+            <% testimonial_chunks.each_with_index do |chunk, index| %>
+              <% label = chunk.map { |testimony| testimony[:label] }.join(", ") %>
+              <button
+                type="button"
+                data-bs-target="#levaTestimonialCarousel"
+                data-bs-slide-to="<%= index %>"
+                class="<%= 'active' if index.zero? %>"
+                aria-current="<%= index.zero? %>"
+                aria-label="<%= label %>"
+              ></button>
+            <% end %>
           </div>
           <div class="carousel-inner px-2 px-md-5">
-            <div class="carousel-item active">
-              <div class="mediapp-testimonial-card mediapp-review-card mx-auto p-4 p-md-5">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-4">
-                  <div class="d-flex align-items-center gap-3">
-                    <div class="mediapp-testimonial-avatar">
-                      <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=128&h=128&q=80" alt="Foto de Carolina M." loading="lazy">
+            <% testimonial_chunks.each_with_index do |chunk, chunk_index| %>
+              <div class="carousel-item <%= 'active' if chunk_index.zero? %>">
+                <div class="row g-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
+                  <% chunk.each do |testimonial| %>
+                    <% avatar_pool = testimonial_avatar_pools[testimonial[:type]] || testimonial_avatar_pools[:patient] %>
+                    <% avatar_url = avatar_pool.sample %>
+                    <div class="col d-flex">
+                      <div class="mediapp-testimonial-card mediapp-review-card mx-auto p-4 p-md-4 p-xl-5 w-100 h-100">
+                        <div class="row g-3 align-items-center mb-4">
+                          <div class="col-12 col-lg">
+                            <div class="d-flex align-items-center gap-3">
+                              <div class="mediapp-testimonial-avatar flex-shrink-0">
+                                <img src="<%= avatar_url %>" alt="Ícono de <%= testimonial[:name] %>" loading="lazy">
+                              </div>
+                              <div class="text-start">
+                                <h5 class="mb-0 fw-bold"><%= testimonial[:name] %></h5>
+                                <small class="mediapp-testimonial-role text-muted"><%= testimonial[:role] %></small>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-lg-auto">
+                            <div class="mediapp-review-rating text-lg-end">
+                              <div class="mediapp-testimonial-stars d-flex gap-1 justify-content-start justify-content-lg-end mb-1">
+                                <% 5.times do %>
+                                  <svg viewBox="0 0 24 24"><path d="M12 2l3 6.1 6.7.9-4.9 4.7 1.2 6.6-6-3.2-6 3.2 1.2-6.6-4.9-4.7 6.7-.9z"/></svg>
+                                <% end %>
+                              </div>
+                              <small class="fw-semibold text-secondary d-block">Calificación 5/5</small>
+                            </div>
+                          </div>
+                        </div>
+                        <p class="mediapp-testimonial-quote mediapp-review-quote mb-0"><%= testimonial[:quote] %></p>
+                      </div>
                     </div>
-                    <div>
-                      <h5 class="mb-0 fw-bold">Carolina M.</h5>
-                      <small class="mediapp-testimonial-role">Paciente de Cardiología</small>
-                    </div>
-                  </div>
-                  <div class="mediapp-review-rating text-md-end">
-                    <div class="mediapp-testimonial-stars d-flex gap-1 justify-content-md-end mb-1">
-                      <% 5.times do %>
-                        <svg viewBox="0 0 24 24"><path d="M12 2l3 6.1 6.7.9-4.9 4.7 1.2 6.6-6-3.2-6 3.2 1.2-6.6-4.9-4.7 6.7-.9z"/></svg>
-                      <% end %>
-                    </div>
-                    <small class="fw-semibold text-secondary d-block">Calificación 5/5</small>
-                  </div>
+                  <% end %>
                 </div>
-                <p class="mediapp-testimonial-quote mediapp-review-quote mb-0">"Con LEVA pude agendar mi consulta en minutos. El proceso fue muy simple y seguro."</p>
               </div>
-            </div>
-            <div class="carousel-item">
-              <div class="mediapp-testimonial-card mediapp-review-card mx-auto p-4 p-md-5">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-4">
-                  <div class="d-flex align-items-center gap-3">
-                    <div class="mediapp-testimonial-avatar">
-                      <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=128&h=128&q=80" alt="Foto de Tomás R." loading="lazy">
-                    </div>
-                    <div>
-                      <h5 class="mb-0 fw-bold">Tomás R.</h5>
-                      <small class="mediapp-testimonial-role">Paciente de Neurología</small>
-                    </div>
-                  </div>
-                  <div class="mediapp-review-rating text-md-end">
-                    <div class="mediapp-testimonial-stars d-flex gap-1 justify-content-md-end mb-1">
-                      <% 5.times do %>
-                        <svg viewBox="0 0 24 24"><path d="M12 2l3 6.1 6.7.9-4.9 4.7 1.2 6.6-6-3.2-6 3.2 1.2-6.6-4.9-4.7 6.7-.9z"/></svg>
-                      <% end %>
-                    </div>
-                    <small class="fw-semibold text-secondary d-block">Calificación 5/5</small>
-                  </div>
-                </div>
-                <p class="mediapp-testimonial-quote mediapp-review-quote mb-0">"Los especialistas verificados me dieron la confianza que necesitaba para hacer seguimiento."</p>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <div class="mediapp-testimonial-card mediapp-review-card mx-auto p-4 p-md-5">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-4">
-                  <div class="d-flex align-items-center gap-3">
-                    <div class="mediapp-testimonial-avatar">
-                      <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=128&h=128&q=80" alt="Foto de Gabriela S." loading="lazy">
-                    </div>
-                    <div>
-                      <h5 class="mb-0 fw-bold">Gabriela S.</h5>
-                      <small class="mediapp-testimonial-role">Paciente de Pediatría</small>
-                    </div>
-                  </div>
-                  <div class="mediapp-review-rating text-md-end">
-                    <div class="mediapp-testimonial-stars d-flex gap-1 justify-content-md-end mb-1">
-                      <% 5.times do %>
-                        <svg viewBox="0 0 24 24"><path d="M12 2l3 6.1 6.7.9-4.9 4.7 1.2 6.6-6-3.2-6 3.2 1.2-6.6-4.9-4.7 6.7-.9z"/></svg>
-                      <% end %>
-                    </div>
-                    <small class="fw-semibold text-secondary d-block">Calificación 5/5</small>
-                  </div>
-                </div>
-                <p class="mediapp-testimonial-quote mediapp-review-quote mb-0">"La seguridad de mis datos y la atención personalizada son excelentes."</p>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <div class="mediapp-testimonial-card mediapp-review-card mx-auto p-4 p-md-5">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-4">
-                  <div class="d-flex align-items-center gap-3">
-                    <div class="mediapp-testimonial-avatar">
-                      <img src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=128&h=128&q=80" alt="Foto de la Dra. Valeria Ruiz" loading="lazy">
-                    </div>
-                    <div>
-                      <h5 class="mb-0 fw-bold">Dra. Valeria Ruiz</h5>
-                      <small class="mediapp-testimonial-role">Cardióloga pediátrica</small>
-                    </div>
-                  </div>
-                  <div class="mediapp-review-rating text-md-end">
-                    <div class="mediapp-testimonial-stars d-flex gap-1 justify-content-md-end mb-1">
-                      <% 5.times do %>
-                        <svg viewBox="0 0 24 24"><path d="M12 2l3 6.1 6.7.9-4.9 4.7 1.2 6.6-6-3.2-6 3.2 1.2-6.6-4.9-4.7 6.7-.9z"/></svg>
-                      <% end %>
-                    </div>
-                    <small class="fw-semibold text-secondary d-block">Calificación 5/5</small>
-                  </div>
-                </div>
-                <p class="mediapp-testimonial-quote mediapp-review-quote mb-0">"Con LEVA puedo hacer seguimiento remoto a mis pacientes y compartir informes con sus familias en segundos."</p>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <div class="mediapp-testimonial-card mediapp-review-card mx-auto p-4 p-md-5">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-4">
-                  <div class="d-flex align-items-center gap-3">
-                    <div class="mediapp-testimonial-avatar">
-                      <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=128&h=128&q=80" alt="Foto del Dr. Miguel Núñez" loading="lazy">
-                    </div>
-                    <div>
-                      <h5 class="mb-0 fw-bold">Dr. Miguel Núñez</h5>
-                      <small class="mediapp-testimonial-role">Director médico NeuroPlus</small>
-                    </div>
-                  </div>
-                  <div class="mediapp-review-rating text-md-end">
-                    <div class="mediapp-testimonial-stars d-flex gap-1 justify-content-md-end mb-1">
-                      <% 5.times do %>
-                        <svg viewBox="0 0 24 24"><path d="M12 2l3 6.1 6.7.9-4.9 4.7 1.2 6.6-6-3.2-6 3.2 1.2-6.6-4.9-4.7 6.7-.9z"/></svg>
-                      <% end %>
-                    </div>
-                    <small class="fw-semibold text-secondary d-block">Calificación 5/5</small>
-                  </div>
-                </div>
-                <p class="mediapp-testimonial-quote mediapp-review-quote mb-0">"La sincronización con nuestro sistema de historias clínicas redujo tiempos de espera y mejoró la adherencia a tratamientos."</p>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <div class="mediapp-testimonial-card mediapp-review-card mx-auto p-4 p-md-5">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-4">
-                  <div class="d-flex align-items-center gap-3">
-                    <div class="mediapp-testimonial-avatar">
-                      <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=128&h=128&q=80" alt="Equipo de Clínica Aurora" loading="lazy">
-                    </div>
-                    <div>
-                      <h5 class="mb-0 fw-bold">Clínica Aurora</h5>
-                      <small class="mediapp-testimonial-role">Centro integral asociado</small>
-                    </div>
-                  </div>
-                  <div class="mediapp-review-rating text-md-end">
-                    <div class="mediapp-testimonial-stars d-flex gap-1 justify-content-md-end mb-1">
-                      <% 5.times do %>
-                        <svg viewBox="0 0 24 24"><path d="M12 2l3 6.1 6.7.9-4.9 4.7 1.2 6.6-6-3.2-6 3.2 1.2-6.6-4.9-4.7 6.7-.9z"/></svg>
-                      <% end %>
-                    </div>
-                    <small class="fw-semibold text-secondary d-block">Calificación 5/5</small>
-                  </div>
-                </div>
-                <p class="mediapp-testimonial-quote mediapp-review-quote mb-0">"Coordinamos cirugías y turnos ambulatorios con mayor precisión. Nuestro equipo administrativo ganó horas valiosas."</p>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <div class="mediapp-testimonial-card mediapp-review-card mx-auto p-4 p-md-5">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-4">
-                  <div class="d-flex align-items-center gap-3">
-                    <div class="mediapp-testimonial-avatar">
-                      <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=128&h=128&q=80" alt="Equipo de Red Salud Viva" loading="lazy">
-                    </div>
-                    <div>
-                      <h5 class="mb-0 fw-bold">Red Salud Viva</h5>
-                      <small class="mediapp-testimonial-role">Clínica aliada</small>
-                    </div>
-                  </div>
-                  <div class="mediapp-review-rating text-md-end">
-                    <div class="mediapp-testimonial-stars d-flex gap-1 justify-content-md-end mb-1">
-                      <% 5.times do %>
-                        <svg viewBox="0 0 24 24"><path d="M12 2l3 6.1 6.7.9-4.9 4.7 1.2 6.6-6-3.2-6 3.2 1.2-6.6-4.9-4.7 6.7-.9z"/></svg>
-                      <% end %>
-                    </div>
-                    <small class="fw-semibold text-secondary d-block">Calificación 5/5</small>
-                  </div>
-                </div>
-                <p class="mediapp-testimonial-quote mediapp-review-quote mb-0">"Integramos todas nuestras sedes en un mismo panel y los pacientes reservan con cualquier especialidad desde el celular."</p>
-              </div>
-            </div>
+            <% end %>
           </div>
           <button class="carousel-control-prev mediapp-carousel-control" type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
