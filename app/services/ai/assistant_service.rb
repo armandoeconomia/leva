@@ -44,7 +44,9 @@ module Ai
       chat.with_instructions(system_prompt(context_data))
       history_payload(user_message).each { |payload| chat.add_message(payload) }
 
-      attachments = user_message.documents if user_message.documents.attached?
+      attachments = if user_message.documents.attached?
+                      user_message.documents.map(&:blob)
+                    end
       chat.ask(user_prompt_for(user_message), with: attachments)
     end
 
