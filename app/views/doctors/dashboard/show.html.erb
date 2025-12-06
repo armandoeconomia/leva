@@ -74,26 +74,12 @@
             <th>Fecha</th>
             <th>Hora</th>
             <th>Paciente</th>
-            <th>Estado</th>
-            <th></th>
+            <th class="text-center">Estado</th>
+            <th class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <% upcoming.each do |appointment| %>
-            <tr>
-              <td><%= appointment.date&.strftime('%d %b %Y') %></td>
-              <td><%= appointment.hour&.strftime('%H:%M') %></td>
-              <td><strong><%= appointment.patient&.user&.name || "Paciente" %></strong></td>
-              <td><span class="status-pill <%= appointment.status %>"><%= appointment.status.to_s.titleize %></span></td>
-              <td class="text-right">
-                <div class="d-flex gap-2 justify-content-end flex-wrap">
-                  <%= link_to "Abrir", doctors_appointment_path(appointment), class: "btn-leva-ghost", style: "padding: 8px 14px; border-radius: 12px;" %>
-                  <%= link_to "Aceptar", confirm_doctors_appointment_path(appointment), method: :patch, class: "btn-leva-primary", style: "padding: 8px 14px; border-radius: 12px;" %>
-                  <%= link_to "Rechazar", cancel_doctors_appointment_path(appointment), method: :patch, class: "btn-leva-ghost", style: "padding: 8px 14px; border-radius: 12px; background: rgba(255,202,58,0.18); color: #2A2A2A;" %>
-                </div>
-              </td>
-            </tr>
-          <% end %>
+          <%= render partial: "doctors/dashboard/appointment_row", collection: upcoming, as: :appointment %>
         </tbody>
       </table>
     </div>

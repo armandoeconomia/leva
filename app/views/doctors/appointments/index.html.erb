@@ -2,6 +2,15 @@
 <% pending = appointments.select { |a| a.status == "pendiente" } %>
 
 <div class="admin-shell" style="padding: 32px 40px 48px; max-width: 1100px; margin: 0 auto;">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <%= link_to doctors_dashboard_path, class: "btn-leva-circle", aria: { label: "Volver" } do %>
+      <i class="fa fa-arrow-left"></i>
+    <% end %>
+    <div class="d-flex gap-2 flex-wrap">
+      <%= link_to "Mi calendario", doctors_calendars_path, class: "btn-leva-plain", style: "padding: 10px 14px; border-radius: 12px;" %>
+      <%= link_to "Mis horarios", doctors_hours_path, class: "btn-leva-plain", style: "padding: 10px 14px; border-radius: 12px;" %>
+    </div>
+  </div>
   <div class="admin-page-header">
     <div>
       <span class="page-eyebrow">Citas</span>
@@ -51,29 +60,12 @@
             <th>Hora</th>
             <th>Paciente</th>
             <th>Motivo</th>
-            <th>Estado</th>
-            <th class="text-right">Acciones</th>
+            <th class="text-center">Estado</th>
+            <th class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <% appointments.each do |appt| %>
-            <% patient_name = appt.patient&.user&.name || "Paciente" %>
-            <tr>
-              <td><%= l(appt.date, format: '%d %b %Y') rescue appt.date %></td>
-              <td><%= appt.hour&.strftime('%H:%M') || appt.hour %></td>
-              <td><strong><%= patient_name %></strong></td>
-              <td class="text-muted"><%= appt.reason_for_consultation.presence || "Sin motivo" %></td>
-              <td><span class="status-pill <%= appt.status %>"><%= appt.status.to_s.titleize %></span></td>
-              <td class="text-right">
-                <div class="d-flex gap-2 justify-content-end flex-wrap">
-                  <%= link_to "Ver", doctors_appointment_path(appt), class: "btn-leva-ghost", style: "padding: 8px 14px; border-radius: 12px;" %>
-                  <%= link_to "Editar", edit_doctors_appointment_path(appt), class: "btn-leva-plain", style: "padding: 8px 14px; border-radius: 12px;" %>
-                  <%= link_to "Confirmar", confirm_doctors_appointment_path(appt), method: :patch, class: "btn-leva-primary", style: "padding: 8px 14px; border-radius: 12px;" %>
-                  <%= link_to "Cancelar", cancel_doctors_appointment_path(appt), method: :patch, class: "btn-leva-ghost", style: "padding: 8px 14px; border-radius: 12px; background: rgba(255,202,58,0.18); color: #2A2A2A;" %>
-                </div>
-              </td>
-            </tr>
-          <% end %>
+          <%= render partial: "doctors/appointments/appointment_row", collection: appointments, as: :appointment %>
         </tbody>
       </table>
     </div>
