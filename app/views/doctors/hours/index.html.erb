@@ -1,0 +1,71 @@
+<div class="admin-shell" style="padding: 32px 40px 48px; max-width: 1100px; margin: 0 auto;">
+  <div class="admin-page-header">
+    <div>
+      <span class="page-eyebrow">Disponibilidad</span>
+      <h1 class="admin-page-title">Gestionar horarios</h1>
+      <p class="admin-page-description">Define los días y rangos de hora en los que puedes trabajar.</p>
+    </div>
+    <div class="admin-actions d-flex gap-2">
+      <%= link_to "Ver mi calendario", doctors_calendars_path, class: "btn-leva-plain" %>
+      <%= link_to "Nuevo día", new_doctors_calendar_path, class: "btn-leva-primary" %>
+    </div>
+  </div>
+
+  <section class="admin-card mt-4" style="border-radius: 18px; box-shadow: 0 18px 32px rgba(0,0,0,0.06); padding: 22px;">
+    <div class="admin-card__header">
+      <div>
+        <p class="page-eyebrow">Calendarios</p>
+        <h2 class="admin-card__title">Días y horas disponibles</h2>
+        <p class="admin-card__description">Agrega o edita las horas de cada día.</p>
+      </div>
+    </div>
+    <% if @calendars.any? %>
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Rango</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+          </thead>
+          <tbody>
+            <% @calendars.each do |calendar| %>
+              <% hours = calendar.hours.order(:start_time) %>
+              <% range_label = if hours.any?
+                                  "#{hours.first.start_time.strftime('%H:%M')} - #{hours.last.end_time.strftime('%H:%M')}"
+                                else
+                                  "Sin horas"
+                                end %>
+              <tr>
+                <td><%= l(calendar.date, format: :long) rescue calendar.date %></td>
+                <td><%= range_label %></td>
+                <td class="text-center">
+                  <div class="d-inline-flex gap-2 flex-wrap justify-content-center">
+                    <%= link_to "Agregar horas", new_doctors_calendar_hour_path(calendar), class: "btn-leva-ghost", style: "padding: 8px 14px; border-radius: 12px;" %>
+                    <%= button_to "Bloquear día", doctors_calendar_path(calendar), method: :delete,
+                                  data: { confirm: "¿Eliminar/bloquear este día completo?" },
+                                  class: "btn-leva-ghost", style: "padding: 8px 14px; border-radius: 12px; background: rgba(255,202,58,0.18); color: #2A2A2A;" %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <% if @prev_page %>
+          <%= link_to "Anterior", doctors_hours_path(page: @prev_page), class: "btn-leva-plain", style: "padding: 8px 14px; border-radius: 12px;" %>
+        <% else %>
+          <span></span>
+        <% end %>
+        <% if @next_page %>
+          <%= link_to "Siguiente", doctors_hours_path(page: @next_page), class: "btn-leva-ghost", style: "padding: 8px 14px; border-radius: 12px;" %>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="muted mb-3">Aún no has creado días en tu calendario.</p>
+      <%= link_to "Crear un día", new_doctors_calendar_path, class: "btn-leva-primary" %>
+    <% end %>
+  </section>
+</div>

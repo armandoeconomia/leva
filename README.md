@@ -7,6 +7,7 @@ El proyecto integra [RubyLLM](https://rubyllm.com) para ofrecer un asistente con
 - **Pacientes**: chat para dudas médicas, subida de exámenes (para interpretación o para guardarlos en el historial).
 - **Doctores**: copiloto clínico que contesta preguntas sobre diagnósticos y métricas de agenda diaria/semanal.
 - **Administradores**: asistente operativo para conteos de citas, pacientes, doctores e institutos.
+- **Visitantes**: widget en la landing (botón “Asistente IA”) que abre un chat emergente orientado únicamente a consultar disponibilidad y proponer horarios con enlace de reserva.
 
 ### Variables de entorno
 

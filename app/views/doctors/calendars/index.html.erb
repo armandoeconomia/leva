@@ -5,6 +5,7 @@
 <% end_range = current_month.end_of_month.end_of_week(:monday) %>
 <% days = (start_range..end_range).to_a.each_slice(7).to_a %>
 <% appointments = doctor ? doctor.appointments.includes(patient: :user).where(date: start_range..end_range).order(:date, :hour) : [] %>
+<% availability = doctor ? doctor.calendars.includes(:hours).where(date: start_range..end_range).index_by(&:date) : {} %>
 
 <div class="container py-4 py-lg-5">
   <div class="row align-items-center g-4 mb-4">
@@ -46,10 +47,19 @@
         <div class="row g-2 mb-2">
           <% week.each do |day| %>
             <% day_appts = appointments.select { |a| a.date == day } %>
+            <% avail = availability[day] %>
+            <% has_hours = avail&.hours&.any? %>
             <div class="col">
               <div class="p-2 rounded-3 <%= day.month == current_month.month ? 'bg-light' : 'bg-body-secondary' %> h-100">
                 <div class="d-flex justify-content-between align-items-center mb-1">
-                  <span class="fw-semibold small"><%= day.day %></span>
+                  <span class="fw-semibold small">
+                    <%= day.day %>
+                    <% if has_hours %>
+                      <span class="badge text-bg-success ms-1">D</span>
+                    <% else %>
+                      <span class="badge text-bg-danger ms-1">S</span>
+                    <% end %>
+                  </span>
                   <% if day_appts.any? %>
                     <span class="badge text-bg-primary"><%= day_appts.size %></span>
                   <% end %>
