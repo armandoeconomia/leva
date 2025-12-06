@@ -110,4 +110,5 @@ class Admin::AppointmentsController < Admin::BaseController
     sanitized = ActiveRecord::Base.sanitize_sql_like(value.to_s.squish)
     "%#{sanitized}%"
   end
+
 end

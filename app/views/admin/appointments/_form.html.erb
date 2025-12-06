@@ -36,7 +36,7 @@
 
     <div class="field-group">
       <%= f.label :hour, "Hora" %>
-      <%= f.time_field :hour %>
+      <%= f.time_field :hour, min: "08:00", max: "17:00", step: 3600 %>
     </div>
 
     <div class="field-group">
