@@ -1,0 +1,31 @@
+<tr id="<%= dom_id(appointment, :index_row) %>">
+  <td><%= l(appointment.date, format: '%d %b %Y') rescue appointment.date %></td>
+  <td><%= appointment.hour&.strftime('%H:%M') || appointment.hour %></td>
+  <td><strong><%= appointment.patient&.user&.name || "Paciente" %></strong></td>
+  <td class="text-muted"><%= appointment.reason_for_consultation.presence || "Sin motivo" %></td>
+  <td class="text-center align-middle"><span class="status-pill <%= appointment.status %>"><%= appointment.status.to_s.titleize %></span></td>
+  <td class="text-center align-middle">
+    <div class="d-flex gap-2 justify-content-center flex-wrap appointment-actions">
+      <%= link_to "Ver", doctors_appointment_path(appointment), class: "btn-leva-ghost", style: "padding: 8px 14px; border-radius: 12px;" %>
+      <% if appointment.patient %>
+        <%= link_to "Historial",
+                    doctors_patient_medical_history_path(appointment.patient, appointment.patient.medical_histories.first || 0),
+                    class: "btn-leva-plain",
+                    style: "padding: 8px 14px; border-radius: 12px;" %>
+      <% end %>
+      <%= link_to "Editar", edit_doctors_appointment_path(appointment), class: "btn-leva-plain", style: "padding: 8px 14px; border-radius: 12px;" %>
+      <%= link_to "Confirmar",
+                  confirm_doctors_appointment_path(appointment),
+                  method: :patch,
+                  data: { turbo_stream: true },
+                  class: "btn-leva-primary",
+                  style: "padding: 8px 14px; border-radius: 12px;" %>
+      <%= link_to "Cancelar",
+                  cancel_doctors_appointment_path(appointment),
+                  method: :patch,
+                  data: { turbo_stream: true },
+                  class: "btn-leva-ghost",
+                  style: "padding: 8px 14px; border-radius: 12px; background: rgba(255,202,58,0.18); color: #2A2A2A;" %>
+    </div>
+  </td>
+</tr>

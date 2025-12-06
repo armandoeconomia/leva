@@ -2,6 +2,11 @@
 <% patient_name = appt.patient&.user&.name || "Paciente" %>
 
 <div class="admin-shell" style="padding: 32px 40px 48px; max-width: 900px; margin: 0 auto;">
+  <div class="d-flex justify-content-start mb-3">
+    <%= link_to doctors_appointments_path, class: "btn-leva-circle", aria: { label: "Volver" } do %>
+      <i class="fa fa-arrow-left"></i>
+    <% end %>
+  </div>
   <div class="admin-page-header">
     <div>
       <span class="page-eyebrow">Cita</span>
@@ -13,7 +18,7 @@
     </div>
   </div>
 
-  <section class="admin-card mt-4" style="border-radius: 16px; box-shadow: 0 18px 32px rgba(0,0,0,0.06); padding: 22px;">
+  <section class="admin-card mt-4" style="border-radius: 16px; box-shadow: 0 18px 32px rgba(0,0,0,0.06); padding: 22px 22px 32px;">
     <div class="admin-card__header">
       <div>
         <p class="page-eyebrow">Información</p>
@@ -36,12 +41,13 @@
         </div>
       </div>
     </div>
-    <div class="admin-card__footer">
-    <div class="d-flex flex-wrap gap-2">
-      <%= link_to 'Confirmar', confirm_doctors_appointment_path(appt), method: :patch, class: "btn-leva-primary" %>
-      <%= link_to 'Cancelar', cancel_doctors_appointment_path(appt), method: :patch, class: "btn-leva-ghost", style: "background: rgba(255,202,58,0.18); color: #2A2A2A;" %>
-      <%= link_to 'Editar', edit_doctors_appointment_path(appt), class: "btn-leva-plain" %>
+    <div class="admin-card__footer" style="margin-top: 18px;">
+      <div class="d-flex flex-wrap justify-content-center appointment-actions-show gap-3">
+        <%= link_to 'Confirmar', confirm_doctors_appointment_path(appt), method: :patch, class: "btn-leva-primary" %>
+        <%= link_to 'Cancelar', cancel_doctors_appointment_path(appt), method: :patch, class: "btn-leva-ghost", style: "background: rgba(255,202,58,0.18); color: #2A2A2A;" %>
+        <%= link_to 'Editar', edit_doctors_appointment_path(appt), class: "btn-leva-plain" %>
+        <%= link_to 'Tomar notas', notes_doctors_appointment_path(appt), class: "btn-leva-ghost" %>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 </div>

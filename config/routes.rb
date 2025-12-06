@@ -52,6 +52,8 @@ Rails.application.routes.draw do
       member do
         match 'confirm', via: [:patch, :get] # Confirmar una cita
         match 'cancel',  via: [:patch, :get] # Cancelar una cita
+        get :notes
+        post :save_notes
         # Otras acciones de gestión de citas
       end
     end

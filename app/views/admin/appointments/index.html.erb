@@ -29,9 +29,10 @@
       <% @appointments.each do |appointment| %>
         <% patient_user = appointment.patient&.user %>
         <% doctor_user = appointment.doctor&.user %>
-        <% status_chip_class = case appointment.status
-                              when "confirmed", "completed" then "status-chip--success"
-                              when "cancelled" then "status-chip--danger"
+        <% normalized_status = appointment.status.presence || "sin estado" %>
+        <% status_chip_class = case normalized_status
+                              when "confirmed", "completed", "completado" then "status-chip--success"
+                              when "cancelled", "cancelado" then "status-chip--danger"
                               else "" end %>
         <tr>
           <td>
@@ -45,7 +46,7 @@
           <td><%= l(appointment.date) if appointment.date %></td>
           <td><%= appointment.hour&.strftime("%I:%M %p") || "--" %></td>
           <td>
-            <span class="status-chip <%= status_chip_class %>"><%= appointment.status.humanize %></span>
+            <span class="status-chip <%= status_chip_class %>"><%= normalized_status.humanize %></span>
           </td>
           <td>
             <div class="admin-actions admin-actions--stack">
