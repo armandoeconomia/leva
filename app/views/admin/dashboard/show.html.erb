@@ -32,6 +32,63 @@
   </div>
 </div>
 
+<section class="admin-card admin-sales-card">
+  <div class="admin-card__header">
+    <div>
+      <p class="page-eyebrow">Ventas</p>
+      <h2 class="admin-card__title">Ingresos por citas</h2>
+      <p class="admin-card__description">
+        Visualiza la evolución mensual de ingresos según el costo asociado a cada cita agendada.
+      </p>
+    </div>
+  </div>
+  <% if @sales_chart_data.present? %>
+    <div class="admin-sales-grid">
+      <div class="sales-summary">
+        <div class="sales-summary__item">
+          <span class="sales-summary__label">Ingresos totales</span>
+          <strong class="sales-summary__value"><%= number_to_currency(@sales_summary[:total_revenue], precision: 0) %></strong>
+        </div>
+        <div class="sales-summary__item">
+          <span class="sales-summary__label">Citas facturadas</span>
+          <strong class="sales-summary__value"><%= @sales_summary[:total_appointments] %></strong>
+        </div>
+        <div class="sales-summary__item">
+          <span class="sales-summary__label">Ticket promedio</span>
+          <strong class="sales-summary__value"><%= number_to_currency(@sales_summary[:average_ticket], precision: 0) %></strong>
+        </div>
+        <div class="sales-summary__item">
+          <span class="sales-summary__label">Mejor mes</span>
+          <strong class="sales-summary__value">
+            <% if @sales_summary[:best_month_label].present? %>
+              <%= @sales_summary[:best_month_label] %>
+              ·
+              <%= number_to_currency(@sales_summary[:best_month_revenue], precision: 0) %>
+            <% else %>
+              N/D
+            <% end %>
+          </strong>
+        </div>
+      </div>
+      <% max_revenue = @sales_chart_data.map { |point| point[:revenue] }.max.to_f %>
+      <div class="sales-chart" role="img" aria-label="Gráfico de ingresos mensuales por citas">
+        <% @sales_chart_data.each do |point| %>
+          <% height = max_revenue.zero? ? 0 : ((point[:revenue] / max_revenue) * 100).round %>
+          <div class="sales-chart__column">
+            <div class="sales-chart__bar" style="height: <%= height %>%;">
+              <span class="sales-chart__bar-value"><%= number_to_currency(point[:revenue], precision: 0) %></span>
+            </div>
+            <p class="sales-chart__label"><%= point[:label] %></p>
+            <span class="sales-chart__appointments"><%= point[:appointments] %> citas</span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <p class="muted mb-0">Aún no hay información de citas para graficar ventas.</p>
+  <% end %>
+</section>
+
 <section class="admin-card mt-8">
   <div class="admin-card__header">
     <div>

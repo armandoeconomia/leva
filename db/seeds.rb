@@ -259,8 +259,7 @@ appointments = []
   date = rand(start_of_month..end_of_month)
 
   hour_int = rand(8..16)
-  minute   = [0, 30].sample
-  hour_time = Time.parse("#{format('%02d', hour_int)}:#{format('%02d', minute)}")
+  hour_time = Time.parse("#{format('%02d', hour_int)}:00")
 
   reason = [
     "Control urológico de rutina.",
@@ -284,6 +283,48 @@ end
 
 puts "✅ 10 citas creadas."
 
+puts "📈 Generando citas históricas para nutrir el dashboard..."
+
+historical_months = 5
+historical_months.downto(1) do |months_ago|
+  month_reference = months_ago.months.ago
+  month_range = month_reference.beginning_of_month..month_reference.end_of_month
+  month_total = rand(10..18)
+
+  month_total.times do
+    institute = medical_institutes.sample
+    doctor = doctors_by_institute[institute].sample
+    patient = patients_by_institute[institute].sample
+    next unless doctor && patient
+
+    hour_int = rand(8..17)
+    hour_time = Time.parse("#{format('%02d', hour_int)}:00")
+
+    reason = [
+      "Control evolutivo de tratamiento.",
+      "Consulta preventiva general.",
+      "Seguimiento de laboratorio.",
+      "Evaluación prequirúrgica.",
+      "Chequeo periódico integral."
+    ].sample
+
+    appointment = Appointment.create!(
+      patient: patient,
+      doctor: doctor,
+      date: rand(month_range),
+      hour: hour_time,
+      reason_for_consultation: reason,
+      status: Appointment.statuses.keys.sample
+    )
+
+    appointments << appointment
+  end
+
+  puts "  ➤ #{month_reference.strftime('%B %Y')} • #{month_total} citas generadas."
+end
+
+puts "✅ Historial mensual adicional creado."
+
 puts "📁 Creando historias clínicas (5 por paciente)..."
 
 patients_by_institute.values.flatten.each do |patient|
@@ -305,35 +346,31 @@ end
 
 puts "✅ Historias clínicas creadas."
 
-puts "🗓️ Creando calendarios de un mes completo para los doctores con citas..."
+puts "🗓️ Creando calendarios y horarios disponibles para todos los doctores..."
 
-doctors_with_appointments = appointments.map(&:doctor).uniq
+calendar_start = Date.today
+calendar_end = calendar_start + 21
+slot_templates = (8..17).map do |hour|
+  "#{format('%02d', hour)}:00"
+end
 
-month_start = Date.today.beginning_of_month
-month_end   = Date.today.end_of_month
-calendar_start = [month_start, Date.today].max
+Doctor.find_each do |doctor|
+  (calendar_start..calendar_end).each do |day|
+    calendar = Calendar.create!(doctor: doctor, date: day)
+    daily_slots = slot_templates.sample(rand(4..slot_templates.size)).uniq.sort
 
-doctors_with_appointments.each do |doctor|
-  (calendar_start..month_end).each do |day|
-    calendar = Calendar.create!(
-      doctor: doctor,
-      date: day
-    )
-
-    (8..16).each do |h|
-      start_time = Time.parse("#{format('%02d', h)}:00")
-      end_time   = Time.parse("#{format('%02d', h + 1)}:00")
-
+    daily_slots.each do |slot|
+      start_time = Time.parse(slot)
       Hour.create!(
         calendar: calendar,
         start_time: start_time,
-        end_time: end_time
+        end_time: start_time + 1.hour
       )
     end
   end
 end
 
-puts "✅ Calendarios y horas creados."
+puts "✅ Calendarios y horarios cargados."
 
 puts "🎉 Seed completado:"
 puts "  Usuarios:          #{User.count}"
