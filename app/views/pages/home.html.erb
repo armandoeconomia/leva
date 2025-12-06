@@ -793,19 +793,21 @@
   <main class="container">
     <% avatar_icon_sets = {
       patient: [
-        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgcng9IjY0IiBmaWxsPSIjZjVmMWZmIi8+PHBhdGggZD0iTTU4IDI4aDEydjcySDU4eiIgZmlsbD0iIzdhNmRmZiIvPjxwYXRoIGQ9Ik0yOCA1OGg3MnYxMkgyOHoiIGZpbGw9IiM3YTZkZmYiLz48L3N2Zz4=',
-        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgcng9IjY0IiBmaWxsPSIjZmRmMmY4Ii8+PHBhdGggZD0iTTU2IDMwaDE2djY4SDU2eiIgZmlsbD0iI2ZmN2ViOSIvPjxwYXRoIGQ9Ik0zMCA1Nmg2OHYxNkgzMHoiIGZpbGw9IiNmZjdlYjkiLz48L3N2Zz4=',
-        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgcng9IjMyIiBmaWxsPSIjZWVmOGZmIi8+PHBhdGggZD0iTTY0IDI2Yy00Ljk3IDAtOSA0LjAzLTkgOXYxN0gzOGMtNC45NyAwLTkgNC4wMy05IDl2Nmg3MHYtNmMwLTQuOTctNC4wMy05LTktOUg3M1YzNWMwLTQuOTctNC4wMy05LTktOXpNMjkgNzN2MjloNzBWNzNIMjl6bTE4IDEwaDh2MTJoLThWODN6bTI0IDBoOHYxMmgtOFY4M3oiIGZpbGw9IiMxZDliZjAiLz48L3N2Zz4='
+        'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=facearea&w=400&h=400&q=80',
+        'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=facearea&w=400&h=400&q=80',
+        'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=facearea&w=400&h=400&q=80',
+        'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=facearea&w=400&h=400&q=80'
       ],
       doctor: [
-        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgcng9IjI4IiBmaWxsPSIjZWRmMWZmIi8+PGNpcmNsZSBjeD0iNDQiIGN5PSI0OCIgcj0iMTYiIGZpbGw9IiM3YTZkZmYiLz48cGF0aCBkPSJNNDQgNjR2MjBjMCAxMS4wNDYgOC45NTQgMjAgMjAgMjBzMjAtOC45NTQgMjAtMjB2LThINzB2OGMwIDMuMzE0LTIuNjg2IDYtNiA2cy02LTIuNjg2LTYtNlY2NGgtMTR6IiBmaWxsPSIjN2E2ZGZmIi8+PHBhdGggZD0iTTcyIDMyaDE0djMySDcyeiIgZmlsbD0iI2M3YmVmZCIvPjwvc3ZnPg==',
-        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgcng9IjQwIiBmaWxsPSIjZThmYmZmIi8+PGNpcmNsZSBjeD0iNjQiIGN5PSI0MCIgcj0iMTgiIGZpbGw9IiMwMGJjZDQiLz48cGF0aCBkPSJNMzIgODhjMC0xMy4yNTUgMTAuNzQ1LTI0IDI0LTI0aDE2YzEzLjI1NSAwIDI0IDEwLjc0NSAyNCAyNHYxMkgzMlY4OHoiIGZpbGw9IiMwMGJjZDQiLz48cGF0aCBkPSJNODAgOTJhOCA4IDAgMSAxLTE2IDAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI2IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiLz48Y2lyY2xlIGN4PSI4OCIgY3k9IjkyIiByPSIxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBiY2Q0IiBzdHJva2Utd2lkdGg9IjYiLz48Y2lyY2xlIGN4PSI4OCIgY3k9IjkyIiByPSI0IiBmaWxsPSIjMDBiY2Q0Ii8+PC9zdmc+',
-        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgcng9IjI4IiBmaWxsPSIjZmZmNGU2Ii8+PGNpcmNsZSBjeD0iNjQiIGN5PSI0NCIgcj0iMTgiIGZpbGw9IiNmZjk4MDAiLz48cGF0aCBkPSJNMjggOTZjMC0xOS44ODIgMTYuMTE4LTM2IDM2LTM2czM2IDE2LjExOCAzNiAzNnY4SDI4di04eiIgZmlsbD0iI2ZmOTgwMCIvPjxwYXRoIGQ9Ik05MiA3NmwxMiAxMi0xMiAxMiIgc3Ryb2tlPSIjZmY5ODAwIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZmlsbD0ibm9uZSIvPjwvc3ZnPg=='
+        'https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=facearea&w=400&h=400&q=80',
+        'https://images.unsplash.com/photo-1527613426441-4da17471b66d?auto=format&fit=facearea&w=400&h=400&q=80',
+        'https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?auto=format&fit=facearea&w=400&h=400&q=80',
+        'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=facearea&w=400&h=400&q=80'
       ],
       clinic: [
-        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgcng9IjI0IiBmaWxsPSIjZjNmZmYzIi8+PHJlY3QgeD0iMjgiIHk9IjQ0IiB3aWR0aD0iNzIiIGhlaWdodD0iNTYiIHJ4PSI2IiBmaWxsPSIjNGNhZjUwIi8+PHJlY3QgeD0iNTYiIHk9IjMyIiB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIGZpbGw9IiM0Y2FmNTAiLz48cGF0aCBkPSJNNTAgNjJoMjh2OEg1MHpNNTAgNzhoMjh2OEg1MHoiIGZpbGw9IiNjOGY3YzUiLz48L3N2Zz4=',
-        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgcng9IjMyIiBmaWxsPSIjZWVmMmZmIi8+PHJlY3QgeD0iMjQiIHk9IjQ4IiB3aWR0aD0iODAiIGhlaWdodD0iNDgiIHJ4PSI4IiBmaWxsPSIjNWM2YmMwIi8+PHJlY3QgeD0iNDgiIHk9IjMyIiB3aWR0aD0iMzIiIGhlaWdodD0iMTYiIGZpbGw9IiM1YzZiYzAiLz48cGF0aCBkPSJNNDAgNjRoMTZ2MjRINDB6TTcyIDY0aDE2djI0SDcyeiIgZmlsbD0iI2JmYzRmZiIvPjwvc3ZnPg==',
-        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgcng9IjI4IiBmaWxsPSIjZmVmNmVkIi8+PHJlY3QgeD0iMjAiIHk9IjUyIiB3aWR0aD0iODgiIGhlaWdodD0iNDQiIHJ4PSIxMCIgZmlsbD0iI2ZmYjc0ZCIvPjxyZWN0IHg9IjUyIiB5PSIzMCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjIyIiBmaWxsPSIjZmZiNzRkIi8+PHBhdGggZD0iTTQ2IDcwaDEydjE4SDQ2ek03MCA3MGgxMnYxOEg3MHoiIGZpbGw9IiNmZmUwYjIiLz48L3N2Zz4='
+        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=facearea&w=400&h=400&q=80',
+        'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=facearea&w=400&h=400&q=80',
+        'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?auto=format&fit=facearea&w=400&h=400&q=80'
       ]
     } %>
     <section id="inicio" class="mb-5 position-relative">
@@ -1236,6 +1238,20 @@
           role: "Paciente de Pediatría",
           quote: "\"La seguridad de mis datos y la atención personalizada son excelentes.\"",
           label: "Gabriela",
+          type: :patient
+        },
+        {
+          name: "Hernán D.",
+          role: "Paciente de Traumatología",
+          quote: "\"Encontré turnos rápidos y pude coordinar mis estudios sin llamadas interminables.\"",
+          label: "Hernán",
+          type: :patient
+        },
+        {
+          name: "Lucía P.",
+          role: "Paciente de Dermatología",
+          quote: "\"La app me recuerda mis controles y converso con mi médica desde casa.\"",
+          label: "Lucía",
           type: :patient
         },
         {
