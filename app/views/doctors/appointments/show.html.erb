@@ -1,5 +1,7 @@
 <% appt = @appointment %>
-<% patient_name = appt.patient&.user&.name || "Paciente" %>
+<% patient = appt.patient %>
+<% patient_name = patient&.user&.name || "Paciente" %>
+<% latest_history = patient&.medical_histories&.order(registration_date: :desc)&.first %>
 
 <div class="admin-shell" style="padding: 32px 40px 48px; max-width: 900px; margin: 0 auto;">
   <div class="d-flex justify-content-start mb-3">
@@ -15,6 +17,11 @@
     </div>
     <div class="admin-actions">
       <%= link_to "Volver al listado", doctors_appointments_path, class: "btn-leva-ghost" %>
+      <% if patient %>
+        <%= link_to "Historial del paciente",
+                    doctors_patient_medical_history_path(patient, latest_history || 0),
+                    class: "btn-leva-link" %>
+      <% end %>
     </div>
   </div>
 
@@ -47,6 +54,9 @@
         <%= link_to 'Cancelar', cancel_doctors_appointment_path(appt), method: :patch, class: "btn-leva-ghost", style: "background: rgba(255,202,58,0.18); color: #2A2A2A;" %>
         <%= link_to 'Editar', edit_doctors_appointment_path(appt), class: "btn-leva-plain" %>
         <%= link_to 'Tomar notas', notes_doctors_appointment_path(appt), class: "btn-leva-ghost" %>
+        <% if patient %>
+          <%= link_to 'Historial', doctors_patient_medical_history_path(patient, latest_history || 0), class: "btn-leva-plain" %>
+        <% end %>
       </div>
     </div>
   </section>
