@@ -75,8 +75,10 @@
         <% @sales_chart_data.each do |point| %>
           <% height = max_revenue.zero? ? 0 : ((point[:revenue] / max_revenue) * 100).round %>
           <div class="sales-chart__column">
-            <div class="sales-chart__bar" style="height: <%= height %>%;">
-              <span class="sales-chart__bar-value"><%= number_to_currency(point[:revenue], precision: 0) %></span>
+            <div class="sales-chart__bar-wrapper">
+              <div class="sales-chart__bar" style="height: <%= height %>%;">
+                <span class="sales-chart__bar-value"><%= number_to_currency(point[:revenue], precision: 0) %></span>
+              </div>
             </div>
             <p class="sales-chart__label"><%= point[:label] %></p>
             <span class="sales-chart__appointments"><%= point[:appointments] %> citas</span>

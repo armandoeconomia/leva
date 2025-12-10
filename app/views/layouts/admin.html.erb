@@ -32,6 +32,7 @@
     </nav>
     <div class="admin-top-actions">
       <%= link_to "Dashboard", admin_dashboard_path, class: "btn-leva-ghost" %>
+      <%= link_to "Asistente IA", admin_assistant_path, class: "btn-leva-ghost" %>
       <%= button_to "Cerrar sesión",
                     destroy_user_session_path,
                     method: :delete,
