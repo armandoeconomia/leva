@@ -5,11 +5,12 @@
 }
 
 .patient-container {
-  width: unquote("min(1200px, 92vw)");
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
 
   &.narrow {
-    width: unquote("min(880px, 95vw)");
+    max-width: 880px;
   }
 }
 
