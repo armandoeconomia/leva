@@ -4,6 +4,11 @@
 <% hours = @hours || [] %>
 
 <div class="container py-4 py-lg-5">
+  <div class="mb-3">
+    <%= link_to doctors_hours_path, class: "btn-leva-circle", aria: { label: "Volver a horarios" } do %>
+      <i class="fa fa-arrow-left"></i>
+    <% end %>
+  </div>
   <div class="row justify-content-center">
     <div class="col-lg-8">
       <div class="card shadow-sm border-0 rounded-4">
