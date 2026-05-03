@@ -1,5 +1,4 @@
-class Doctors::HoursController < ApplicationController
-  before_action :require_doctor!
+class Doctors::HoursController < Doctors::BaseController
   before_action :set_doctor
   before_action :set_hour, only: [:destroy]
   before_action :set_calendar, only: [:new, :create]
@@ -62,7 +61,4 @@ class Doctors::HoursController < ApplicationController
     params.require(:hour).permit(:start_time, :end_time)
   end
 
-  def require_doctor!
-    redirect_to root_path, alert: "No tienes acceso como doctor" unless current_user&.doctor.present?
-  end
 end

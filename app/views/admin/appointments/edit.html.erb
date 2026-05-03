@@ -1,13 +1,15 @@
-<div class="admin-page-header">
+<% content_for :page_title do %>
+  Recepción · Editar Cita
+<% end %>
+
+<div class="panel-page-header">
   <div>
-    <span class="page-eyebrow">Coordinacion</span>
-    <h1 class="admin-page-title">Editar cita</h1>
-    <p class="admin-page-description">
-      Ajusta horarios, motivos o estados para mantener informados a pacientes y especialistas.
-    </p>
+    <span class="panel-eyebrow"><i class="fa fa-calendar-check"></i> Citas</span>
+    <h1 class="panel-page-title">Editar cita</h1>
+    <p class="panel-page-description">Ajusta horarios, motivos o estados para mantener informados a pacientes y especialistas.</p>
   </div>
-  <div class="admin-actions">
-    <%= link_to "Ver detalle", admin_appointment_path(@appointment), class: "btn-leva-ghost" %>
+  <div class="d-flex gap-2">
+    <%= link_to "Ver detalle", admin_appointment_path(@appointment), class: "btn-panel-ghost" %>
   </div>
 </div>
 

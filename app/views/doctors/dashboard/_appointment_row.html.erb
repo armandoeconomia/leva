@@ -1,23 +1,26 @@
 <tr id="<%= dom_id(appointment, :dashboard_row) %>">
-  <td><%= appointment.date&.strftime('%d %b %Y') %></td>
-  <td><%= appointment.hour&.strftime('%H:%M') %></td>
-  <td><strong><%= appointment.patient&.user&.name || "Paciente" %></strong></td>
-  <td class="text-center align-middle"><span class="status-pill <%= appointment.status %>"><%= appointment.status.to_s.titleize %></span></td>
-  <td class="text-center align-middle">
-    <div class="d-flex gap-2 justify-content-center flex-wrap appointment-actions">
-      <%= link_to "Abrir", doctors_appointment_path(appointment), class: "btn-leva-ghost", style: "padding: 8px 14px; border-radius: 12px;" %>
-      <%= link_to "Aceptar",
-                  confirm_doctors_appointment_path(appointment),
-                  method: :patch,
-                  data: { turbo_stream: true },
-                  class: "btn-leva-primary",
-                  style: "padding: 8px 14px; border-radius: 12px;" %>
-      <%= link_to "Rechazar",
-                  cancel_doctors_appointment_path(appointment),
-                  method: :patch,
-                  data: { turbo_stream: true },
-                  class: "btn-leva-ghost",
-                  style: "padding: 8px 14px; border-radius: 12px; background: rgba(255,202,58,0.18); color: #2A2A2A;" %>
+  <td><%= appointment.date&.strftime('%d/%m/%Y') %></td>
+  <td><strong><%= appointment.hour&.strftime('%H:%M') %></strong></td>
+  <td><strong><%= appointment.patient&.user&.name %> <%= appointment.patient&.user&.last_name %></strong></td>
+  <td><%= appointment.reason_for_consultation.presence || "—" %></td>
+  <td class="text-center">
+    <span class="status-pill <%= appointment.status %>"><%= appointment.status.to_s.humanize %></span>
+  </td>
+  <td class="text-center">
+    <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;">
+      <% if appointment.status == "pendiente" %>
+        <%= button_to "Aceptar",
+                      confirm_doctors_appointment_path(appointment),
+                      method: :patch,
+                      class: "btn-panel-success",
+                      style: "padding:5px 10px;font-size:.8rem;" %>
+        <%= button_to "Rechazar",
+                      cancel_doctors_appointment_path(appointment),
+                      method: :patch,
+                      class: "btn-panel-danger",
+                      style: "padding:5px 10px;font-size:.8rem;" %>
+      <% end %>
+      <%= link_to "Ver", doctors_appointment_path(appointment), class: "btn-panel-link" %>
     </div>
   </td>
 </tr>

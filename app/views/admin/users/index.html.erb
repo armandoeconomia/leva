@@ -1,58 +1,77 @@
-<div class="admin-page-header">
+<% content_for :page_title do %>
+  Recepción · Usuarios
+<% end %>
+
+<div class="panel-page-header">
   <div>
-    <span class="page-eyebrow">Usuarios del ecosistema</span>
-    <h1 class="admin-page-title">Gestion de usuarios</h1>
-    <p class="admin-page-description">
-      Administra cuentas, permisos y datos basicos de contacto para tu equipo medico y pacientes.
-    </p>
+    <span class="panel-eyebrow"><i class="fa fa-users"></i> Usuarios</span>
+    <h1 class="panel-page-title">Gestión de usuarios</h1>
+    <p class="panel-page-description">Administra cuentas y datos de contacto del equipo médico y pacientes.</p>
   </div>
-  <div class="admin-actions">
-    <%= link_to "Crear usuario", new_admin_user_path, class: "btn-leva-primary" %>
-    <%= link_to "Regresar al dashboard", admin_dashboard_path, class: "btn-leva-ghost" %>
+  <div class="d-flex gap-2">
+    <%= link_to "Crear usuario", new_admin_user_path, class: "btn-panel-primary" %>
+    <%= link_to "Dashboard", admin_dashboard_path, class: "btn-panel-ghost" %>
   </div>
 </div>
 
-<div class="admin-card">
-  <table class="admin-table">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Correo</th>
-        <th>Telefono</th>
-        <th>Rol</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @users.each do |user| %>
-        <tr>
-          <td>
-            <strong><%= user.name %> <%= user.last_name %></strong><br>
-            <small class="admin-row-meta">ID: <%= user.id %></small>
-          </td>
-          <td><%= user.email %></td>
-          <td><%= user.phone_number.presence || "Sin numero" %></td>
-          <td>
-            <span class="status-chip">
-              <%= user.admin? ? "Administrador" : "Usuario estandar" %>
-            </span>
-          </td>
-          <td>
-            <div class="admin-actions">
-              <%= link_to "Ver", admin_user_path(user), class: "btn-soft btn-soft--info" %>
-              <%= link_to "Editar", edit_admin_user_path(user), class: "btn-soft btn-soft--warning" %>
-              <%#= link_to "Eliminar",
-                          admin_user_path(user),
-                          method: :delete,
-                          data: { confirm: "Seguro que deseas eliminar este usuario?" },
-                          class: "btn-soft btn-soft--danger" %>
-              <%= button_to "Eliminar",admin_user_path(user) ,
-                            method: :delete, confirm: "¿Seguro que deseas eliminar esta cita?",
-                            class: "btn-soft btn-soft--danger" %>
-            </div>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+<div class="panel-card">
+  <% if @users.any? %>
+    <div class="panel-table-wrapper">
+      <table class="panel-table">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Rol</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @users.each do |user| %>
+            <tr>
+              <td>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#b69cff,#6d4ec2);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;flex-shrink:0;">
+                    <%= user.name&.first&.upcase %>
+                  </div>
+                  <div>
+                    <strong><%= user.name %> <%= user.last_name %></strong><br>
+                    <small style="color:#aaa;">ID: <%= user.id %></small>
+                  </div>
+                </div>
+              </td>
+              <td><%= user.email %></td>
+              <td><%= user.phone_number.presence || "Sin número" %></td>
+              <td>
+                <span class="status-pill <%= user.admin? || user.gerente? ? 'completado' : 'pendiente' %>">
+                  <% if user.gerente? %>Gerente
+                  <% elsif user.admin? %>Administrador
+                  <% elsif user.doctor.present? %>Doctor
+                  <% else %>Usuario
+                  <% end %>
+                </span>
+              </td>
+              <td>
+                <div style="display:flex;gap:6px;justify-content:flex-end;">
+                  <%= link_to "Ver", admin_user_path(user), class: "btn-panel-link" %>
+                  <%= link_to "Editar", edit_admin_user_path(user), class: "btn-panel-ghost", style: "padding:6px 12px;font-size:.8rem;" %>
+                  <%= button_to "Eliminar", admin_user_path(user),
+                                method: :delete,
+                                data: { confirm: "¿Seguro que deseas eliminar este usuario?" },
+                                class: "btn-panel-danger",
+                                style: "padding:6px 12px;font-size:.8rem;" %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div style="text-align:center;padding:48px 0;color:#aaa;">
+      <i class="fa fa-users" style="font-size:2.5rem;margin-bottom:12px;display:block;"></i>
+      <p style="margin:0;">No hay usuarios registrados todavía.</p>
+    </div>
+  <% end %>
 </div>

@@ -1,63 +1,64 @@
+<% content_for :page_title do %>
+  Doctor · Cita
+<% end %>
+
 <% appt = @appointment %>
 <% patient = appt.patient %>
 <% patient_name = patient&.user&.name || "Paciente" %>
 <% latest_history = patient&.medical_histories&.order(registration_date: :desc)&.first %>
 
-<div class="admin-shell" style="padding: 32px 40px 48px; max-width: 900px; margin: 0 auto;">
-  <div class="d-flex justify-content-start mb-3">
-    <%= link_to doctors_appointments_path, class: "btn-leva-circle", aria: { label: "Volver" } do %>
-      <i class="fa fa-arrow-left"></i>
+<div class="panel-page-header">
+  <div>
+    <span class="panel-eyebrow"><i class="fa fa-calendar-check"></i> Citas</span>
+    <h1 class="panel-page-title">Detalle de cita</h1>
+    <p class="panel-page-description">Revisa la información y realiza acciones sobre esta consulta.</p>
+  </div>
+  <div class="d-flex gap-2">
+    <%= link_to "Volver al listado", doctors_appointments_path, class: "btn-panel-ghost" %>
+    <% if patient %>
+      <%= link_to "Historial del paciente",
+                  doctors_patient_medical_history_path(patient, latest_history || 0),
+                  class: "btn-panel-ghost" %>
     <% end %>
   </div>
-  <div class="admin-page-header">
+</div>
+
+<div class="panel-card">
+  <div class="panel-card__header">
     <div>
-      <span class="page-eyebrow">Cita</span>
-      <h1 class="admin-page-title">Detalle de cita</h1>
-      <p class="admin-page-description">Revisa la información de la cita y realiza acciones rápidas.</p>
+      <span class="panel-eyebrow"><i class="fa fa-user"></i> Paciente</span>
+      <h2 class="panel-card__title"><%= patient_name %></h2>
+      <p class="panel-card__description">
+        <%= l(appt.date, format: '%d %b %Y') rescue appt.date %> · <%= appt.hour&.strftime('%H:%M') || appt.hour %>
+      </p>
     </div>
-    <div class="admin-actions">
-      <%= link_to "Volver al listado", doctors_appointments_path, class: "btn-leva-ghost" %>
-      <% if patient %>
-        <%= link_to "Historial del paciente",
-                    doctors_patient_medical_history_path(patient, latest_history || 0),
-                    class: "btn-leva-link" %>
-      <% end %>
+    <span class="status-pill <%= appt.status %>"><%= appt.status.to_s.titleize %></span>
+  </div>
+
+  <div class="panel-details" style="margin-bottom:24px;">
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Paciente</p>
+      <p class="panel-detail-value"><%= patient_name %></p>
+    </div>
+    <div class="panel-detail-item panel-detail-item--full">
+      <p class="panel-detail-label">Motivo de consulta</p>
+      <p class="panel-detail-value"><%= appt.reason_for_consultation.presence || "Sin motivo registrado" %></p>
     </div>
   </div>
 
-  <section class="admin-card mt-4" style="border-radius: 16px; box-shadow: 0 18px 32px rgba(0,0,0,0.06); padding: 22px 22px 32px;">
-    <div class="admin-card__header">
-      <div>
-        <p class="page-eyebrow">Información</p>
-        <h2 class="admin-card__title"><%= patient_name %></h2>
-        <p class="admin-card__description">
-          <%= l(appt.date, format: '%d %b %Y') rescue appt.date %> · <%= appt.hour&.strftime('%H:%M') || appt.hour %>
-        </p>
-      </div>
-      <span class="status-pill <%= appt.status %>"><%= appt.status.to_s.titleize %></span>
-    </div>
-    <div class="admin-card__body">
-      <div class="row g-3">
-        <div class="col-md-6">
-          <p class="text-muted mb-1 small">Paciente</p>
-          <p class="fw-semibold mb-0"><%= patient_name %></p>
-        </div>
-        <div class="col-md-6">
-          <p class="text-muted mb-1 small">Motivo</p>
-          <p class="mb-0"><%= appt.reason_for_consultation.presence || "Sin motivo registrado" %></p>
-        </div>
-      </div>
-    </div>
-    <div class="admin-card__footer" style="margin-top: 18px;">
-      <div class="d-flex flex-wrap justify-content-center appointment-actions-show gap-3">
-        <%= link_to 'Confirmar', confirm_doctors_appointment_path(appt), method: :patch, class: "btn-leva-primary" %>
-        <%= link_to 'Cancelar', cancel_doctors_appointment_path(appt), method: :patch, class: "btn-leva-ghost", style: "background: rgba(255,202,58,0.18); color: #2A2A2A;" %>
-        <%= link_to 'Editar', edit_doctors_appointment_path(appt), class: "btn-leva-plain" %>
-        <%= link_to 'Tomar notas', notes_doctors_appointment_path(appt), class: "btn-leva-ghost" %>
-        <% if patient %>
-          <%= link_to 'Historial', doctors_patient_medical_history_path(patient, latest_history || 0), class: "btn-leva-plain" %>
-        <% end %>
-      </div>
-    </div>
-  </section>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;">
+    <%= button_to "Confirmar", confirm_doctors_appointment_path(appt),
+                  method: :patch,
+                  class: "btn-panel-success",
+                  form: { data: { turbo_stream: true } } %>
+    <%= button_to "Cancelar cita", cancel_doctors_appointment_path(appt),
+                  method: :patch,
+                  class: "btn-panel-danger",
+                  form: { data: { turbo_stream: true } } %>
+    <%= link_to "Editar", edit_doctors_appointment_path(appt), class: "btn-panel-ghost" %>
+    <%= link_to "Tomar notas", notes_doctors_appointment_path(appt), class: "btn-panel-ghost" %>
+    <% if patient %>
+      <%= link_to "Ver paciente", doctors_patient_path(patient), class: "btn-panel-link" %>
+    <% end %>
+  </div>
 </div>

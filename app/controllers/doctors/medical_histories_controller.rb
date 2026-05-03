@@ -1,5 +1,4 @@
-class Doctors::MedicalHistoriesController < ApplicationController
-  before_action :require_doctor!
+class Doctors::MedicalHistoriesController < Doctors::BaseController
   before_action :set_patient
   before_action :set_history, only: [:show]
 
@@ -19,10 +18,6 @@ class Doctors::MedicalHistoriesController < ApplicationController
   end
 
   private
-
-  def require_doctor!
-    redirect_to root_path, alert: "No tienes acceso como doctor" unless current_user&.doctor.present?
-  end
 
   def set_patient
     @patient = Patient.includes(:user).find(params[:patient_id])

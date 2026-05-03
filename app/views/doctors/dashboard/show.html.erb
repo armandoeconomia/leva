@@ -1,126 +1,108 @@
-<% doctor = @doctor %>
-<% upcoming = @upcoming_appointments || [] %>
-<% pending_requests = upcoming.select { |a| a.status == "pendiente" } %>
-<% patients = @active_patients || [] %>
-<% institute = @medical_institute %>
-<% work_hours = @work_hours || [] %>
-<% appointments_today = upcoming.count { |a| a.date == Date.today } %>
+<% content_for :page_title do %>
+  Doctor · Dashboard
+<% end %>
 
-<div class="admin-shell" style="padding: 32px 40px 56px; max-width: 1200px; margin: 0 auto;">
-  <!-- Hero estilo admin -->
-  <div class="admin-hero mb-5" style="background: linear-gradient(135deg, #D9D8E0 0%, #B69CFF 45%, #F8F7F9 100%); border-radius: 28px; padding: 32px 32px 36px; box-shadow: 0 24px 44px rgba(0,0,0,0.08);">
-    <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-3 justify-content-between">
-      <div class="flex-grow-1">
-        <p class="page-eyebrow text-dark">Cuidado confiable</p>
-        <h1 class="admin-page-title mb-2">Tu salud, a un clic de distancia</h1>
-        <p class="admin-page-description mb-0">Agenda y gestiona tus citas con tecnología humana. Mantén pacientes, horarios e instituto en un solo lugar.</p>
-      </div>
-      <div class="d-flex flex-column align-items-lg-end gap-3">
-        <div class="d-flex flex-wrap gap-2 justify-content-end">
-          <%= link_to "Mis citas", doctors_appointments_path, class: "btn-leva-primary" %>
-          <%= link_to "Mi perfil", edit_doctors_doctor_path, class: "btn-leva-ghost" %>
-          <%= link_to "Pacientes", doctors_patients_path, class: "btn-leva-ghost" %>
-          <%= link_to "Asistente IA", doctors_assistant_path, class: "btn-leva-ghost" %>
-        </div>
-      </div>
-    </div>
+<div class="panel-page-header">
+  <div>
+    <span class="panel-eyebrow"><i class="fa fa-stethoscope"></i> Panel médico</span>
+    <h1 class="panel-page-title">Hola, Dr. <%= current_user.name %></h1>
+    <p class="panel-page-description">
+      Revisa tus citas pendientes, gestiona tu agenda y consulta tu facturación mensual.
+      <% if @medical_institute %>
+        · <strong><%= @medical_institute.name %></strong>
+      <% end %>
+    </p>
   </div>
-
-  <div class="admin-page-header">
-    <div>
-      <span class="page-eyebrow">Panel principal</span>
-      <h1 class="admin-page-title">Resumen operativo</h1>
-      <p class="admin-page-description">
-        Monitorea tu actividad diaria: citas, pacientes, horarios y usa tu asistente IA.
-      </p>
-    </div>
-  </div>
-
-<div class="admin-metrics" style="gap: 14px; flex-wrap: wrap; margin-bottom: 20px;">
-  <div class="admin-metric-card" style="order: -1; border-radius: 14px; padding: 16px 18px; box-shadow: 0 14px 24px rgba(0,0,0,0.05); min-width: 220px;">
-    <p class="admin-metric-label">Instituto</p>
-    <p class="admin-metric-value" style="font-size: 20px;"><%= institute&.name || "N/D" %></p>
-  </div>
-  <div class="admin-metric-card" style="border-radius: 14px; padding: 16px 18px; box-shadow: 0 14px 24px rgba(0,0,0,0.05);">
-    <p class="admin-metric-value"><%= appointments_today %></p>
-    <p class="admin-metric-label">Citas hoy</p>
-  </div>
-  <div class="admin-metric-card" style="border-radius: 14px; padding: 16px 18px; box-shadow: 0 14px 24px rgba(0,0,0,0.05);">
-    <p class="admin-metric-value"><%= pending_requests.size %></p>
-    <p class="admin-metric-label">Pendientes</p>
-  </div>
-  <div class="admin-metric-card" style="border-radius: 14px; padding: 16px 18px; box-shadow: 0 14px 24px rgba(0,0,0,0.05);">
-    <p class="admin-metric-value"><%= patients.size %></p>
-    <p class="admin-metric-label">Pacientes</p>
+  <div class="d-flex gap-2 flex-wrap">
+    <%= link_to "Mis citas", doctors_appointments_path, class: "btn-panel-primary" %>
+    <%= link_to "Mis pacientes", doctors_patients_path, class: "btn-panel-ghost" %>
   </div>
 </div>
 
-<section class="admin-card mt-8" style="border-radius: 24px; box-shadow: 0 24px 44px rgba(0,0,0,0.06); padding: 24px;">
-  <div class="admin-card__header">
-    <div>
-      <p class="page-eyebrow">Seguimiento</p>
-      <h2 class="admin-card__title">Próximas citas</h2>
-      <p class="admin-card__description">
-        Visualiza tus próximas reservas y toma acción inmediata.
-      </p>
+<!-- KPIs -->
+<div class="panel-metrics">
+  <div class="panel-metric panel-metric--warning">
+    <div class="panel-metric__icon" style="background:rgba(255,202,58,0.2);color:#a07900;">
+      <i class="fa fa-clock"></i>
     </div>
-    <%= link_to "Ver todas", doctors_appointments_path, class: "btn-leva-ghost" %>
+    <p class="panel-metric__value"><%= @appointments_pending %></p>
+    <p class="panel-metric__label">Citas pendientes</p>
   </div>
-  <% if upcoming.any? %>
-    <div class="admin-table-wrapper">
-      <table class="admin-table">
+  <div class="panel-metric panel-metric--accent">
+    <div class="panel-metric__icon">
+      <i class="fa fa-calendar-day"></i>
+    </div>
+    <p class="panel-metric__value"><%= @appointments_today %></p>
+    <p class="panel-metric__label">Citas hoy</p>
+  </div>
+  <div class="panel-metric panel-metric--success">
+    <div class="panel-metric__icon" style="background:rgba(93,211,158,0.2);color:#2ea87a;">
+      <i class="fa fa-check-circle"></i>
+    </div>
+    <p class="panel-metric__value"><%= @appointments_completed %></p>
+    <p class="panel-metric__label">Citas completadas</p>
+  </div>
+  <div class="panel-metric">
+    <div class="panel-metric__icon">
+      <i class="fa fa-users"></i>
+    </div>
+    <p class="panel-metric__value"><%= @active_patients.size %></p>
+    <p class="panel-metric__label">Pacientes activos</p>
+  </div>
+</div>
+
+<!-- Próximas citas con acciones -->
+<div class="panel-card">
+  <div class="panel-card__header">
+    <div>
+      <span class="panel-eyebrow"><i class="fa fa-calendar"></i> Agenda</span>
+      <h2 class="panel-card__title">Próximas citas</h2>
+      <p class="panel-card__description">Acepta o rechaza las citas pendientes. Gestiona tus consultas.</p>
+    </div>
+    <%= link_to "Ver todas", doctors_appointments_path, class: "btn-panel-ghost" %>
+  </div>
+
+  <% if @upcoming_appointments.any? %>
+    <div class="panel-table-wrapper">
+      <table class="panel-table">
         <thead>
           <tr>
             <th>Fecha</th>
             <th>Hora</th>
             <th>Paciente</th>
+            <th>Motivo</th>
             <th class="text-center">Estado</th>
             <th class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <%= render partial: "doctors/dashboard/appointment_row", collection: upcoming, as: :appointment %>
-        </tbody>
-      </table>
-    </div>
-  <% else %>
-    <p class="muted">Aún no se registran citas futuras.</p>
-  <% end %>
-</section>
-
-<section class="admin-card mt-4" style="border-radius: 24px; box-shadow: 0 24px 44px rgba(0,0,0,0.06); padding: 24px;">
-  <div class="admin-card__header">
-    <div>
-      <p class="page-eyebrow">Pacientes</p>
-      <h2 class="admin-card__title">Pacientes activos</h2>
-      <p class="admin-card__description">
-        Accede rápidamente a los perfiles e historiales de tus pacientes.
-      </p>
-    </div>
-    <%= link_to "Ver todos", doctors_patients_path, class: "btn-leva-ghost" %>
-  </div>
-  <% if patients.any? %>
-    <div class="admin-table-wrapper">
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Teléfono</th>
-            <th>Historial</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% patients.each do |patient| %>
-            <% first_history = patient.medical_histories.first %>
-            <tr>
-              <td><strong><%= patient.user&.name || "Paciente ##{patient.id}" %></strong></td>
-              <td><%= patient.user&.phone_number.presence || "Sin teléfono" %></td>
+          <% @upcoming_appointments.each do |appt| %>
+            <tr id="<%= dom_id(appt, :dashboard_row) %>">
+              <td><%= appt.date&.strftime('%d/%m/%Y') %></td>
+              <td><strong><%= appt.hour&.strftime('%H:%M') %></strong></td>
               <td>
-                <% if first_history %>
-                  <%= link_to "Ver historial", doctors_patient_medical_history_path(patient, first_history), class: "btn-leva-link" %>
-                <% else %>
-                  <span class="muted">Sin historial</span>
-                <% end %>
+                <strong><%= appt.patient&.user&.name %> <%= appt.patient&.user&.last_name %></strong>
+              </td>
+              <td><%= appt.reason_for_consultation.presence || "—" %></td>
+              <td class="text-center">
+                <span class="status-pill <%= appt.status %>"><%= appt.status&.humanize %></span>
+              </td>
+              <td class="text-center">
+                <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;">
+                  <% if appt.status == "pendiente" %>
+                    <%= button_to "Aceptar",
+                                  confirm_doctors_appointment_path(appt),
+                                  method: :patch,
+                                  class: "btn-panel-success",
+                                  style: "padding:6px 12px;font-size:.8rem;" %>
+                    <%= button_to "Rechazar",
+                                  cancel_doctors_appointment_path(appt),
+                                  method: :patch,
+                                  class: "btn-panel-danger",
+                                  style: "padding:6px 12px;font-size:.8rem;" %>
+                  <% end %>
+                  <%= link_to "Ver", doctors_appointment_path(appt), class: "btn-panel-link" %>
+                </div>
               </td>
             </tr>
           <% end %>
@@ -128,51 +110,89 @@
       </table>
     </div>
   <% else %>
-    <p class="muted">Aún no tienes pacientes registrados.</p>
+    <div style="text-align:center;padding:32px 0;color:#aaa;">
+      <i class="fa fa-calendar" style="font-size:2rem;margin-bottom:10px;display:block;"></i>
+      No tienes citas próximas agendadas.
+    </div>
   <% end %>
-</section>
-
-<section class="admin-card mt-4" style="border-radius: 24px; box-shadow: 0 24px 44px rgba(0,0,0,0.06); padding: 24px;">
-  <div class="admin-card__header">
-    <div>
-      <p class="page-eyebrow">Disponibilidad</p>
-      <h2 class="admin-card__title">Horas de trabajo</h2>
-      <p class="admin-card__description">
-        Revisa tus horarios activos por día.
-      </p>
-    </div>
-    <div class="d-flex gap-2">
-      <%= link_to "Gestionar horarios", doctors_hours_path, class: "btn-leva-ghost" %>
-      <%= link_to "Ver mi calendario", doctors_calendars_path, class: "btn-leva-plain" %>
-    </div>
-  </div>
-  <% grouped_hours = work_hours.group_by { |h| h.calendar.date }.to_a.sort_by(&:first).first(7) %>
-  <div class="admin-table-wrapper">
-    <table class="admin-table">
-      <thead>
-        <tr>
-          <th>Día</th>
-          <th>Rango</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% if grouped_hours.any? %>
-          <% grouped_hours.each do |date, hours| %>
-            <% sorted = hours.sort_by(&:start_time) %>
-            <% range_label = "#{sorted.first.start_time.strftime('%H:%M')} - #{sorted.last.end_time.strftime('%H:%M')}" %>
-            <tr>
-              <td><%= date&.strftime('%A %d/%m') %></td>
-              <td><%= range_label %></td>
-            </tr>
-          <% end %>
-        <% else %>
-          <tr>
-            <td colspan="2" class="muted">Aún no registras horarios activos.</td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-</section>
-
 </div>
+
+<!-- Estadísticas de facturación mensual -->
+<div class="panel-card" style="margin-top:20px;">
+  <div class="panel-card__header">
+    <div>
+      <span class="panel-eyebrow"><i class="fa fa-chart-bar"></i> Facturación</span>
+      <h2 class="panel-card__title">Mis ingresos mensuales</h2>
+      <p class="panel-card__description">Citas completadas y facturación estimada de los últimos 6 meses.</p>
+    </div>
+    <div class="d-flex flex-column align-items-end gap-1">
+      <strong style="font-size:1.4rem;color:#2a2a2a;"><%= number_to_currency(@billing_summary[:total_revenue], precision: 0) %></strong>
+      <span style="font-size:.8rem;color:#6f6f6f;">Total período</span>
+    </div>
+  </div>
+
+  <!-- Resumen -->
+  <div style="display:flex;gap:28px;flex-wrap:wrap;margin-bottom:24px;">
+    <div>
+      <p style="font-size:.75rem;color:#6f6f6f;text-transform:uppercase;letter-spacing:.08em;margin:0 0 2px;">Citas completadas</p>
+      <strong style="font-size:1.1rem;"><%= @billing_summary[:total_appointments] %></strong>
+    </div>
+    <div>
+      <p style="font-size:.75rem;color:#6f6f6f;text-transform:uppercase;letter-spacing:.08em;margin:0 0 2px;">Ticket promedio</p>
+      <strong style="font-size:1.1rem;"><%= number_to_currency(@billing_summary[:average_ticket], precision: 0) %></strong>
+    </div>
+    <% if @billing_summary[:best_month_label].present? %>
+      <div>
+        <p style="font-size:.75rem;color:#6f6f6f;text-transform:uppercase;letter-spacing:.08em;margin:0 0 2px;">Mejor mes</p>
+        <strong style="font-size:1.1rem;"><%= @billing_summary[:best_month_label] %> · <%= number_to_currency(@billing_summary[:best_month_revenue], precision: 0) %></strong>
+      </div>
+    <% end %>
+  </div>
+
+  <% if @monthly_billing.present? %>
+    <% max_rev = @monthly_billing.map { |p| p[:revenue] }.max.to_f %>
+    <div class="panel-chart">
+      <% @monthly_billing.each do |point| %>
+        <% height = max_rev.zero? ? 4 : ((point[:revenue] / max_rev) * 100).round.clamp(4, 100) %>
+        <div class="panel-chart__col">
+          <div class="panel-chart__bar-wrap">
+            <div class="panel-chart__bar" style="height:<%= height %>%;">
+              <div class="panel-chart__tooltip"><%= number_to_currency(point[:revenue], precision: 0) %></div>
+            </div>
+          </div>
+          <p class="panel-chart__label"><%= point[:label] %></p>
+          <p class="panel-chart__sub"><%= point[:appointments] %> citas</p>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p style="color:#6f6f6f;margin:0;">Aún no tienes citas completadas registradas en este período.</p>
+  <% end %>
+</div>
+
+<!-- Pacientes activos -->
+<% if @active_patients.any? %>
+  <div class="panel-card" style="margin-top:20px;">
+    <div class="panel-card__header">
+      <div>
+        <span class="panel-eyebrow"><i class="fa fa-users"></i> Pacientes</span>
+        <h2 class="panel-card__title">Pacientes recientes</h2>
+      </div>
+      <%= link_to "Ver todos", doctors_patients_path, class: "btn-panel-ghost" %>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <% @active_patients.each do |patient| %>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#f8f7f9;border-radius:12px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#b69cff,#6d4ec2);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">
+            <%= patient.user&.name&.first&.upcase %>
+          </div>
+          <div style="flex:1;min-width:0;">
+            <p style="margin:0;font-weight:600;font-size:.9rem;"><%= patient.user&.name %> <%= patient.user&.last_name %></p>
+            <p style="margin:0;font-size:.8rem;color:#6f6f6f;"><%= patient.user&.email %></p>
+          </div>
+          <%= link_to "Ver paciente", doctors_patient_path(patient), class: "btn-panel-link" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

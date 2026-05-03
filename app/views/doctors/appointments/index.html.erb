@@ -1,59 +1,47 @@
-<% appointments = @appointments || [] %>
-<% pending = appointments.select { |a| a.status == "pendiente" } %>
+<% content_for :page_title do %>
+  Doctor · Mis Citas
+<% end %>
 
-<div class="admin-shell" style="padding: 32px 40px 48px; max-width: 1100px; margin: 0 auto;">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <%= link_to doctors_dashboard_path, class: "btn-leva-circle", aria: { label: "Volver" } do %>
-      <i class="fa fa-arrow-left"></i>
-    <% end %>
-    <div class="d-flex gap-2 flex-wrap">
-      <%= link_to "Mi calendario", doctors_calendars_path, class: "btn-leva-plain", style: "padding: 10px 14px; border-radius: 12px;" %>
-      <%= link_to "Mis horarios", doctors_hours_path, class: "btn-leva-plain", style: "padding: 10px 14px; border-radius: 12px;" %>
-    </div>
-  </div>
-  <div class="admin-page-header">
-    <div>
-      <span class="page-eyebrow">Citas</span>
-      <h1 class="admin-page-title">Citas asignadas</h1>
-      <p class="admin-page-description">
-        Gestiona tus citas: revísalas, edítalas, confírmalas o cancélalas.
-      </p>
-    </div>
-  </div>
+<% pending = @appointments.select { |a| a.status == "pendiente" } %>
+<% completed = @appointments.select { |a| a.status == "completado" } %>
+<% cancelled = @appointments.select { |a| a.status == "cancelado" } %>
 
-  <div class="admin-metrics justify-content-center" style="gap: 12px; flex-wrap: wrap; margin-bottom: 20px;">
-    <div class="admin-metric-card" style="min-width: 160px; border-radius: 14px; padding: 14px 16px; box-shadow: 0 14px 28px rgba(0,0,0,0.05);">
-      <p class="admin-metric-value"><%= appointments.size %></p>
-      <p class="admin-metric-label">Total citas</p>
-    </div>
-    <div class="admin-metric-card" style="min-width: 160px; border-radius: 14px; padding: 14px 16px; box-shadow: 0 14px 28px rgba(0,0,0,0.05);">
-      <p class="admin-metric-value"><%= pending.size %></p>
-      <p class="admin-metric-label">Pendientes</p>
-    </div>
-    <div class="admin-metric-card" style="min-width: 160px; border-radius: 14px; padding: 14px 16px; box-shadow: 0 14px 28px rgba(0,0,0,0.05);">
-      <p class="admin-metric-value"><%= appointments.count { |a| a.status == "completado" } %></p>
-      <p class="admin-metric-label">Completadas</p>
-    </div>
-    <div class="admin-metric-card" style="min-width: 160px; border-radius: 14px; padding: 14px 16px; box-shadow: 0 14px 28px rgba(0,0,0,0.05);">
-      <p class="admin-metric-value"><%= appointments.count { |a| a.status == "cancelado" } %></p>
-      <p class="admin-metric-label">Canceladas</p>
-    </div>
+<div class="panel-page-header">
+  <div>
+    <span class="panel-eyebrow"><i class="fa fa-calendar"></i> Citas</span>
+    <h1 class="panel-page-title">Mis citas asignadas</h1>
+    <p class="panel-page-description">Acepta, rechaza y gestiona todas tus consultas.</p>
   </div>
-
-<section class="admin-card mt-8" style="border-radius: 18px; box-shadow: 0 22px 38px rgba(0,0,0,0.06); padding: 22px;">
-  <div class="admin-card__header">
-    <div>
-      <p class="page-eyebrow">Listado</p>
-      <h2 class="admin-card__title">Citas agendadas</h2>
-      <p class="admin-card__description">
-        Visualiza tus citas con estado y acciones rápidas.
-      </p>
-    </div>
+  <div class="d-flex gap-2">
+    <%= link_to "Dashboard", doctors_dashboard_path, class: "btn-panel-ghost" %>
+    <%= link_to "Mi calendario", doctors_calendars_path, class: "btn-panel-ghost" %>
   </div>
+</div>
 
-  <% if appointments.any? %>
-    <div class="admin-table-wrapper" style="border-radius: 18px; overflow: hidden;">
-      <table class="admin-table">
+<!-- KPIs -->
+<div class="panel-metrics">
+  <div class="panel-metric">
+    <p class="panel-metric__value"><%= @appointments.size %></p>
+    <p class="panel-metric__label">Total citas</p>
+  </div>
+  <div class="panel-metric panel-metric--warning">
+    <p class="panel-metric__value"><%= pending.size %></p>
+    <p class="panel-metric__label">Pendientes</p>
+  </div>
+  <div class="panel-metric panel-metric--success">
+    <p class="panel-metric__value"><%= completed.size %></p>
+    <p class="panel-metric__label">Completadas</p>
+  </div>
+  <div class="panel-metric panel-metric--danger">
+    <p class="panel-metric__value"><%= cancelled.size %></p>
+    <p class="panel-metric__label">Canceladas</p>
+  </div>
+</div>
+
+<div class="panel-card">
+  <% if @appointments.any? %>
+    <div class="panel-table-wrapper">
+      <table class="panel-table">
         <thead>
           <tr>
             <th>Fecha</th>
@@ -65,12 +53,43 @@
           </tr>
         </thead>
         <tbody>
-          <%= render partial: "doctors/appointments/appointment_row", collection: appointments, as: :appointment %>
+          <% @appointments.each do |appt| %>
+            <tr id="<%= dom_id(appt, :index_row) %>">
+              <td><%= appt.date&.strftime('%d/%m/%Y') %></td>
+              <td><strong><%= appt.hour&.strftime('%H:%M') %></strong></td>
+              <td>
+                <strong><%= appt.patient&.user&.name %> <%= appt.patient&.user&.last_name %></strong>
+              </td>
+              <td><%= appt.reason_for_consultation.presence || "—" %></td>
+              <td class="text-center">
+                <span class="status-pill <%= appt.status %>"><%= appt.status&.humanize %></span>
+              </td>
+              <td class="text-center">
+                <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;">
+                  <% if appt.status == "pendiente" %>
+                    <%= button_to "Aceptar",
+                                  confirm_doctors_appointment_path(appt),
+                                  method: :patch,
+                                  class: "btn-panel-success",
+                                  style: "padding:6px 12px;font-size:.8rem;" %>
+                    <%= button_to "Rechazar",
+                                  cancel_doctors_appointment_path(appt),
+                                  method: :patch,
+                                  class: "btn-panel-danger",
+                                  style: "padding:6px 12px;font-size:.8rem;" %>
+                  <% end %>
+                  <%= link_to "Ver", doctors_appointment_path(appt), class: "btn-panel-link" %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
         </tbody>
       </table>
     </div>
   <% else %>
-    <p class="muted">No hay citas asignadas todavía.</p>
+    <div style="text-align:center;padding:48px 0;color:#aaa;">
+      <i class="fa fa-calendar" style="font-size:2.5rem;margin-bottom:12px;display:block;"></i>
+      <p style="margin:0;">No tienes citas asignadas todavía.</p>
+    </div>
   <% end %>
-</section>
 </div>

@@ -1,0 +1,102 @@
+<% content_for :page_title do %>
+  Gerencia · <%= @medical_institute.name %>
+<% end %>
+
+<div class="panel-page-header">
+  <div>
+    <%= link_to gerente_medical_institutes_path, class: "btn-panel-ghost", style: "margin-bottom:12px;display:inline-flex;" do %>
+      <i class="fa fa-arrow-left"></i>&nbsp; Volver a ubicaciones
+    <% end %>
+    <span class="panel-eyebrow"><i class="fa fa-hospital"></i> Sede</span>
+    <h1 class="panel-page-title"><%= @medical_institute.name %></h1>
+  </div>
+  <div class="d-flex gap-2">
+    <%= link_to "Editar", edit_gerente_medical_institute_path(@medical_institute), class: "btn-panel-ghost" %>
+    <%= button_to "Cerrar sede",
+                  gerente_medical_institute_path(@medical_institute),
+                  method: :delete,
+                  data: { confirm: "¿Confirmas cerrar '#{@medical_institute.name}'?" },
+                  class: "btn-panel-danger" %>
+  </div>
+</div>
+
+<!-- KPIs de la sede -->
+<div class="panel-metrics">
+  <div class="panel-metric panel-metric--accent">
+    <div class="panel-metric__icon"><i class="fa fa-user-doctor"></i></div>
+    <p class="panel-metric__value"><%= @doctors.size %></p>
+    <p class="panel-metric__label">Doctores</p>
+  </div>
+  <div class="panel-metric panel-metric--success">
+    <div class="panel-metric__icon" style="background:rgba(93,211,158,0.2);color:#2ea87a;"><i class="fa fa-calendar-check"></i></div>
+    <p class="panel-metric__value"><%= @appointment_count %></p>
+    <p class="panel-metric__label">Citas totales</p>
+  </div>
+  <div class="panel-metric">
+    <div class="panel-metric__icon"><i class="fa fa-dollar-sign"></i></div>
+    <p class="panel-metric__value"><%= number_to_currency(@revenue, precision: 0) %></p>
+    <p class="panel-metric__label">Ingresos estimados</p>
+  </div>
+</div>
+
+<!-- Datos de la sede -->
+<div class="panel-card">
+  <div class="panel-card__header">
+    <div>
+      <span class="panel-eyebrow">Información</span>
+      <h2 class="panel-card__title">Detalles de la sede</h2>
+    </div>
+  </div>
+  <div class="panel-details">
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Dirección</p>
+      <p class="panel-detail-value"><%= @medical_institute.address.presence || "No especificada" %></p>
+    </div>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Teléfono</p>
+      <p class="panel-detail-value"><%= @medical_institute.phone_number.presence || "—" %></p>
+    </div>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Tel. emergencias</p>
+      <p class="panel-detail-value"><%= @medical_institute.emergency_phone_number.presence || "—" %></p>
+    </div>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Tipo</p>
+      <p class="panel-detail-value"><%= @medical_institute.institute_type&.humanize %></p>
+    </div>
+  </div>
+</div>
+
+<!-- Doctores en la sede -->
+<div class="panel-card" style="margin-top:20px;">
+  <div class="panel-card__header">
+    <div>
+      <span class="panel-eyebrow"><i class="fa fa-user-doctor"></i> Personal</span>
+      <h2 class="panel-card__title">Doctores en esta sede</h2>
+    </div>
+  </div>
+  <% if @doctors.any? %>
+    <div class="panel-table-wrapper">
+      <table class="panel-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Especialidad</th>
+            <th>Registro médico</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @doctors.each do |doctor| %>
+            <tr>
+              <td><strong>Dr. <%= doctor.user&.name %> <%= doctor.user&.last_name %></strong></td>
+              <td><%= doctor.speciality&.humanize.presence || "—" %></td>
+              <td><%= doctor.medical_registration.presence || "—" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <p style="color:#aaa;margin:0;">No hay doctores asignados a esta sede.</p>
+  <% end %>
+</div>

@@ -1,93 +1,371 @@
 <style>
-  .leva-login-page {
-    background: #f7f4fb;
+  .login-page {
+    min-height: 100vh;
+    display: flex;
+    background: #f8f7f9;
   }
 
-  .leva-login-logo {
-    width: 56px;
-    height: 56px;
-    border-radius: 1rem;
-    box-shadow: 0 12px 30px rgba(122, 109, 255, 0.4);
+  /* ---- Lado izquierdo (marca) ---- */
+  .login-brand {
+    flex: 1 1 45%;
+    background: linear-gradient(145deg, #1a0845 0%, #3b1f8a 40%, #6d4ec2 75%, #b69cff 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 48px;
+    position: relative;
+    overflow: hidden;
   }
 
-  .leva-login-card {
-    border-radius: 30px;
-    max-width: 480px;
+  .login-brand::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 80%, rgba(182,156,255,0.25) 0%, transparent 55%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 40%);
   }
 
-  .leva-login-card .form-control {
-    border-radius: 12px;
-    border-color: #e1dff0;
-    padding: 0.75rem 1rem;
+  .login-brand__content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: #fff;
   }
 
-  .leva-login-card label {
+  .login-brand__logo {
+    width: 72px;
+    height: 72px;
+    border-radius: 20px;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.35);
+    margin-bottom: 24px;
+  }
+
+  .login-brand__name {
+    font-size: 2.5rem;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    margin: 0 0 12px;
+  }
+
+  .login-brand__tagline {
+    font-size: 1.05rem;
+    opacity: 0.8;
+    max-width: 340px;
+    line-height: 1.6;
+    margin: 0 auto 40px;
+  }
+
+  .login-brand__features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+  }
+
+  .login-brand__feature {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+
+  .login-brand__feature-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.85rem;
+  }
+
+  .login-brand__dots {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    opacity: 0.3;
+  }
+
+  .login-brand__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #fff;
+  }
+
+  /* ---- Lado derecho (formulario) ---- */
+  .login-form-side {
+    flex: 1 1 55%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 48px;
+  }
+
+  .login-form-container {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .login-form-header {
+    margin-bottom: 36px;
+  }
+
+  .login-form-header__greeting {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #9d84ff;
+    margin-bottom: 8px;
+  }
+
+  .login-form-header__title {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #1a0845;
+    margin: 0 0 8px;
+    line-height: 1.15;
+  }
+
+  .login-form-header__subtitle {
+    color: #6f6f6f;
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .login-field {
+    margin-bottom: 18px;
+  }
+
+  .login-field label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #444;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 7px;
+  }
+
+  .login-input {
+    width: 100%;
+    border: 1.5px solid #e1dff0;
+    border-radius: 14px;
+    padding: 13px 16px;
+    font-size: 0.95rem;
+    background: #fff;
+    color: #2a2a2a;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+  }
+
+  .login-input:focus {
+    border-color: #9d84ff;
+    box-shadow: 0 0 0 4px rgba(182, 156, 255, 0.18);
+  }
+
+  .login-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .login-remember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    color: #6f6f6f;
+    cursor: pointer;
+  }
+
+  .login-remember input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    border-radius: 5px;
+    accent-color: #9d84ff;
+    cursor: pointer;
+  }
+
+  .login-forgot {
+    font-size: 0.875rem;
     font-weight: 600;
-    color: #4b4b63;
+    color: #9d84ff;
+    text-decoration: none;
+  }
+
+  .login-forgot:hover {
+    color: #7b63e0;
+    text-decoration: underline;
+  }
+
+  .login-submit {
+    width: 100%;
+    background: linear-gradient(120deg, #7b63e0, #4b2db5);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 12px 32px rgba(107, 75, 200, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .login-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 40px rgba(107, 75, 200, 0.48);
+  }
+
+  .login-divider {
+    text-align: center;
+    color: #c3c2c8;
+    font-size: 0.85rem;
+    margin: 28px 0 0;
+  }
+
+  .login-footer {
+    margin-top: auto;
+    padding-top: 40px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #aaa;
+  }
+
+  .login-error {
+    background: rgba(255, 89, 94, 0.08);
+    border: 1px solid rgba(255, 89, 94, 0.25);
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: #b03b40;
+    font-size: 0.875rem;
+    margin-bottom: 20px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .login-brand {
+      display: none;
+    }
+    .login-form-side {
+      padding: 40px 24px;
+    }
   }
 </style>
 
-<div class="leva-login-page min-vh-100 d-flex flex-column">
-  <div class="container flex-grow-1 d-flex flex-column align-items-center justify-content-center py-5">
-    <%= link_to root_path, class: "text-center mb-4 d-inline-flex flex-column align-items-center text-decoration-none" do %>
-      <%= image_tag "logo_leva.png", alt: "Leva logo", class: "leva-login-logo mb-3" %>
-      <p class="fw-semibold fs-4 mb-0 text-dark">LEVA</p>
-    <% end %>
-
-    <div class="leva-login-card bg-white shadow-lg w-100 p-4 p-md-5">
-      <h1 class="text-center fw-bold mb-2">Iniciar Sesión</h1>
-      <p class="text-center text-secondary mb-4">Bienvenido de nuevo. Accede a tu cuenta.</p>
-
-      <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-        <%= f.error_notification %>
-
-        <div class="mb-3">
-          <%= f.input :email,
-                      label: "Email",
-                      required: true,
-                      autofocus: true,
-                      placeholder: "ejemplo@correo.com",
-                      input_html: { autocomplete: "email", class: "form-control" } %>
-        </div>
-        <div class="mb-3">
-          <%= f.input :password,
-                      label: "Contraseña",
-                      required: true,
-                      placeholder: "Contraseña",
-                      input_html: { autocomplete: "current-password", class: "form-control" } %>
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <% if devise_mapping.rememberable? %>
-            <div class="form-check">
-              <%= f.input :remember_me,
-                          as: :boolean,
-                          label: "Recordarme",
-                          wrapper_html: { class: "mb-0" },
-                          input_html: { class: "form-check-input" },
-                          label_html: { class: "form-check-label text-secondary" } %>
-            </div>
-          <% end %>
-
-          <% if devise_mapping.recoverable? %>
-            <%= link_to "¿Olvidaste tu contraseña?", new_password_path(resource_name), class: "text-decoration-none fw-semibold", style: "color: #9d84ff;" %>
-          <% end %>
-        </div>
-
-        <%= f.button :submit, "Iniciar Sesión", class: "btn mediapp-hero-btn text-white w-100 py-3" %>
-      <% end %>
-
-      <% if devise_mapping.registerable? %>
-        <p class="text-center text-secondary mt-4 mb-0">
-          ¿No tienes una cuenta?
-          <%= link_to "Regístrate aquí", new_registration_path(resource_name), class: "fw-semibold text-decoration-none", style: "color: #9d84ff;" %>
-        </p>
-      <% end %>
+<div class="login-page">
+  <!-- Lado izquierdo: marca -->
+  <div class="login-brand">
+    <div class="login-brand__content">
+      <%= image_tag "logo_leva.png", alt: "LEVA", class: "login-brand__logo" %>
+      <h1 class="login-brand__name">LEVA</h1>
+      <p class="login-brand__tagline">
+        Plataforma médica inteligente para doctores, administradores y gerentes.
+      </p>
+      <ul class="login-brand__features">
+        <li class="login-brand__feature">
+          <span class="login-brand__feature-icon"><i class="fa fa-calendar-check"></i></span>
+          Gestión de agenda y citas en tiempo real
+        </li>
+        <li class="login-brand__feature">
+          <span class="login-brand__feature-icon"><i class="fa fa-chart-line"></i></span>
+          Reportes financieros por ubicación
+        </li>
+        <li class="login-brand__feature">
+          <span class="login-brand__feature-icon"><i class="fa fa-robot"></i></span>
+          Asistente IA integrado para cada rol
+        </li>
+        <li class="login-brand__feature">
+          <span class="login-brand__feature-icon"><i class="fa fa-hospital"></i></span>
+          Administración multi-sede centralizada
+        </li>
+      </ul>
+    </div>
+    <div class="login-brand__dots">
+      <span class="login-brand__dot"></span>
+      <span class="login-brand__dot"></span>
+      <span class="login-brand__dot"></span>
     </div>
   </div>
 
-  <footer class="container text-center text-secondary py-4">
-    <small>&copy; <%= Time.current.year %> LEVA. Todos los derechos reservados.<br>
-      Contacto: soporte@leva.com · +54 11 0000-0000</small>
-  </footer>
+  <!-- Lado derecho: formulario -->
+  <div class="login-form-side">
+    <div class="login-form-container">
+      <div class="login-form-header">
+        <p class="login-form-header__greeting">Bienvenido de nuevo</p>
+        <h2 class="login-form-header__title">Inicia sesión en<br>tu cuenta</h2>
+        <p class="login-form-header__subtitle">Ingresa tus credenciales para continuar.</p>
+      </div>
+
+      <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <% if resource.errors.any? %>
+          <div class="login-error">
+            <%= resource.errors.full_messages.first %>
+          </div>
+        <% end %>
+
+        <%= f.error_notification %>
+
+        <div class="login-field">
+          <label for="user_email">Correo electrónico</label>
+          <input type="email"
+                 id="user_email"
+                 name="user[email]"
+                 value="<%= resource.email %>"
+                 placeholder="ejemplo@correo.com"
+                 autocomplete="email"
+                 class="login-input"
+                 autofocus>
+        </div>
+
+        <div class="login-field">
+          <label for="user_password">Contraseña</label>
+          <input type="password"
+                 id="user_password"
+                 name="user[password]"
+                 placeholder="••••••••"
+                 autocomplete="current-password"
+                 class="login-input">
+        </div>
+
+        <div class="login-options">
+          <% if devise_mapping.rememberable? %>
+            <label class="login-remember">
+              <input type="checkbox" name="user[remember_me]" value="1">
+              Recordarme
+            </label>
+          <% end %>
+          <% if devise_mapping.recoverable? %>
+            <%= link_to "¿Olvidaste tu contraseña?", new_password_path(resource_name), class: "login-forgot" %>
+          <% end %>
+        </div>
+
+        <button type="submit" class="login-submit">
+          Iniciar Sesión
+        </button>
+      <% end %>
+
+      <p class="login-divider">
+        LEVA &copy; <%= Time.current.year %> · Plataforma Médica
+      </p>
+    </div>
+
+    <footer class="login-footer">
+      Contacto: soporte@leva.com
+    </footer>
+  </div>
 </div>

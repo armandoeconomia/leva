@@ -1,38 +1,49 @@
-<div class="admin-page-header">
+<% content_for :page_title do %>
+  Recepción · Doctor
+<% end %>
+
+<div class="panel-page-header">
   <div>
-    <span class="page-eyebrow">Ficha del medico</span>
-    <h1 class="admin-page-title"><%= @doctor.user.name %> <%= @doctor.user.last_name %></h1>
-    <p class="admin-page-description">
-      Informacion clave para coordinar agendas, teleconsultas y cobertura institucional.
-    </p>
+    <span class="panel-eyebrow"><i class="fa fa-user-doctor"></i> Doctores</span>
+    <h1 class="panel-page-title">Dr. <%= @doctor.user.name %> <%= @doctor.user.last_name %></h1>
+    <p class="panel-page-description">Información clave para coordinar agendas y cobertura institucional.</p>
   </div>
-  <div class="admin-actions">
-    <span class="status-chip"><%= @doctor.speciality&.humanize || "Sin especialidad" %></span>
+  <div class="d-flex gap-2">
+    <%= link_to "Editar", edit_admin_doctor_path(@doctor), class: "btn-panel-primary" %>
+    <%= link_to "Volver al listado", admin_doctors_path, class: "btn-panel-ghost" %>
   </div>
 </div>
 
-<div class="admin-card">
-  <div class="admin-details">
-    <div class="admin-detail-item">
-      <p class="admin-detail-label">Correo</p>
-      <p class="admin-detail-value"><%= @doctor.user.email %></p>
+<div class="panel-card">
+  <div class="panel-card__header">
+    <div>
+      <span class="panel-eyebrow"><i class="fa fa-stethoscope"></i> Ficha médica</span>
     </div>
-    <div class="admin-detail-item">
-      <p class="admin-detail-label">Instituto</p>
-      <p class="admin-detail-value"><%= @doctor.medical_institute&.name || "No asignado" %></p>
-    </div>
-    <div class="admin-detail-item">
-      <p class="admin-detail-label">Licencia</p>
-      <p class="admin-detail-value"><%= @doctor.medical_registration %></p>
-    </div>
-    <div class="admin-detail-item">
-      <p class="admin-detail-label">Tipo de instituto</p>
-      <p class="admin-detail-value"><%= @doctor.medical_institute&.institute_type&.humanize || "No definido" %></p>
-    </div>
+    <span class="status-pill completado">
+      <%= @doctor.speciality&.humanize || "Sin especialidad" %>
+    </span>
   </div>
 
-  <div class="admin-form-actions">
-    <%= link_to "Editar", edit_admin_doctor_path(@doctor), class: "btn-leva-primary" %>
-    <%= link_to "Volver al listado", admin_doctors_path, class: "btn-leva-ghost" %>
+  <div class="panel-details">
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Correo</p>
+      <p class="panel-detail-value"><%= @doctor.user.email %></p>
+    </div>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Teléfono</p>
+      <p class="panel-detail-value"><%= @doctor.user.phone_number.presence || "Sin registro" %></p>
+    </div>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Instituto médico</p>
+      <p class="panel-detail-value"><%= @doctor.medical_institute&.name || "No asignado" %></p>
+    </div>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Tipo de instituto</p>
+      <p class="panel-detail-value"><%= @doctor.medical_institute&.institute_type&.humanize || "No definido" %></p>
+    </div>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Licencia médica</p>
+      <p class="panel-detail-value"><%= @doctor.medical_registration.presence || "Sin registro" %></p>
+    </div>
   </div>
 </div>

@@ -1,0 +1,17 @@
+<% content_for :page_title do %>
+  Gerencia · Editar sede
+<% end %>
+
+<div class="panel-page-header">
+  <div>
+    <%= link_to gerente_medical_institute_path(@medical_institute), class: "btn-panel-ghost", style: "margin-bottom:12px;display:inline-flex;" do %>
+      <i class="fa fa-arrow-left"></i>&nbsp; Volver
+    <% end %>
+    <span class="panel-eyebrow"><i class="fa fa-edit"></i> Editar</span>
+    <h1 class="panel-page-title">Editar: <%= @medical_institute.name %></h1>
+  </div>
+</div>
+
+<div class="panel-card" style="max-width:720px;">
+  <%= render "form" %>
+</div>

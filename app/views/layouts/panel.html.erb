@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>LEVA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", media: "all" %>
+  <%= javascript_include_tag "application" %>
+</head>
+
+<body class="panel-body">
+  <div class="panel-layout">
+    <!-- Sidebar -->
+    <aside class="panel-sidebar" id="panelSidebar">
+      <div class="sidebar-brand">
+        <%= link_to root_path, class: "sidebar-brand__link" do %>
+          <%= image_tag "logo_leva.png", alt: "Leva", class: "sidebar-brand__logo" %>
+          <span class="sidebar-brand__name">LEVA</span>
+        <% end %>
+      </div>
+
+      <nav class="sidebar-nav">
+        <% if current_user&.doctor? %>
+          <p class="sidebar-nav__section">Principal</p>
+          <%= link_to doctors_dashboard_path, class: "sidebar-nav__link #{'is-active' if controller_path == 'doctors/dashboard'}" do %>
+            <i class="fa fa-grid-2 sidebar-nav__icon"></i> Dashboard
+          <% end %>
+          <%= link_to doctors_appointments_path, class: "sidebar-nav__link #{'is-active' if controller_path.start_with?('doctors/appointments')}" do %>
+            <i class="fa fa-calendar sidebar-nav__icon"></i> Mis Citas
+          <% end %>
+          <%= link_to doctors_patients_path, class: "sidebar-nav__link #{'is-active' if controller_path.start_with?('doctors/patients')}" do %>
+            <i class="fa fa-users sidebar-nav__icon"></i> Pacientes
+          <% end %>
+          <p class="sidebar-nav__section">Configuración</p>
+          <%= link_to doctors_calendars_path, class: "sidebar-nav__link #{'is-active' if controller_path.start_with?('doctors/calendars')}" do %>
+            <i class="fa fa-calendar-days sidebar-nav__icon"></i> Calendario
+          <% end %>
+          <%= link_to doctors_hours_path, class: "sidebar-nav__link #{'is-active' if controller_path.start_with?('doctors/hours')}" do %>
+            <i class="fa fa-clock sidebar-nav__icon"></i> Horarios
+          <% end %>
+          <%= link_to edit_doctors_doctor_path, class: "sidebar-nav__link #{'is-active' if controller_path == 'doctors/doctor'}" do %>
+            <i class="fa fa-user-doctor sidebar-nav__icon"></i> Mi Perfil
+          <% end %>
+          <%= link_to doctors_assistant_path, class: "sidebar-nav__link #{'is-active' if controller_path == 'doctors/assistants'}" do %>
+            <i class="fa fa-robot sidebar-nav__icon"></i> Asistente IA
+          <% end %>
+
+        <% elsif current_user&.admin? %>
+          <p class="sidebar-nav__section">Recepción</p>
+          <%= link_to admin_dashboard_path, class: "sidebar-nav__link #{'is-active' if controller_path == 'admin/dashboard'}" do %>
+            <i class="fa fa-grid-2 sidebar-nav__icon"></i> Dashboard
+          <% end %>
+          <%= link_to admin_appointments_path, class: "sidebar-nav__link #{'is-active' if controller_path == 'admin/appointments'}" do %>
+            <i class="fa fa-calendar-check sidebar-nav__icon"></i> Agenda de Citas
+          <% end %>
+          <p class="sidebar-nav__section">Registros</p>
+          <%= link_to admin_patients_path, class: "sidebar-nav__link #{'is-active' if controller_path == 'admin/patients'}" do %>
+            <i class="fa fa-user-injured sidebar-nav__icon"></i> Pacientes
+          <% end %>
+          <%= link_to admin_doctors_path, class: "sidebar-nav__link #{'is-active' if controller_path == 'admin/doctors'}" do %>
+            <i class="fa fa-user-doctor sidebar-nav__icon"></i> Doctores
+          <% end %>
+          <%= link_to admin_users_path, class: "sidebar-nav__link #{'is-active' if controller_path == 'admin/users'}" do %>
+            <i class="fa fa-users sidebar-nav__icon"></i> Usuarios
+          <% end %>
+          <p class="sidebar-nav__section">Herramientas</p>
+          <%= link_to admin_assistant_path, class: "sidebar-nav__link #{'is-active' if controller_path == 'admin/assistants'}" do %>
+            <i class="fa fa-robot sidebar-nav__icon"></i> Asistente IA
+          <% end %>
+
+        <% elsif current_user&.gerente? %>
+          <p class="sidebar-nav__section">Finanzas</p>
+          <%= link_to gerente_dashboard_path, class: "sidebar-nav__link #{'is-active' if controller_path == 'gerente/dashboard'}" do %>
+            <i class="fa fa-chart-line sidebar-nav__icon"></i> Dashboard
+          <% end %>
+          <p class="sidebar-nav__section">Operaciones</p>
+          <%= link_to gerente_medical_institutes_path, class: "sidebar-nav__link #{'is-active' if controller_path == 'gerente/medical_institutes'}" do %>
+            <i class="fa fa-hospital sidebar-nav__icon"></i> Ubicaciones
+          <% end %>
+        <% end %>
+      </nav>
+
+      <div class="sidebar-user">
+        <div class="sidebar-user__avatar">
+          <%= current_user.name.first.upcase %>
+        </div>
+        <div class="sidebar-user__info">
+          <p class="sidebar-user__name"><%= current_user.name %> <%= current_user.last_name %></p>
+          <p class="sidebar-user__role">
+            <% if current_user.doctor? %>
+              Doctor
+            <% elsif current_user.gerente? %>
+              Gerente
+            <% elsif current_user.admin? %>
+              Administrador
+            <% end %>
+          </p>
+        </div>
+        <%= button_to destroy_user_session_path, method: :delete, class: "sidebar-user__logout", form: { data: { turbo: false } } do %>
+          <i class="fa fa-sign-out-alt"></i>
+        <% end %>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="panel-main">
+      <div class="panel-topbar">
+        <button class="panel-topbar__toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+          <i class="fa fa-bars"></i>
+        </button>
+        <div class="panel-topbar__breadcrumb">
+          <%= content_for?(:page_title) ? yield(:page_title) : "Panel" %>
+        </div>
+        <div class="panel-topbar__actions"></div>
+      </div>
+
+      <%= render "shared/flashes" %>
+
+      <div class="panel-content">
+        <%= yield %>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.getElementById('sidebarToggle')?.addEventListener('click', function() {
+      document.getElementById('panelSidebar').classList.toggle('is-open');
+    });
+  </script>
+</body>
+</html>

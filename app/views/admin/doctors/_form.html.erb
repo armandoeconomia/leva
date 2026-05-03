@@ -1,9 +1,9 @@
-<div class="admin-card">
-  <%= form_with model: [:admin, @doctor], local: true, html: { class: "admin-form" } do |f| %>
+<div class="panel-card">
+  <%= form_with model: [:admin, @doctor], local: true, html: { class: "panel-form" } do |f| %>
     <% if @doctor.errors.any? %>
-      <div class="admin-alert">
+      <div style="border-radius:12px;padding:14px 18px;background:rgba(#e74c3c,.08);color:#a44545;font-weight:600;border:1px solid rgba(#e74c3c,.15);">
         Revisa los siguientes campos:
-        <ul>
+        <ul style="margin:8px 0 0 18px;padding:0;color:#666;font-weight:500;">
           <% @doctor.errors.full_messages.each do |msg| %>
             <li><%= msg %></li>
           <% end %>
@@ -11,7 +11,7 @@
       </div>
     <% end %>
 
-    <div class="field-group">
+    <div>
       <%= f.label :user_id, "Usuario (email)" %>
       <%= f.collection_select :user_id,
                               User.all,
@@ -20,8 +20,8 @@
                               { prompt: "Selecciona usuario" } %>
     </div>
 
-    <div class="field-group">
-      <%= f.label :medical_institute_id, "Instituto medico" %>
+    <div>
+      <%= f.label :medical_institute_id, "Instituto médico" %>
       <%= f.collection_select :medical_institute_id,
                               MedicalInstitute.all,
                               :id,
@@ -29,21 +29,21 @@
                               { prompt: "Selecciona instituto" } %>
     </div>
 
-    <div class="field-group">
+    <div>
       <%= f.label :speciality, "Especialidad" %>
       <%= f.select :speciality,
                    Doctor.specialities.keys.map { |s| [s.humanize, s] },
                    { prompt: "Selecciona especialidad" } %>
     </div>
 
-    <div class="field-group">
-      <%= f.label :medical_registration, "Licencia medica" %>
-      <%= f.text_field :medical_registration, placeholder: "Numero de colegiado" %>
+    <div>
+      <%= f.label :medical_registration, "Licencia médica" %>
+      <%= f.text_field :medical_registration, placeholder: "Número de colegiado" %>
     </div>
 
-    <div class="admin-form-actions">
-      <%= f.submit "Guardar doctor", class: "btn-leva-primary" %>
-      <%= link_to "Cancelar", admin_doctors_path, class: "btn-leva-ghost" %>
+    <div class="panel-form-actions">
+      <%= f.submit "Guardar doctor", class: "btn-panel-primary" %>
+      <%= link_to "Cancelar", admin_doctors_path, class: "btn-panel-ghost" %>
     </div>
   <% end %>
 </div>

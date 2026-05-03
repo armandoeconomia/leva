@@ -1,145 +1,129 @@
-<% patient = @patient || Patient.includes(:user, :medical_histories).find_by(id: params[:id]) %>
+<% content_for :page_title do %>
+  Doctor · Paciente
+<% end %>
+
+<% patient = @patient %>
 <% histories = patient&.medical_histories&.order(registration_date: :desc) || [] %>
 <% latest_history = histories.first %>
 
-<div class="admin-shell" style="padding: 32px 40px 48px; max-width: 1100px; margin: 0 auto;">
-  <% if patient.nil? %>
-    <div class="alert alert-warning">No se encontró al paciente.</div>
+<% if patient.nil? %>
+  <div style="text-align:center;padding:64px 0;color:#aaa;">
+    <i class="fa fa-user-slash" style="font-size:2.5rem;margin-bottom:12px;display:block;"></i>
+    <p style="margin:0;">No se encontró al paciente.</p>
+    <%= link_to "Volver a mis pacientes", doctors_patients_path, class: "btn-panel-ghost", style: "margin-top:16px;display:inline-flex;" %>
+  </div>
+<% else %>
+
+<div class="panel-page-header">
+  <div>
+    <span class="panel-eyebrow"><i class="fa fa-user"></i> Pacientes</span>
+    <h1 class="panel-page-title"><%= patient.user&.name %> <%= patient.user&.last_name %></h1>
+    <p class="panel-page-description">Historial y datos clínicos del paciente.</p>
+  </div>
+  <div class="d-flex gap-2">
+    <%= link_to "Ver citas", doctors_appointments_path, class: "btn-panel-ghost" %>
+    <%= link_to "Mis pacientes", doctors_patients_path, class: "btn-panel-ghost" %>
+  </div>
+</div>
+
+<div class="panel-card">
+  <div class="panel-card__header">
+    <div>
+      <span class="panel-eyebrow"><i class="fa fa-id-card"></i> Datos del paciente</span>
+    </div>
+    <span class="status-pill <%= patient.blood_type.present? ? 'completado' : 'pendiente' %>">
+      <%= patient.blood_type.present? ? patient.blood_type.upcase : "Sin tipo de sangre" %>
+    </span>
+  </div>
+
+  <div class="panel-details">
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Correo</p>
+      <p class="panel-detail-value"><%= patient.user&.email || "Sin email" %></p>
+    </div>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Teléfono</p>
+      <p class="panel-detail-value"><%= patient.user&.phone_number.presence || "Sin teléfono" %></p>
+    </div>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Estado civil</p>
+      <p class="panel-detail-value"><%= patient.marital_status&.humanize || "N/D" %></p>
+    </div>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Contacto de emergencia</p>
+      <p class="panel-detail-value"><%= patient.emergency_contact.presence || "N/D" %></p>
+    </div>
+  </div>
+</div>
+
+<% if latest_history.present? %>
+<div class="panel-card">
+  <div class="panel-card__header">
+    <div>
+      <span class="panel-eyebrow"><i class="fa fa-notes-medical"></i> Último registro</span>
+      <h2 class="panel-card__title"><%= latest_history.registration_date&.strftime('%d %b %Y') || "Sin fecha" %></h2>
+      <p class="panel-card__description">Diagnóstico y tratamiento más reciente.</p>
+    </div>
+    <span class="status-pill completado"><%= latest_history.doctor&.user&.name || "Doctor" %></span>
+  </div>
+
+  <div class="panel-details">
+    <div class="panel-detail-item panel-detail-item--full">
+      <p class="panel-detail-label">Diagnóstico</p>
+      <p class="panel-detail-value"><%= latest_history.diagnosis.presence || "Sin diagnóstico" %></p>
+    </div>
+    <div class="panel-detail-item panel-detail-item--full">
+      <p class="panel-detail-label">Tratamiento</p>
+      <p class="panel-detail-value"><%= latest_history.treatment.presence || "Sin tratamiento" %></p>
+    </div>
+    <div class="panel-detail-item panel-detail-item--full">
+      <p class="panel-detail-label">Prescripción</p>
+      <p class="panel-detail-value"><%= latest_history.prescription.presence || "Sin prescripción" %></p>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<div class="panel-card">
+  <div class="panel-card__header">
+    <div>
+      <span class="panel-eyebrow"><i class="fa fa-list-alt"></i> Historiales</span>
+      <h2 class="panel-card__title">Historiales médicos</h2>
+      <p class="panel-card__description">Selecciona cualquier registro para ver su detalle.</p>
+    </div>
+  </div>
+
+  <% if histories.any? %>
+    <div class="panel-table-wrapper">
+      <table class="panel-table">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Doctor</th>
+            <th>Diagnóstico</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% histories.each do |history| %>
+            <tr>
+              <td><%= history.registration_date&.strftime('%d %b %Y') || "Sin fecha" %></td>
+              <td><%= history.doctor&.user&.name || "Doctor" %></td>
+              <td style="color:#888;"><%= truncate(history.diagnosis, length: 80) %></td>
+              <td>
+                <%= link_to "Ver detalle", doctors_patient_medical_history_path(patient, history), class: "btn-panel-link" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   <% else %>
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <%= link_to doctors_patients_path, class: "btn-leva-circle", aria: { label: "Volver" } do %>
-        <i class="fa fa-arrow-left"></i>
-      <% end %>
+    <div style="text-align:center;padding:32px 0;color:#aaa;">
+      <i class="fa fa-notes-medical" style="font-size:2rem;margin-bottom:10px;display:block;"></i>
+      <p style="margin:0;">Este paciente no tiene historiales médicos registrados.</p>
     </div>
-
-    <div class="row g-4 mb-4">
-      <div class="col-lg-8">
-        <div class="card shadow-sm border-0 rounded-4 h-100" style="border-radius: 18px; box-shadow: 0 18px 32px rgba(0,0,0,0.06);">
-          <div class="card-body p-4">
-            <p class="text-uppercase fw-semibold small mb-1 text-muted">Perfil</p>
-            <h2 class="fw-bold mb-3"><%= patient.user&.name || "Paciente ##{patient.id}" %></h2>
-            <div class="row g-3">
-              <div class="col-md-6">
-                <p class="text-muted mb-1 small">Email</p>
-                <p class="fw-semibold mb-0"><%= patient.user&.email || "Sin email" %></p>
-              </div>
-              <div class="col-md-6">
-                <p class="text-muted mb-1 small">Teléfono</p>
-                <p class="fw-semibold mb-0"><%= patient.user&.phone_number.presence || "Sin teléfono" %></p>
-              </div>
-              <div class="col-md-6">
-                <p class="text-muted mb-1 small">Tipo de sangre</p>
-                <p class="fw-semibold mb-0"><%= patient.blood_type || "N/D" %></p>
-              </div>
-              <div class="col-md-6">
-                <p class="text-muted mb-1 small">Estado civil</p>
-                <p class="fw-semibold mb-0"><%= patient.marital_status || "N/D" %></p>
-              </div>
-              <div class="col-12">
-                <p class="text-muted mb-1 small">Contacto de emergencia</p>
-                <p class="fw-semibold mb-0"><%= patient.emergency_contact.presence || "N/D" %></p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="card shadow-sm border-0 rounded-4 h-100" style="border-radius: 18px; box-shadow: 0 18px 32px rgba(0,0,0,0.06);">
-          <div class="card-body p-4">
-            <p class="text-uppercase fw-semibold small mb-1 text-muted">Accesos rápidos</p>
-            <div class="d-flex flex-column gap-2">
-              <%= link_to 'Historial del paciente',
-                          doctors_patient_medical_history_path(patient, latest_history || 0),
-                          class: "btn-leva-ghost",
-                          style: "padding: 10px 14px; border-radius: 12px;" %>
-              <%= link_to 'Ver citas', doctors_appointments_path,
-                          class: "btn-leva-plain",
-                          style: "padding: 10px 14px; border-radius: 12px;" %>
-              <%= link_to 'Ver calendario', doctors_calendars_path,
-                          class: "btn-leva-plain",
-                          style: "padding: 10px 14px; border-radius: 12px;" %>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <section class="admin-card mt-4" style="border-radius: 18px; box-shadow: 0 18px 32px rgba(0,0,0,0.06); padding: 22px;">
-      <% if latest_history.present? %>
-        <div class="admin-card__header">
-          <div>
-            <p class="page-eyebrow">Detalle</p>
-            <h2 class="admin-card__title"><%= latest_history.registration_date&.strftime('%d %b %Y') || "Sin fecha" %></h2>
-            <p class="admin-card__description">Diagnóstico y tratamiento más reciente.</p>
-          </div>
-          <span class="status-pill info"><%= latest_history.doctor&.user&.name || "Doctor" %></span>
-        </div>
-        <div class="admin-card__body">
-          <div class="mb-3">
-            <p class="text-muted small mb-1">Diagnóstico</p>
-            <p class="fw-semibold mb-0"><%= latest_history.diagnosis.presence || "Sin diagnóstico" %></p>
-          </div>
-          <div class="mb-3">
-            <p class="text-muted small mb-1">Tratamiento</p>
-            <p class="mb-0"><%= latest_history.treatment.presence || "Sin tratamiento" %></p>
-          </div>
-          <div class="mb-3">
-            <p class="text-muted small mb-1">Prescripción</p>
-            <p class="mb-0"><%= latest_history.prescription.presence || "Sin prescripción" %></p>
-          </div>
-        </div>
-      <% else %>
-        <div class="admin-card__body">
-          <p class="muted mb-3">Este paciente no cuenta con historial médico.</p>
-          <%= link_to "Ver historiales de otros pacientes",
-                      doctors_patient_medical_history_path(patient, 0, show_others: true),
-                      class: "btn-leva-ghost", style: "padding: 8px 14px; border-radius: 12px;" %>
-        </div>
-      <% end %>
-    </section>
-
-    <section class="admin-card mt-4" style="border-radius: 18px; box-shadow: 0 18px 32px rgba(0,0,0,0.06); padding: 22px;">
-      <div class="admin-card__header">
-        <div>
-          <p class="page-eyebrow">Listado</p>
-          <h2 class="admin-card__title">Historiales médicos</h2>
-          <p class="admin-card__description">Selecciona cualquier registro para ver su detalle.</p>
-        </div>
-        <% if histories.any? %>
-          <%= link_to "Vista detallada", doctors_patient_medical_history_path(patient, latest_history || histories.first), class: "btn-leva-link" %>
-        <% end %>
-      </div>
-      <% if histories.any? %>
-        <div class="admin-table-wrapper">
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Fecha</th>
-                <th>Doctor</th>
-                <th>Diagnóstico</th>
-                <th class="text-right">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% histories.each do |history| %>
-                <tr>
-                  <td><%= history.registration_date&.strftime('%d %b %Y') || "Sin fecha" %></td>
-                  <td><%= history.doctor&.user&.name || "Doctor" %></td>
-                  <td class="text-muted"><%= truncate(history.diagnosis, length: 80) %></td>
-                  <td class="text-right">
-                    <%= link_to "Ver", doctors_patient_medical_history_path(patient, history), class: "btn-leva-ghost", style: "padding: 8px 14px; border-radius: 12px;" %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
-      <% else %>
-        <p class="muted mb-3">Este paciente no cuenta con historiales médicos.</p>
-        <%= link_to "Ver historiales de otros pacientes",
-                    doctors_patient_medical_history_path(patient, 0, show_others: true),
-                    class: "btn-leva-ghost", style: "padding: 8px 14px; border-radius: 12px;" %>
-      <% end %>
-    </section>
   <% end %>
 </div>
+
+<% end %>

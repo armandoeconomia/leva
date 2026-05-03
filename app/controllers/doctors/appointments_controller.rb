@@ -1,5 +1,4 @@
-class Doctors::AppointmentsController < ApplicationController
-  before_action :require_doctor!
+class Doctors::AppointmentsController < Doctors::BaseController
   before_action :set_appointment, only: [:show, :edit, :update, :destroy, :confirm, :cancel, :notes, :save_notes]
 
   def index
@@ -87,10 +86,6 @@ class Doctors::AppointmentsController < ApplicationController
 
   def history_params
     params.require(:medical_history).permit(:diagnosis, :treatment, :prescription)
-  end
-
-  def require_doctor!
-    redirect_to root_path, alert: "No tienes acceso como doctor" unless current_user&.doctor.present?
   end
 
   def appointment_params

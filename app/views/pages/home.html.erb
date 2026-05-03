@@ -1,1539 +1,2006 @@
+<%# ─── LEVA Landing Page ─────────────────────────────────────────── %>
+<% map_markers = (@medical_institutes || []).map { |i|
+     { id: i.id, name: i.name, address: i.address,
+       latitude: i.latitude, longitude: i.longitude }
+   } %>
+<% map_center = map_markers.first ? [map_markers.first[:latitude], map_markers.first[:longitude]] : [-4.0, -74.0] %>
+
 <style>
-  .leva-home {
-    background: linear-gradient(180deg, #f6f2ff 0%, #ffffff 100%);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .leva-home::before,
-  .leva-home::after {
-    content: "";
-    position: absolute;
-    width: 420px;
-    height: 420px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(169, 136, 255, 0.35) 0%, rgba(255, 255, 255, 0) 70%);
-    filter: blur(12px);
-    z-index: 0;
-  }
-
-  .leva-home::before {
-    top: -160px;
-    right: -90px;
-  }
-
-  .leva-home::after {
-    bottom: -160px;
-    left: -50px;
-  }
-
-  .mediapp-hero-shell {
-    border-radius: 2.75rem;
-    padding: clamp(1.5rem, 2.5vw, 3rem);
-    background: linear-gradient(135deg, rgba(248, 245, 255, 0.96), rgba(231, 239, 255, 0.96));
-    box-shadow: 0 45px 95px rgba(31, 22, 73, 0.22);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .mediapp-hero-shell::before,
-  .mediapp-hero-shell::after {
-    content: "";
-    position: absolute;
-    width: 360px;
-    height: 360px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(180, 107, 255, 0.15), transparent 70%);
-    filter: blur(12px);
-    z-index: 0;
-  }
-
-  .mediapp-hero-shell::before {
-    top: -120px;
-    left: -80px;
-  }
-
-  .mediapp-hero-shell::after {
-    bottom: -150px;
-    right: -120px;
-  }
-
-  .mediapp-hero-shell > * {
-    position: relative;
-    z-index: 1;
-  }
-
-  .mediapp-hero-card {
-    border-radius: 2.25rem;
-    box-shadow: 0 45px 85px rgba(56, 39, 120, 0.18);
-    background: rgba(255, 255, 255, 0.95);
-    padding: 0.85rem;
-    position: relative;
-  }
-
-  .mediapp-hero-frame {
-    border-radius: 2rem;
-    padding: 0;
-    background: transparent;
-    box-shadow: none;
-  }
-
-  .mediapp-hero-btn {
-    background: linear-gradient(90deg, #b46bff, #786dff);
-    border: none;
-    box-shadow: 0 20px 35px rgba(120, 109, 255, 0.35);
-  }
-
-  .mediapp-nav-btn {
-    border-radius: 999px;
-    padding-inline: 1.5rem;
-    box-shadow: 0 15px 30px rgba(122, 109, 255, 0.35);
-    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
-  }
-
-  .mediapp-nav-btn:hover,
-  .mediapp-nav-btn:focus {
-    transform: translateY(-2px);
-    box-shadow: 0 20px 40px rgba(122, 109, 255, 0.45);
-    opacity: 0.95;
-  }
-
-  .mediapp-outline-btn {
-    border: 1px solid rgba(122, 109, 255, 0.35);
-    color: #7a6dff;
-    background: #fff;
-  }
-
-  .mediapp-feature-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 1rem;
-    background-color: rgba(120, 109, 255, 0.1);
-    color: #7a6dff;
-    flex-shrink: 0;
-  }
-
-  .mediapp-feature-icon svg {
-    width: 28px;
-    height: 28px;
-  }
-
-  .mediapp-service-icon {
-    width: 40px;
-    height: 40px;
-  }
-
-  .mediapp-logo {
-    width: 46px;
-    height: 46px;
-    border-radius: 1rem;
-    box-shadow: 0 10px 20px rgba(122, 109, 255, 0.35);
-  }
-
-  .mediapp-hero-image {
-    border-radius: 1.5rem;
-    border: none;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    box-shadow: 0 20px 40px rgba(28, 20, 70, 0.25);
-  }
-
-  .mediapp-hero-photo {
-    border-radius: 1.75rem;
-    overflow: hidden;
-    position: relative;
-    background: #fff;
-  }
-
-  .mediapp-hero-photo::after {
-    content: "";
-    position: absolute;
-    width: 180px;
-    height: 180px;
-    top: -60px;
-    right: -50px;
-    background: radial-gradient(circle, rgba(180, 107, 255, 0.35), transparent 70%);
-    pointer-events: none;
-  }
-
-  .mediapp-nav-link {
-    color: #4a4a4a;
-    font-weight: 600;
-    text-decoration: none;
-    padding: 0.35rem 0.85rem;
-    border-radius: 999px;
-    transition: color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .mediapp-nav-link:hover {
-    color: #7a6dff;
-    background-color: rgba(122, 109, 255, 0.12);
-    box-shadow: 0 8px 20px rgba(122, 109, 255, 0.2);
-  }
-
-  .mediapp-contact-btn {
-    background: #f3edff;
-    color: #7a6dff;
-    box-shadow: 0 10px 20px rgba(122, 109, 255, 0.2);
-    border: none;
-  }
-
-  .mediapp-nav {
-    position: sticky;
-    top: 0;
-    z-index: 1020;
-    background: transparent;
-    backdrop-filter: blur(12px);
-    border-bottom: none;
-    box-shadow: none;
-  }
-
-  .mediapp-nav-inner {
-    background: rgba(255, 255, 255, 0.85);
-    border-radius: 999px;
-    padding: 0.5rem 1.5rem;
-    border: 1px solid rgba(122, 109, 255, 0.15);
-    box-shadow: 0 25px 60px rgba(29, 27, 58, 0.12);
-  }
-
-  .mediapp-contact-shell {
-    position: relative;
-    border-radius: 2rem;
-    background: linear-gradient(135deg, #fefefe, #eef3ff);
-    box-shadow: 0 35px 65px rgba(47, 31, 120, 0.08);
-    overflow: hidden;
-  }
-
-  .mediapp-contact-shell::before,
-  .mediapp-contact-shell::after {
-    content: "";
-    position: absolute;
-    width: 260px;
-    height: 260px;
-    border-radius: 50%;
-    background: rgba(180, 107, 255, 0.15);
-    filter: blur(40px);
-    z-index: 0;
-  }
-
-  .mediapp-contact-shell::before {
-    top: -100px;
-    right: -80px;
-  }
-
-  .mediapp-contact-shell::after {
-    bottom: -120px;
-    left: -120px;
-    background: rgba(120, 109, 255, 0.12);
-  }
-
-  .mediapp-contact-shell > * {
-    position: relative;
-    z-index: 1;
-  }
-
-  .mediapp-social-btn {
-    width: 42px;
-    height: 42px;
-    border-radius: 999px;
-    border: 1px solid rgba(74, 74, 74, 0.2);
-    background-color: #fff;
-    color: #1f152c;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 8px 18px rgba(17, 12, 34, 0.12);
-  }
-
-  .mediapp-social-btn:hover,
-  .mediapp-social-btn:focus {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(17, 12, 34, 0.18);
-  }
-
-  .mediapp-social-btn svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .mediapp-contact-badge {
-    background: rgba(122, 109, 255, 0.15);
-    color: #7362ff;
-    border-radius: 999px;
-    padding: 0.3rem 0.95rem;
-    font-weight: 600;
-    font-size: 0.85rem;
-  }
-
-  .mediapp-contact-chip {
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 1.25rem;
-    border: 1px solid rgba(122, 109, 255, 0.12);
-    padding: 0.9rem 1.2rem;
-    box-shadow: 0 18px 35px rgba(24, 16, 66, 0.08);
-    min-width: 240px;
-  }
-
-  .mediapp-contact-panel {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 1.75rem;
-    border: 1px solid rgba(122, 109, 255, 0.12);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  }
-
-  .mediapp-contact-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 1rem;
-    background: rgba(122, 109, 255, 0.12);
-    color: #7a6dff;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .mediapp-contact-signal {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #4cd964;
-    box-shadow: 0 0 0 rgba(76, 217, 100, 0.4);
-    animation: mediappPulse 1.8s infinite;
-  }
-
-  @keyframes mediappPulse {
-    0% {
-      box-shadow: 0 0 0 0 rgba(76, 217, 100, 0.4);
-    }
-    70% {
-      box-shadow: 0 0 0 12px rgba(76, 217, 100, 0);
-    }
-    100% {
-      box-shadow: 0 0 0 0 rgba(76, 217, 100, 0);
-    }
-  }
-
-  .mediapp-testimonial-shell {
-    position: relative;
-    border-radius: 2rem;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(238, 241, 248, 0.95));
-    box-shadow: 0 35px 65px rgba(47, 31, 120, 0.1);
-    overflow: hidden;
-  }
-
-  .mediapp-testimonial-shell::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at top right, rgba(193, 199, 226, 0.35), transparent 55%);
-    pointer-events: none;
-  }
-
-  .mediapp-testimonial-card {
-    background: #fff;
-    border-radius: 1.5rem;
-    box-shadow: 0 20px 45px rgba(24, 16, 66, 0.08);
-    position: relative;
-    z-index: 1;
-  }
-
-  .mediapp-doctor-card {
-    border: 1px solid rgba(122, 109, 255, 0.12);
-    border-radius: 2rem;
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(245, 241, 255, 0.98));
-    box-shadow: 0 25px 55px rgba(24, 16, 66, 0.15);
-  }
-
-  .mediapp-doctor-header h5 {
-    font-size: 1.5rem;
-  }
-
-  .mediapp-doctor-speciality {
-    font-weight: 600;
-    color: #7a6dff;
-  }
-
-  .mediapp-doctor-location {
-    font-size: 1.05rem;
-    color: #3a3456;
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-  }
-
-  .mediapp-doctor-location svg {
-    width: 20px;
-    height: 20px;
-    color: #7a6dff;
-    flex-shrink: 0;
-  }
-
-  .mediapp-doctor-chip {
-    border-radius: 999px;
-    background: rgba(122, 109, 255, 0.08);
-    padding: 0.4rem 1rem;
-    font-size: 0.95rem;
-    color: #6b6789;
-    display: inline-flex;
-    gap: 0.35rem;
-    align-items: center;
-  }
-
-  .mediapp-doctor-chip strong {
-    color: #332f5f;
-  }
-
-  .mediapp-review-card {
-    border: 1px solid rgba(122, 109, 255, 0.12);
-    border-radius: 2rem;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(239, 237, 255, 0.98));
-    box-shadow: 0 30px 65px rgba(24, 16, 66, 0.12);
-  }
-
-  .mediapp-review-rating {
-    min-width: 160px;
-  }
-
-  .mediapp-review-rating small {
-    letter-spacing: 0.02em;
-  }
-
-  .mediapp-review-quote {
-    font-size: 1.2rem;
-    line-height: 1.85;
-    color: #2f2c4a;
-  }
-
-  .mediapp-testimonial-avatar {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    border: 3px solid #fff;
-    box-shadow: 0 15px 35px rgba(35, 23, 89, 0.25);
-    overflow: hidden;
-    flex-shrink: 0;
-    background: linear-gradient(120deg, #c284ff, #9f7bff);
-  }
-
-  .mediapp-testimonial-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .mediapp-testimonial-quote {
-    font-size: 1.15rem;
-    color: #3a3456;
-    line-height: 1.7;
-  }
-
-  .mediapp-testimonial-role {
-    color: #7f7f98;
-  }
-
-  .mediapp-testimonial-stars svg {
-    width: 20px;
-    height: 20px;
-    fill: #f9b233;
-  }
-
-  .mediapp-carousel-control {
-    width: 3rem;
-    height: 3rem;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(122, 109, 255, 0.25);
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-  }
-
-  .mediapp-carousel-control span.carousel-control-prev-icon,
-  .mediapp-carousel-control span.carousel-control-next-icon {
-    filter: invert(1);
-  }
-
-  .mediapp-hero-badge {
-    background: rgba(122, 109, 255, 0.15);
-    color: #7a6dff;
-    font-weight: 600;
-    border-radius: 999px;
-    padding: 0.35rem 0.95rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-
-  .mediapp-gradient-card {
-    border-radius: 1.5rem;
-    border: 1px solid rgba(122, 109, 255, 0.08);
-    background: linear-gradient(180deg, #ffffff, #f6f2ff);
-    box-shadow: 0 25px 45px rgba(24, 16, 66, 0.12);
-  }
-
-  .mediapp-stat-value {
-    font-size: 2.1rem;
-    font-weight: 700;
-    color: #1d1b3a;
-  }
-
-  .mediapp-floating-btn {
-    position: fixed;
-    right: 1.5rem;
-    bottom: 6.5rem;
-    z-index: 1050;
-    border: none;
-    background-image: linear-gradient(115deg, #c47bff, #786dff);
-    box-shadow: 0 15px 35px rgba(122, 109, 255, 0.35);
-    padding: 0.65rem 1.25rem;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .mediapp-floating-btn:hover,
-  .mediapp-floating-btn:focus-visible {
-    transform: translateY(-3px);
-    box-shadow: 0 25px 55px rgba(51, 45, 99, 0.45);
-  }
-
-  .mediapp-floating-arrow {
-    width: 36px;
-    height: 36px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.95);
-    color: #6b5de9;
-    box-shadow: 0 10px 20px rgba(17, 11, 48, 0.2);
-  }
-
-  .mediapp-floating-arrow svg {
-    flex: none;
-  }
-
-
-  section[id] {
-    scroll-margin-top: 200px;
-  }
-
-  .leva-home main {
-    padding-top: 1.5rem;
-  }
-
-  .mediapp-map-card {
-    border-radius: 1.5rem;
-    background: #fff;
-    box-shadow: 0 25px 45px rgba(24, 16, 66, 0.12);
-    border: 1px solid rgba(122, 109, 255, 0.08);
-  }
-
-  #medical-institutes-map {
-    width: 100%;
-    height: 420px;
-    border-radius: 1.2rem;
-  }
-
-  .mediapp-location-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(122, 109, 255, 0.15);
-    color: #7a6dff;
-  }
-
-  .mediapp-location-item {
-    border: none;
-    background: transparent;
-    width: 100%;
-    text-align: left;
-    padding: 0;
-    border-radius: 1rem;
-    transition: background 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .mediapp-location-item:focus,
-  .mediapp-location-item:hover {
-    outline: none;
-    background: rgba(122, 109, 255, 0.07);
-    box-shadow: 0 10px 25px rgba(122, 109, 255, 0.1);
-  }
-
-  .mediapp-location-details .text-secondary {
-    margin-bottom: 0.1rem !important;
-  }
-
-  .mediapp-location-details small {
-    display: block;
-    margin-top: 0;
-    line-height: 1.2;
-  }
-
-  .mediapp-plan-price {
-    border-top: 1px solid rgba(122, 109, 255, 0.12);
-    margin-top: 1.25rem;
-    padding-top: 1rem;
-    display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
-  }
-
-  .mediapp-plan-price .amount {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #2c2359;
-  }
-
-  .mediapp-plan-price .billing {
-    font-size: 0.95rem;
-    color: #6c6a8a;
-    font-weight: 600;
-  }
-
-
-  .mediapp-section-card {
-    border-radius: 1.5rem;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .mediapp-section-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 25px 45px rgba(24, 16, 66, 0.18);
-  }
-
-  .mediapp-section-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-
-  .landing-chat {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    z-index: 1050;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 12px;
-  }
-
-  .landing-chat__panel {
-    width: 100%;
-    max-width: 360px;
-    background: #ffffff;
-    border-radius: 20px;
-    border: 1px solid rgba(122, 109, 255, 0.18);
-    box-shadow: 0 20px 60px rgba(29, 27, 58, 0.18);
-    padding: 18px;
-    margin-bottom: 12px;
-    transform: translateY(15px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-  }
-
-  .landing-chat__panel.is-open {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-  }
-
-  .landing-chat__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  }
-
-  .landing-chat__title {
-    font-weight: 700;
-    margin: 0;
-  }
-
-  .landing-chat__messages {
-    max-height: 320px;
-    overflow-y: auto;
-    display: grid;
-    gap: 10px;
-    padding-bottom: 6px;
-  }
-
-  .landing-chat__message {
-    border-radius: 16px;
-    padding: 12px 14px;
-    font-size: 0.94rem;
-    line-height: 1.35;
-    box-shadow: 0 10px 25px rgba(24, 16, 66, 0.08);
-  }
-
-  .landing-chat__message--assistant {
-    background: rgba(122, 109, 255, 0.1);
-    border: 1px solid rgba(122, 109, 255, 0.18);
-  }
-
-  .landing-chat__message--user {
-    background: linear-gradient(120deg, #9c7bff, #7c78ff);
-    color: #fff;
-    border: none;
-    justify-self: end;
-    text-align: right;
-  }
-
-  .landing-chat__message-author {
-    font-weight: 600;
-    margin-bottom: 4px;
-    font-size: 0.8rem;
-    color: #7a6dff;
-  }
-
-  .landing-chat__message--user .landing-chat__message-author {
-    color: rgba(255, 255, 255, 0.9);
-  }
-
-  .landing-chat__message-body {
-    color: #3d3d4e;
-    margin: 0;
-  }
-
-  .landing-chat__form textarea {
-    width: 100%;
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    border-radius: 12px;
-    padding: 10px 12px;
-    resize: none;
-    min-height: 70px;
-  }
-
-  .landing-chat__error {
-    color: #d9534f;
-    font-size: 0.85rem;
-    min-height: 18px;
-    margin-top: 4px;
-  }
-
-  .landing-chat__submit {
-    width: 100%;
-    border: none;
-    border-radius: 999px;
-    background: linear-gradient(90deg, #b46bff, #786dff);
-    padding: 10px 16px;
-    color: #fff;
-    font-weight: 600;
-    margin-top: 10px;
-  }
-
-  .landing-chat__submit:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-
-  .landing-chat .mediapp-floating-btn {
-    position: relative;
-    inset: 0;
-    bottom: unset;
-    right: unset;
-  }
-
-  @media (max-width: 576px) {
-    .landing-chat {
-      right: 12px;
-      bottom: 12px;
-    }
-  }
-
+/* ══════════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; }
+
+.leva-site {
+  font-family: "Inter", -apple-system, "Helvetica Neue", sans-serif;
+  color: #0f0d1a;
+  background: #faf9fc;
+  overflow-x: hidden;
+}
+
+/* ══════════════════════════════════════════════
+   NAV
+══════════════════════════════════════════════ */
+.leva-nav {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  padding: 12px 0;
+}
+
+.leva-nav__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(182,156,255,0.18);
+  border-radius: 999px;
+  padding: 10px 20px 10px 16px;
+  box-shadow: 0 8px 32px rgba(30,20,80,0.1);
+}
+
+.leva-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #0f0d1a;
+}
+
+.leva-nav__logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 6px 16px rgba(182,156,255,0.4);
+}
+
+.leva-nav__brand-name {
+  font-size: 1.2rem;
+  font-weight: 800;
+  background: linear-gradient(120deg, #6b3fff, #b46bff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.leva-nav__links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.leva-nav__link {
+  color: #4a4466;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  padding: 7px 14px;
+  border-radius: 999px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.leva-nav__link:hover {
+  background: rgba(182,156,255,0.12);
+  color: #6b3fff;
+}
+
+.leva-nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-leva-nav {
+  padding: 9px 20px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-leva-nav--outline {
+  background: transparent;
+  color: #6b3fff;
+  border: 1.5px solid rgba(107,63,255,0.3);
+}
+
+.btn-leva-nav--outline:hover { background: rgba(107,63,255,0.06); color: #6b3fff; }
+
+.btn-leva-nav--primary {
+  background: linear-gradient(120deg, #7b3fff, #b46bff);
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(107,63,255,0.35);
+}
+
+.btn-leva-nav--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 32px rgba(107,63,255,0.45);
+  color: #fff;
+}
+
+/* ══════════════════════════════════════════════
+   HERO
+══════════════════════════════════════════════ */
+.leva-hero {
+  position: relative;
+  min-height: 92vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 60px 0 40px;
+}
+
+.leva-hero__bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 75% 40%, rgba(182,156,255,0.28) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 20% 70%, rgba(107,63,255,0.14) 0%, transparent 55%),
+    linear-gradient(175deg, #f3eeff 0%, #faf9fc 55%, #fff 100%);
+  z-index: 0;
+}
+
+.leva-hero__glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(182,156,255,0.22) 0%, transparent 65%);
+  top: -120px;
+  right: -80px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.leva-hero__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.leva-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(107,63,255,0.1);
+  color: #6b3fff;
+  border: 1px solid rgba(107,63,255,0.2);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.leva-hero__title {
+  font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: #0f0d1a;
+  margin: 0 0 20px;
+}
+
+.leva-hero__title em {
+  font-style: normal;
+  background: linear-gradient(120deg, #7b3fff, #c47bff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.leva-hero__subtitle {
+  font-size: 1.15rem;
+  color: #5a546e;
+  line-height: 1.7;
+  max-width: 480px;
+  margin: 0 0 36px;
+}
+
+.leva-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 48px;
+}
+
+.btn-leva-cta {
+  padding: 14px 28px;
+  border-radius: 16px;
+  font-weight: 800;
+  font-size: 1rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-leva-cta--primary {
+  background: linear-gradient(120deg, #6b3fff, #c47bff);
+  color: #fff;
+  box-shadow: 0 16px 40px rgba(107,63,255,0.42);
+}
+
+.btn-leva-cta--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 50px rgba(107,63,255,0.52);
+  color: #fff;
+}
+
+.btn-leva-cta--outline {
+  background: #fff;
+  color: #0f0d1a;
+  border: 1.5px solid rgba(107,63,255,0.22);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+}
+
+.btn-leva-cta--outline:hover {
+  background: #f7f3ff;
+  color: #6b3fff;
+  transform: translateY(-1px);
+}
+
+.leva-hero__trust {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.leva-hero__avatars {
+  display: flex;
+}
+
+.leva-hero__avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2.5px solid #fff;
+  background: linear-gradient(135deg, #c47bff, #7b3fff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.8rem;
+  margin-left: -10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.leva-hero__avatar:first-child { margin-left: 0; }
+
+.leva-hero__avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.leva-hero__trust-text {
+  font-size: 0.875rem;
+  color: #5a546e;
+  font-weight: 500;
+}
+
+.leva-hero__trust-text strong {
+  color: #0f0d1a;
+  display: block;
+}
+
+/* Right side visual */
+.leva-hero__visual {
+  position: relative;
+}
+
+.leva-hero__card {
+  background: #fff;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(30,15,80,0.2), 0 0 0 1px rgba(182,156,255,0.15);
+  position: relative;
+}
+
+.leva-hero__card img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Floating info chips */
+.leva-float-chip {
+  position: absolute;
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px 16px;
+  box-shadow: 0 16px 40px rgba(30,15,80,0.16);
+  border: 1px solid rgba(182,156,255,0.18);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0f0d1a;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.leva-float-chip__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.leva-float-chip--tl {
+  top: -16px;
+  left: -24px;
+}
+
+.leva-float-chip--br {
+  bottom: -16px;
+  right: -20px;
+}
+
+.leva-float-chip--tr {
+  top: 40%;
+  right: -24px;
+}
+
+/* ══════════════════════════════════════════════
+   STATS BAR
+══════════════════════════════════════════════ */
+.leva-stats {
+  background: linear-gradient(120deg, #1a0845, #3b1f8a, #6b3fff);
+  padding: 48px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.leva-stats::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 50% 100% at 80% 50%, rgba(255,255,255,0.06) 0%, transparent 60%);
+}
+
+.leva-stats__grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.leva-stat {
+  text-align: center;
+  color: #fff;
+}
+
+.leva-stat__value {
+  font-size: 2.6rem;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, #fff, rgba(255,255,255,0.75));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.leva-stat__label {
+  font-size: 0.9rem;
+  opacity: 0.72;
+  font-weight: 500;
+}
+
+.leva-stat__divider {
+  width: 1px;
+  background: rgba(255,255,255,0.12);
+  align-self: stretch;
+  margin: auto 0;
+}
+
+/* ══════════════════════════════════════════════
+   SECTIONS SHARED
+══════════════════════════════════════════════ */
+.leva-section {
+  padding: 96px 0;
+}
+
+.leva-section__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.leva-section__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(107,63,255,0.08);
+  color: #6b3fff;
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+
+.leva-section__title {
+  font-size: clamp(1.9rem, 3vw, 2.7rem);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: #0f0d1a;
+  margin: 0 0 16px;
+}
+
+.leva-section__subtitle {
+  font-size: 1.05rem;
+  color: #5a546e;
+  line-height: 1.7;
+  max-width: 560px;
+}
+
+/* ══════════════════════════════════════════════
+   HOW IT WORKS
+══════════════════════════════════════════════ */
+.leva-how {
+  background: linear-gradient(180deg, #faf9fc 0%, #f3eeff 100%);
+}
+
+.leva-how__steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  margin-top: 56px;
+  position: relative;
+}
+
+.leva-how__steps::before {
+  content: "";
+  position: absolute;
+  top: 40px;
+  left: calc(16.66% + 20px);
+  right: calc(16.66% + 20px);
+  height: 2px;
+  background: linear-gradient(90deg, #c47bff, #7b3fff, #c47bff);
+  border-radius: 2px;
+  opacity: 0.3;
+}
+
+.leva-step {
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px 28px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(30,15,80,0.07);
+  border: 1px solid rgba(182,156,255,0.15);
+  transition: transform 0.25s, box-shadow 0.25s;
+  position: relative;
+}
+
+.leva-step:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 56px rgba(107,63,255,0.15);
+}
+
+.leva-step__number {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #7b3fff, #c47bff);
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  box-shadow: 0 12px 28px rgba(107,63,255,0.35);
+}
+
+.leva-step__title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f0d1a;
+  margin: 0 0 10px;
+}
+
+.leva-step__text {
+  font-size: 0.9rem;
+  color: #5a546e;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ══════════════════════════════════════════════
+   FEATURES / SERVICIOS
+══════════════════════════════════════════════ */
+.leva-features {
+  background: #fff;
+}
+
+.leva-features__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 56px;
+}
+
+.leva-feature {
+  background: #faf9fc;
+  border-radius: 22px;
+  padding: 28px 24px;
+  border: 1px solid rgba(182,156,255,0.14);
+  transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+}
+
+.leva-feature:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 50px rgba(107,63,255,0.1);
+  background: #fff;
+}
+
+.leva-feature__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(107,63,255,0.12), rgba(196,123,255,0.12));
+  color: #7b3fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 18px;
+}
+
+.leva-feature__title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f0d1a;
+  margin: 0 0 8px;
+}
+
+.leva-feature__text {
+  font-size: 0.875rem;
+  color: #5a546e;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ══════════════════════════════════════════════
+   ROLES SPLIT
+══════════════════════════════════════════════ */
+.leva-roles {
+  background: linear-gradient(180deg, #f3eeff 0%, #faf9fc 100%);
+}
+
+.leva-roles__tabs {
+  display: flex;
+  gap: 8px;
+  margin: 40px 0 32px;
+  border-bottom: 2px solid rgba(182,156,255,0.2);
+  padding-bottom: 0;
+}
+
+.leva-roles__tab {
+  padding: 10px 22px 12px;
+  font-weight: 700;
+  font-size: 0.925rem;
+  color: #5a546e;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.2s, border-color 0.2s;
+  border-radius: 0;
+}
+
+.leva-roles__tab.is-active {
+  color: #6b3fff;
+  border-color: #7b3fff;
+}
+
+.leva-roles__panel {
+  display: none;
+}
+
+.leva-roles__panel.is-active {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.leva-roles__visual {
+  background: linear-gradient(145deg, #1a0845, #3b1f8a);
+  border-radius: 28px;
+  padding: 36px 32px;
+  box-shadow: 0 32px 64px rgba(30,15,80,0.24);
+  position: relative;
+  overflow: hidden;
+}
+
+.leva-roles__visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(182,156,255,0.25) 0%, transparent 50%);
+}
+
+.leva-roles__visual-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.06));
+  border: 1px solid rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #fff;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.leva-roles__visual-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #fff;
+  margin: 0 0 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.leva-roles__visual-sub {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.65;
+  position: relative;
+  z-index: 1;
+}
+
+.leva-roles__features {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.leva-roles__feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255,255,255,0.85);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.leva-roles__check {
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b69cff;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.leva-roles__info-title {
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: #0f0d1a;
+  margin: 0 0 14px;
+}
+
+.leva-roles__info-text {
+  font-size: 1rem;
+  color: #5a546e;
+  line-height: 1.7;
+  margin: 0 0 28px;
+}
+
+.leva-roles__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 14px;
+  background: linear-gradient(120deg, #6b3fff, #c47bff);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.925rem;
+  text-decoration: none;
+  box-shadow: 0 10px 28px rgba(107,63,255,0.38);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.leva-roles__cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(107,63,255,0.48);
+  color: #fff;
+}
+
+/* ══════════════════════════════════════════════
+   MAP / LOCATIONS
+══════════════════════════════════════════════ */
+.leva-map-section {
+  background: #fff;
+}
+
+.leva-map-wrap {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 28px;
+  margin-top: 56px;
+  align-items: start;
+}
+
+.leva-map-card {
+  background: #faf9fc;
+  border-radius: 24px;
+  padding: 20px;
+  border: 1px solid rgba(182,156,255,0.18);
+  overflow: hidden;
+}
+
+#medical-institutes-map {
+  width: 100%;
+  height: 440px;
+  border-radius: 16px;
+}
+
+.leva-locations-list {
+  background: #faf9fc;
+  border-radius: 24px;
+  padding: 24px;
+  border: 1px solid rgba(182,156,255,0.18);
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.leva-locations-list__title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f0d1a;
+  margin: 0 0 16px;
+}
+
+.leva-location-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+}
+
+.leva-location-item:hover {
+  background: rgba(107,63,255,0.06);
+}
+
+.leva-location-item__icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: rgba(107,63,255,0.1);
+  color: #7b3fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.leva-location-item__name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0f0d1a;
+  margin: 0 0 2px;
+}
+
+.leva-location-item__address {
+  font-size: 0.8rem;
+  color: #5a546e;
+  margin: 0;
+}
+
+/* ══════════════════════════════════════════════
+   DOCTORS GRID
+══════════════════════════════════════════════ */
+.leva-doctors {
+  background: linear-gradient(180deg, #faf9fc 0%, #f3eeff 100%);
+}
+
+.leva-doctors__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-top: 52px;
+}
+
+.leva-doctor-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 28px 24px;
+  border: 1px solid rgba(182,156,255,0.15);
+  box-shadow: 0 8px 32px rgba(30,15,80,0.06);
+  transition: transform 0.25s, box-shadow 0.25s;
+  text-align: center;
+}
+
+.leva-doctor-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 56px rgba(107,63,255,0.14);
+}
+
+.leva-doctor-card__avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c47bff, #7b3fff);
+  color: #fff;
+  font-size: 1.8rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 12px 28px rgba(107,63,255,0.28);
+  border: 3px solid #fff;
+}
+
+.leva-doctor-card__name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f0d1a;
+  margin: 0 0 4px;
+}
+
+.leva-doctor-card__specialty {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #7b3fff;
+  margin: 0 0 8px;
+}
+
+.leva-doctor-card__institute {
+  font-size: 0.82rem;
+  color: #5a546e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin: 0;
+}
+
+/* ══════════════════════════════════════════════
+   TESTIMONIALS
+══════════════════════════════════════════════ */
+.leva-testimonials {
+  background: #fff;
+}
+
+.leva-testimonials__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-top: 52px;
+}
+
+.leva-testimonial {
+  background: linear-gradient(145deg, #faf9fc, #f3eeff);
+  border-radius: 22px;
+  padding: 28px 24px;
+  border: 1px solid rgba(182,156,255,0.18);
+  box-shadow: 0 8px 28px rgba(30,15,80,0.05);
+}
+
+.leva-testimonial__stars {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 16px;
+  color: #f9b233;
+  font-size: 1rem;
+}
+
+.leva-testimonial__quote {
+  font-size: 0.95rem;
+  color: #2f2c4a;
+  line-height: 1.75;
+  margin: 0 0 20px;
+  font-style: italic;
+}
+
+.leva-testimonial__author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.leva-testimonial__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c47bff, #7b3fff);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.leva-testimonial__name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #0f0d1a;
+  margin: 0;
+}
+
+.leva-testimonial__role {
+  font-size: 0.8rem;
+  color: #5a546e;
+  margin: 0;
+}
+
+/* ══════════════════════════════════════════════
+   CTA BAND
+══════════════════════════════════════════════ */
+.leva-cta-band {
+  background: linear-gradient(120deg, #1a0845 0%, #3b1f8a 50%, #6b3fff 100%);
+  padding: 80px 0;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.leva-cta-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 55% 80% at 15% 50%, rgba(182,156,255,0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 60% at 85% 50%, rgba(255,255,255,0.07) 0%, transparent 50%);
+}
+
+.leva-cta-band__content {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.leva-cta-band__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.88);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 20px;
+}
+
+.leva-cta-band__title {
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.15;
+  margin: 0 0 14px;
+}
+
+.leva-cta-band__sub {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.7);
+  margin: 0 0 36px;
+  line-height: 1.6;
+}
+
+.leva-cta-band__actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-leva-cta-band {
+  padding: 14px 30px;
+  border-radius: 16px;
+  font-weight: 800;
+  font-size: 1rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-leva-cta-band--white {
+  background: #fff;
+  color: #6b3fff;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+}
+
+.btn-leva-cta-band--white:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+  color: #6b3fff;
+}
+
+.btn-leva-cta-band--ghost {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border: 1.5px solid rgba(255,255,255,0.25);
+}
+
+.btn-leva-cta-band--ghost:hover {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* ══════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════ */
+.leva-footer {
+  background: #0a0617;
+  padding: 60px 0 32px;
+  color: rgba(255,255,255,0.55);
+}
+
+.leva-footer__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.leva-footer__top {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.leva-footer__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  text-decoration: none;
+}
+
+.leva-footer__logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.leva-footer__brand-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.leva-footer__desc {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  margin: 0;
+  color: rgba(255,255,255,0.45);
+}
+
+.leva-footer__col-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.45);
+  margin: 0 0 14px;
+}
+
+.leva-footer__links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.leva-footer__links a {
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.leva-footer__links a:hover { color: #b69cff; }
+
+.leva-footer__bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 28px;
+  font-size: 0.82rem;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.leva-footer__copy {
+  color: rgba(255,255,255,0.35);
+  margin: 0;
+}
+
+.leva-footer__legal {
+  display: flex;
+  gap: 20px;
+}
+
+.leva-footer__legal a {
+  color: rgba(255,255,255,0.35);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.leva-footer__legal a:hover { color: #b69cff; }
+
+/* ══════════════════════════════════════════════
+   AI CHAT WIDGET
+══════════════════════════════════════════════ */
+.leva-chat-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.leva-chat-toggle {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(120deg, #7b3fff, #c47bff);
+  color: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  box-shadow: 0 14px 36px rgba(107,63,255,0.42);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leva-chat-toggle:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 20px 48px rgba(107,63,255,0.52);
+}
+
+.leva-chat-panel {
+  width: 340px;
+  background: #fff;
+  border-radius: 22px;
+  border: 1px solid rgba(182,156,255,0.2);
+  box-shadow: 0 24px 64px rgba(30,15,80,0.18);
+  padding: 20px;
+  transform: translateY(12px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.leva-chat-panel.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.leva-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.leva-chat-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f0d1a;
+  margin: 0;
+}
+
+.leva-chat-close {
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0;
+}
+
+.leva-chat-messages {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.leva-chat-msg {
+  padding: 10px 13px;
+  border-radius: 14px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  max-width: 88%;
+}
+
+.leva-chat-msg--bot {
+  background: #f3eeff;
+  color: #2f2c4a;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.leva-chat-msg--user {
+  background: linear-gradient(120deg, #7b3fff, #b46bff);
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.leva-chat-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.leva-chat-textarea {
+  flex: 1;
+  border: 1.5px solid rgba(182,156,255,0.3);
+  border-radius: 14px;
+  padding: 10px 13px;
+  font-size: 0.875rem;
+  resize: none;
+  min-height: 60px;
+  color: #0f0d1a;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.leva-chat-textarea:focus {
+  border-color: #9d84ff;
+  box-shadow: 0 0 0 3px rgba(182,156,255,0.18);
+}
+
+.leva-chat-send {
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  border: none;
+  background: linear-gradient(120deg, #7b3fff, #b46bff);
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  align-self: flex-end;
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leva-chat-send:hover { transform: scale(1.07); }
+.leva-chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════ */
+@media (max-width: 992px) {
+  .leva-hero__container { grid-template-columns: 1fr; gap: 40px; }
+  .leva-hero__visual { max-width: 480px; margin: 0 auto; }
+  .leva-stats__grid { grid-template-columns: repeat(2, 1fr); }
+  .leva-how__steps { grid-template-columns: 1fr; }
+  .leva-how__steps::before { display: none; }
+  .leva-features__grid { grid-template-columns: 1fr 1fr; }
+  .leva-roles__panel.is-active { grid-template-columns: 1fr; }
+  .leva-map-wrap { grid-template-columns: 1fr; }
+  .leva-doctors__grid { grid-template-columns: 1fr 1fr; }
+  .leva-testimonials__grid { grid-template-columns: 1fr 1fr; }
+  .leva-footer__top { grid-template-columns: 1fr 1fr; gap: 32px; }
+}
+
+@media (max-width: 640px) {
+  .leva-nav__links { display: none; }
+  .leva-hero { padding: 40px 0 32px; }
+  .leva-stats__grid { grid-template-columns: 1fr 1fr; }
+  .leva-features__grid { grid-template-columns: 1fr; }
+  .leva-doctors__grid { grid-template-columns: 1fr; }
+  .leva-testimonials__grid { grid-template-columns: 1fr; }
+  .leva-float-chip--tl, .leva-float-chip--br, .leva-float-chip--tr { display: none; }
+  .leva-footer__top { grid-template-columns: 1fr; }
+  .leva-chat-panel { width: calc(100vw - 32px); }
+}
 </style>
 
-<% map_markers = (@medical_institutes || []).map do |institute|
-     {
-       id: institute.id,
-       name: institute.name,
-       address: institute.address,
-       latitude: institute.latitude,
-       longitude: institute.longitude
-     }
-   end %>
-<% map_center = map_markers.first ? [map_markers.first[:latitude], map_markers.first[:longitude]] : [-34.6037, -58.3816] %>
+<div class="leva-site" data-controller="landing-chat" id="leva-home-top">
 
-<div class="leva-home py-4 min-vh-100">
-  <div id="leva-home-top"></div>
-  <nav class="mediapp-nav w-100">
-    <div class="container mediapp-nav-inner d-flex flex-column flex-lg-row justify-content-between align-items-center gap-4 py-3">
-      <div class="d-flex align-items-center gap-3">
-        <%= link_to root_path, class: "d-inline-flex align-items-center gap-3 text-decoration-none" do %>
-          <%= image_tag "logo_leva.png", class: "mediapp-logo", alt: "Leva logo" %>
-          <span class="fw-semibold fs-4 text-dark mb-0">LEVA</span>
-        <% end %>
-      </div>
-      <div class="d-flex align-items-center gap-4 text-center flex-wrap">
-        <a class="mediapp-nav-link" href="#inicio" data-scroll-target="#inicio">Inicio</a>
-        <a class="mediapp-nav-link" href="#about" data-scroll-target="#about">Sobre Nosotros</a>
-        <a class="mediapp-nav-link" href="#servicios" data-scroll-target="#servicios">Servicios</a>
-        <a class="mediapp-nav-link" href="#testimonios" data-scroll-target="#testimonios">Testimonios</a>
-      </div>
-      <div class="d-flex align-items-center gap-3 flex-wrap justify-content-end">
-        <%= link_to "Contáctanos", "#contacto", class: "btn btn-sm text-white mediapp-hero-btn mediapp-nav-btn px-4", data: { scroll_target: "#contacto" } %>
+  <%# ─── NAVBAR ──────────────────────────────── %>
+  <nav class="leva-nav">
+    <div class="leva-nav__inner">
+      <%= link_to root_path, class: "leva-nav__brand" do %>
+        <%= image_tag "logo_leva.png", alt: "LEVA", class: "leva-nav__logo" %>
+        <span class="leva-nav__brand-name">LEVA</span>
+      <% end %>
+
+      <ul class="leva-nav__links">
+        <li><a href="#como-funciona" class="leva-nav__link">Cómo funciona</a></li>
+        <li><a href="#servicios" class="leva-nav__link">Servicios</a></li>
+        <li><a href="#roles" class="leva-nav__link">Para ti</a></li>
+        <li><a href="#ubicaciones" class="leva-nav__link">Ubicaciones</a></li>
+        <li><a href="#doctores" class="leva-nav__link">Doctores</a></li>
+      </ul>
+
+      <div class="leva-nav__actions">
         <% if user_signed_in? %>
-          <div class="dropdown">
-            <a href="#" class="d-inline-block" id="levaNavbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <%= image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar", alt: "Menú de usuario" %>
-            </a>
-            <div class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2" aria-labelledby="levaNavbarDropdown">
-              <%= link_to "Action", "#", class: "dropdown-item" %>
-              <%= link_to "Another action", "#", class: "dropdown-item" %>
-              <%= link_to "Log out", destroy_user_session_path, data: { turbo_method: :delete }, class: "dropdown-item" %>
-            </div>
-          </div>
+          <%= button_to "Cerrar sesión", destroy_user_session_path, method: :delete,
+              class: "btn-leva-nav btn-leva-nav--outline", form: { data: { turbo: false } } %>
         <% else %>
-          <%= link_to "Iniciar Sesión", new_user_session_path, class: "btn btn-sm text-white mediapp-hero-btn mediapp-nav-btn px-4" %>
+          <%= link_to "Iniciar sesión", new_user_session_path, class: "btn-leva-nav btn-leva-nav--outline" %>
+          <a href="#roles" class="btn-leva-nav btn-leva-nav--primary">
+            Empezar gratis <i class="fa fa-arrow-right"></i>
+          </a>
         <% end %>
       </div>
     </div>
   </nav>
 
-  <main class="container">
-    <% avatar_icon_sets = {
-      patient: [
-        'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=facearea&w=400&h=400&q=80',
-        'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=facearea&w=400&h=400&q=80',
-        'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=facearea&w=400&h=400&q=80',
-        'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=facearea&w=400&h=400&q=80'
-      ],
-      doctor: [
-        'https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=facearea&w=400&h=400&q=80',
-        'https://images.unsplash.com/photo-1527613426441-4da17471b66d?auto=format&fit=facearea&w=400&h=400&q=80',
-        'https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?auto=format&fit=facearea&w=400&h=400&q=80',
-        'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=facearea&w=400&h=400&q=80'
-      ],
-      clinic: [
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=facearea&w=400&h=400&q=80',
-        'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=facearea&w=400&h=400&q=80',
-        'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?auto=format&fit=facearea&w=400&h=400&q=80'
-      ]
-    } %>
-    <section id="inicio" class="mb-5 position-relative">
-      <div class="mediapp-hero-shell">
-        <div class="row align-items-center g-5">
-          <div class="col-lg-6">
-            <span class="mediapp-hero-badge mb-3">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 20s-6.5-4.35-6.5-9.5A4.5 4.5 0 0 1 10 6a4.3 4.3 0 0 1 2 1 4.3 4.3 0 0 1 2-1 4.5 4.5 0 0 1 4.5 4.5C18.5 15.65 12 20 12 20z" stroke="#7a6dff" stroke-width="1.5" fill="none"/>
-                <path d="M9 12h2l1-2 1 4 1-2h2" stroke="#7a6dff" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              Cuidado confiable
-            </span>
-            <h1 class="display-4 fw-bold mb-3">Tu salud, a un clic de distancia</h1>
-            <p class="fs-5 text-secondary mb-4">
-              Agenda citas con tus especialistas de confianza de forma rápida y segura. Simplificamos la experiencia médica con tecnología humana.
-            </p>
-            <div class="d-flex flex-wrap gap-3">
-              <a class="btn btn-lg text-white mediapp-hero-btn" data-scroll-target="#ubicaciones">Ver ubicaciones</a>
-              <a class="btn btn-lg mediapp-outline-btn px-4" href="#doctores" data-scroll-target="#doctores">Ver plantilla medica</a>
-            </div>
+  <%# ─── HERO ────────────────────────────────── %>
+  <section class="leva-hero" id="inicio">
+    <div class="leva-hero__bg"></div>
+    <div class="leva-hero__glow"></div>
+
+    <div class="leva-hero__container">
+      <div class="leva-hero__content">
+        <span class="leva-hero__eyebrow">
+          <i class="fa fa-circle-check"></i>
+          Plataforma médica inteligente
+        </span>
+        <h1 class="leva-hero__title">
+          Tu salud,<br>
+          <em>a un clic</em><br>
+          de distancia
+        </h1>
+        <p class="leva-hero__subtitle">
+          Agenda citas médicas, gestiona tu clínica y accede a inteligencia artificial médica — todo desde una sola plataforma diseñada para el cuidado moderno.
+        </p>
+        <div class="leva-hero__actions">
+          <%= link_to new_user_session_path, class: "btn-leva-cta btn-leva-cta--primary" do %>
+            <i class="fa fa-calendar-check"></i> Acceder a LEVA
+          <% end %>
+          <a href="#como-funciona" class="btn-leva-cta btn-leva-cta--outline">
+            Cómo funciona <i class="fa fa-arrow-down"></i>
+          </a>
+        </div>
+
+        <div class="leva-hero__trust">
+          <div class="leva-hero__avatars">
+            <div class="leva-hero__avatar">A</div>
+            <div class="leva-hero__avatar">M</div>
+            <div class="leva-hero__avatar">C</div>
+            <div class="leva-hero__avatar">R</div>
           </div>
-          <div class="col-lg-6">
-            <div class="mediapp-hero-card">
-              <div class="mediapp-hero-frame">
-                <div class="ratio ratio-4x3 mediapp-hero-photo">
-                  <%= image_tag "Foto_HomePage_Dos.png", class: "mediapp-hero-image", alt: "Equipo médico atendiendo pacientes en LEVA" %>
+          <div class="leva-hero__trust-text">
+            <strong>+500 profesionales de salud</strong>
+            ya usan LEVA hoy
+          </div>
+        </div>
+      </div>
+
+      <div class="leva-hero__visual">
+        <div class="leva-hero__card">
+          <%= image_tag "Foto_HomePage_Dos.png",
+                        alt: "Equipo médico LEVA",
+                        onerror: "this.style.height='420px';this.style.background='linear-gradient(135deg,#c47bff,#7b3fff)'" %>
+        </div>
+
+        <div class="leva-float-chip leva-float-chip--tl">
+          <div class="leva-float-chip__icon" style="background:rgba(93,211,158,0.15);color:#2ea87a;">
+            <i class="fa fa-circle-check"></i>
+          </div>
+          <div>
+            <div style="font-size:.7rem;color:#6f6f6f;font-weight:600;">Cita confirmada</div>
+            <div>Dr. García · 10:00 AM</div>
+          </div>
+        </div>
+
+        <div class="leva-float-chip leva-float-chip--br">
+          <div class="leva-float-chip__icon" style="background:rgba(182,156,255,0.15);color:#7b3fff;">
+            <i class="fa fa-robot"></i>
+          </div>
+          <div>
+            <div style="font-size:.7rem;color:#6f6f6f;font-weight:600;">Asistente IA</div>
+            <div>Disponible 24/7</div>
+          </div>
+        </div>
+
+        <div class="leva-float-chip leva-float-chip--tr">
+          <div class="leva-float-chip__icon" style="background:rgba(78,161,255,0.15);color:#4ea1ff;">
+            <i class="fa fa-chart-line"></i>
+          </div>
+          <div>
+            <div style="font-size:.7rem;color:#6f6f6f;font-weight:600;">Facturación</div>
+            <div>+35% este mes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%# ─── STATS ───────────────────────────────── %>
+  <div class="leva-stats">
+    <div class="leva-stats__grid">
+      <div class="leva-stat">
+        <div class="leva-stat__value">120K+</div>
+        <div class="leva-stat__label">Citas coordinadas</div>
+      </div>
+      <div class="leva-stat">
+        <div class="leva-stat__value">350+</div>
+        <div class="leva-stat__label">Especialistas aliados</div>
+      </div>
+      <div class="leva-stat">
+        <div class="leva-stat__value">4.9/5</div>
+        <div class="leva-stat__label">Satisfacción promedio</div>
+      </div>
+      <div class="leva-stat">
+        <div class="leva-stat__value">24/7</div>
+        <div class="leva-stat__label">Soporte con IA</div>
+      </div>
+    </div>
+  </div>
+
+  <%# ─── HOW IT WORKS ─────────────────────────── %>
+  <section class="leva-section leva-how" id="como-funciona">
+    <div class="leva-section__container">
+      <div style="text-align:center; max-width:620px; margin:0 auto;">
+        <span class="leva-section__tag"><i class="fa fa-list-check"></i> Proceso</span>
+        <h2 class="leva-section__title">Todo empieza en 3 pasos simples</h2>
+        <p class="leva-section__subtitle" style="margin:0 auto;">
+          Desde la creación de tu cuenta hasta tu primera cita confirmada. Sin filas, sin llamadas, sin esperas.
+        </p>
+      </div>
+
+      <div class="leva-how__steps">
+        <div class="leva-step">
+          <div class="leva-step__number">1</div>
+          <h3 class="leva-step__title">Accede a tu panel</h3>
+          <p class="leva-step__text">Inicia sesión como doctor, administrador o gerente. Cada rol tiene su propio panel personalizado con las herramientas que necesita.</p>
+        </div>
+        <div class="leva-step">
+          <div class="leva-step__number">2</div>
+          <h3 class="leva-step__title">Gestiona tu agenda</h3>
+          <p class="leva-step__text">Los doctores aceptan o rechazan citas. Los administradores coordinan la agenda diaria. Todo en tiempo real y desde cualquier dispositivo.</p>
+        </div>
+        <div class="leva-step">
+          <div class="leva-step__number">3</div>
+          <h3 class="leva-step__title">Mide tu negocio</h3>
+          <p class="leva-step__text">El gerente visualiza ingresos, rendimiento por sede y citas completadas con reportes detallados y gráficos mensuales automáticos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%# ─── FEATURES ─────────────────────────────── %>
+  <section class="leva-section leva-features" id="servicios">
+    <div class="leva-section__container">
+      <div style="max-width:560px;">
+        <span class="leva-section__tag"><i class="fa fa-star"></i> Características</span>
+        <h2 class="leva-section__title">Todo lo que tu clínica necesita</h2>
+        <p class="leva-section__subtitle">Una plataforma completa que centraliza la gestión médica, administrativa y financiera.</p>
+      </div>
+
+      <div class="leva-features__grid">
+        <div class="leva-feature">
+          <div class="leva-feature__icon"><i class="fa fa-calendar-check"></i></div>
+          <h3 class="leva-feature__title">Agenda inteligente</h3>
+          <p class="leva-feature__text">Sistema de citas con validación de horarios, confirmación instantánea y notificaciones automáticas para doctores y pacientes.</p>
+        </div>
+        <div class="leva-feature">
+          <div class="leva-feature__icon"><i class="fa fa-robot"></i></div>
+          <h3 class="leva-feature__title">Asistente IA médico</h3>
+          <p class="leva-feature__text">Cada rol tiene su propio asistente de inteligencia artificial: soporte clínico para doctores, operativo para admins y estratégico para gerentes.</p>
+        </div>
+        <div class="leva-feature">
+          <div class="leva-feature__icon"><i class="fa fa-chart-line"></i></div>
+          <h3 class="leva-feature__title">Reportes financieros</h3>
+          <p class="leva-feature__text">Ingresos por mes, por sede y por doctor. Ticket promedio, mejor período y proyecciones — todo visualizado en tiempo real.</p>
+        </div>
+        <div class="leva-feature">
+          <div class="leva-feature__icon"><i class="fa fa-hospital"></i></div>
+          <h3 class="leva-feature__title">Multi-sede</h3>
+          <p class="leva-feature__text">Gestiona múltiples clínicas o consultorios desde un solo lugar. El gerente crea y administra ubicaciones con total control.</p>
+        </div>
+        <div class="leva-feature">
+          <div class="leva-feature__icon"><i class="fa fa-notes-medical"></i></div>
+          <h3 class="leva-feature__title">Historiales médicos</h3>
+          <p class="leva-feature__text">Los doctores documentan diagnósticos, tratamientos y prescripciones de forma estructurada y accesible desde cualquier cita.</p>
+        </div>
+        <div class="leva-feature">
+          <div class="leva-feature__icon"><i class="fa fa-shield-halved"></i></div>
+          <h3 class="leva-feature__title">Acceso por roles</h3>
+          <p class="leva-feature__text">Cada usuario ve exactamente lo que necesita. Seguridad por capas con permisos específicos para doctor, administrador y gerente.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%# ─── ROLES ────────────────────────────────── %>
+  <section class="leva-section leva-roles" id="roles">
+    <div class="leva-section__container">
+      <div style="max-width:560px;">
+        <span class="leva-section__tag"><i class="fa fa-users"></i> Para cada rol</span>
+        <h2 class="leva-section__title">Una plataforma, tres experiencias únicas</h2>
+        <p class="leva-section__subtitle">LEVA adapta su interfaz y funcionalidades según quién accede.</p>
+      </div>
+
+      <div class="leva-roles__tabs" id="rolesTabs">
+        <button class="leva-roles__tab is-active" data-tab="doctor">Doctor</button>
+        <button class="leva-roles__tab" data-tab="admin">Administrador</button>
+        <button class="leva-roles__tab" data-tab="gerente">Gerente</button>
+      </div>
+
+      <!-- Panel Doctor -->
+      <div class="leva-roles__panel is-active" id="tab-doctor">
+        <div class="leva-roles__visual">
+          <div class="leva-roles__visual-icon"><i class="fa fa-user-doctor"></i></div>
+          <h3 class="leva-roles__visual-title">Panel del Doctor</h3>
+          <p class="leva-roles__visual-sub">Vista médica completa con agenda, pacientes y facturación personal.</p>
+          <ul class="leva-roles__features">
+            <li class="leva-roles__feature">
+              <span class="leva-roles__check"><i class="fa fa-check"></i></span>
+              Aceptar o rechazar citas pendientes
+            </li>
+            <li class="leva-roles__feature">
+              <span class="leva-roles__check"><i class="fa fa-check"></i></span>
+              Ver citas del día y agenda semanal
+            </li>
+            <li class="leva-roles__feature">
+              <span class="leva-roles__check"><i class="fa fa-check"></i></span>
+              Historial médico de cada paciente
+            </li>
+            <li class="leva-roles__feature">
+              <span class="leva-roles__check"><i class="fa fa-check"></i></span>
+              Estadísticas de facturación mensual
+            </li>
+            <li class="leva-roles__feature">
+              <span class="leva-roles__check"><i class="fa fa-check"></i></span>
+              Asistente IA de soporte clínico
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="leva-roles__info-title">Enfócate en lo que importa: tus pacientes</h3>
+          <p class="leva-roles__info-text">
+            Tu panel está diseñado para minimizar el tiempo administrativo. Revisa citas, acepta consultas, documenta diagnósticos y visualiza cuánto has generado este mes — todo en un flujo intuitivo.
+          </p>
+          <%= link_to new_user_session_path, class: "leva-roles__cta" do %>
+            Acceder como doctor <i class="fa fa-arrow-right"></i>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Panel Admin -->
+      <div class="leva-roles__panel" id="tab-admin">
+        <div class="leva-roles__visual">
+          <div class="leva-roles__visual-icon"><i class="fa fa-clipboard-list"></i></div>
+          <h3 class="leva-roles__visual-title">Panel del Administrador</h3>
+          <p class="leva-roles__visual-sub">Recepción digital con gestión completa de la agenda y coordinación entre doctores y pacientes.</p>
+          <ul class="leva-roles__features">
+            <li class="leva-roles__feature">
+              <span class="leva-roles__check"><i class="fa fa-check"></i></span>
+              Agenda diaria con todas las citas
+            </li>
+            <li class="leva-roles__feature">
+              <span class="leva-roles__check"><i class="fa fa-check"></i></span>
+              Crear, editar y eliminar citas
+            </li>
+            <li class="leva-roles__feature">
+              <span class="leva-roles__check"><i class="fa fa-check"></i></span>
+              Directorio de pacientes y doctores
+            </li>
+            <li class="leva-roles__feature">
+              <span class="leva-roles__check"><i class="fa fa-check"></i></span>
+              Registrar nuevos usuarios al sistema
+            </li>
+            <li class="leva-roles__feature">
+              <span class="leva-roles__check"><i class="fa fa-check"></i></span>
+              Asistente IA operativo
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="leva-roles__info-title">La recepción del siglo XXI</h3>
+          <p class="leva-roles__info-text">
+            Coordina la operación diaria de la clínica sin hojas de papel ni sistemas lentos. Visualiza la agenda completa, registra pacientes y mantén todo organizado desde un solo panel de control.
+          </p>
+          <%= link_to new_user_session_path, class: "leva-roles__cta" do %>
+            Acceder como administrador <i class="fa fa-arrow-right"></i>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Panel Gerente -->
+      <div class="leva-roles__panel" id="tab-gerente">
+        <div class="leva-roles__visual">
+          <div class="leva-roles__visual-icon"><i class="fa fa-chart-line"></i></div>
+          <h3 class="leva-roles__visual-title">Panel del Gerente</h3>
+          <p class="leva-roles__visual-sub">Vista financiera y estratégica del negocio con gestión de todas las sedes.</p>
+          <ul class="leva-roles__features">
+            <li class="leva-roles__feature">
+              <span class="leva-roles__check"><i class="fa fa-check"></i></span>
+              Ingresos totales e históricos
+            </li>
+            <li class="leva-roles__feature">
+              <span class="leva-roles__check"><i class="fa fa-check"></i></span>
+              Gráfico de facturación mensual
+            </li>
+            <li class="leva-roles__feature">
+              <span class="leva-roles__check"><i class="fa fa-check"></i></span>
+              Rendimiento por sede y doctor
+            </li>
+            <li class="leva-roles__feature">
+              <span class="leva-roles__check"><i class="fa fa-check"></i></span>
+              Abrir o cerrar ubicaciones
+            </li>
+            <li class="leva-roles__feature">
+              <span class="leva-roles__check"><i class="fa fa-check"></i></span>
+              Estado global de todas las citas
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="leva-roles__info-title">Control total del negocio médico</h3>
+          <p class="leva-roles__info-text">
+            Toma decisiones estratégicas con datos reales. Monitorea el desempeño financiero de cada sede, identifica los mejores meses y gestiona la expansión o cierre de ubicaciones desde un dashboard unificado.
+          </p>
+          <%= link_to new_user_session_path, class: "leva-roles__cta" do %>
+            Acceder como gerente <i class="fa fa-arrow-right"></i>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%# ─── MAP / LOCATIONS ───────────────────────── %>
+  <% if map_markers.any? %>
+    <section class="leva-section leva-map-section" id="ubicaciones">
+      <div class="leva-section__container">
+        <div style="max-width:560px;">
+          <span class="leva-section__tag"><i class="fa fa-location-dot"></i> Sedes</span>
+          <h2 class="leva-section__title">Encuéntranos cerca de ti</h2>
+          <p class="leva-section__subtitle">Sedes médicas con doctores especializados disponibles en tu área.</p>
+        </div>
+
+        <div class="leva-map-wrap">
+          <div class="leva-map-card">
+            <div id="medical-institutes-map"
+                 data-controller="map"
+                 data-map-markers-value="<%= json_escape(map_markers.to_json) %>"
+                 data-map-center-value="<%= json_escape(map_center.to_json) %>"
+                 data-map-zoom-value="5"></div>
+          </div>
+
+          <div class="leva-locations-list">
+            <p class="leva-locations-list__title"><%= map_markers.size %> sede<%= map_markers.size != 1 ? 's' : '' %> registrada<%= map_markers.size != 1 ? 's' : '' %></p>
+            <% map_markers.each do |m| %>
+              <button class="leva-location-item" type="button">
+                <div class="leva-location-item__icon">
+                  <i class="fa fa-hospital"></i>
                 </div>
-              </div>
-            </div>
+                <div>
+                  <p class="leva-location-item__name"><%= m[:name] %></p>
+                  <p class="leva-location-item__address"><%= m[:address].presence || "Ver en mapa" %></p>
+                </div>
+              </button>
+            <% end %>
           </div>
         </div>
       </div>
     </section>
+  <% end %>
 
-    <section class="row row-cols-2 row-cols-md-4 g-4 mb-5">
-      <div class="col">
-        <div class="mediapp-gradient-card text-center p-3 h-100">
-          <div class="mediapp-stat-value">120K+</div>
-          <p class="text-secondary mb-0">Citas coordinadas</p>
+  <%# ─── DOCTORS GRID ───────────────────────────── %>
+  <% if @featured_doctors.any? %>
+    <section class="leva-section leva-doctors" id="doctores">
+      <div class="leva-section__container">
+        <div style="text-align:center; max-width:560px; margin:0 auto;">
+          <span class="leva-section__tag"><i class="fa fa-user-doctor"></i> Plantilla médica</span>
+          <h2 class="leva-section__title">Conoce a nuestros especialistas</h2>
+          <p class="leva-section__subtitle" style="margin:0 auto;">Profesionales certificados listos para atenderte.</p>
         </div>
-      </div>
-      <div class="col">
-        <div class="mediapp-gradient-card text-center p-3 h-100">
-          <div class="mediapp-stat-value">350</div>
-          <p class="text-secondary mb-0">Especialistas aliados</p>
-        </div>
-      </div>
-      <div class="col">
-        <div class="mediapp-gradient-card text-center p-3 h-100">
-          <div class="mediapp-stat-value">4.9/5</div>
-          <p class="text-secondary mb-0">Satisfacción promedio</p>
-        </div>
-      </div>
-      <div class="col">
-        <div class="mediapp-gradient-card text-center p-3 h-100">
-          <div class="mediapp-stat-value">24/7</div>
-          <p class="text-secondary mb-0">Soporte inteligente</p>
+
+        <div class="leva-doctors__grid">
+          <% @featured_doctors.each do |doctor| %>
+            <div class="leva-doctor-card">
+              <div class="leva-doctor-card__avatar">
+                <%= doctor.user&.name&.first&.upcase || "D" %>
+              </div>
+              <p class="leva-doctor-card__name">
+                Dr. <%= doctor.user&.name %> <%= doctor.user&.last_name %>
+              </p>
+              <p class="leva-doctor-card__specialty">
+                <%= doctor.speciality&.humanize || "Especialista" %>
+              </p>
+              <p class="leva-doctor-card__institute">
+                <i class="fa fa-hospital" style="color:#b69cff;"></i>
+                <%= doctor.medical_institute&.name || "LEVA" %>
+              </p>
+            </div>
+          <% end %>
         </div>
       </div>
     </section>
+  <% end %>
 
-    <section id="ubicaciones" class="py-5">
-      <div class="row g-4 align-items-stretch">
-        <div class="col-lg-7">
-          <div class="mediapp-map-card p-3 h-100 d-flex flex-column gap-3">
+  <%# ─── TESTIMONIALS ───────────────────────────── %>
+  <section class="leva-section leva-testimonials" id="testimonios">
+    <div class="leva-section__container">
+      <div style="text-align:center; max-width:560px; margin:0 auto;">
+        <span class="leva-section__tag"><i class="fa fa-star"></i> Testimonios</span>
+        <h2 class="leva-section__title">Lo que dicen los que ya usan LEVA</h2>
+      </div>
+
+      <div class="leva-testimonials__grid">
+        <div class="leva-testimonial">
+          <div class="leva-testimonial__stars">
+            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+          </div>
+          <p class="leva-testimonial__quote">"Desde que usamos LEVA, la coordinación de citas se redujo de 2 horas diarias a 15 minutos. El panel del administrador es increíblemente intuitivo."</p>
+          <div class="leva-testimonial__author">
+            <div class="leva-testimonial__avatar">M</div>
             <div>
-              <span class="mediapp-hero-badge mb-2">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 20s-6.5-4.35-6.5-9.5A4.5 4.5 0 0 1 10 6a4.3 4.3 0 0 1 2 1 4.3 4.3 0 0 1 2-1 4.5 4.5 0 0 1 4.5 4.5C18.5 15.65 12 20 12 20z" stroke="#7a6dff" stroke-width="1.5" fill="none"/>
-                  <path d="M11.5 9.5a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0-3 0" stroke="#7a6dff" stroke-width="1.5" fill="none"/>
-                </svg>
-                Clínicas cercanas
-              </span>
-              <h2 class="fw-bold mb-1">Mapa de Instituciones</h2>
-              <p class="text-secondary mb-0">Visualiza de un vistazo dónde están ubicadas nuestras clínicas registradas.</p>
+              <p class="leva-testimonial__name">María Rodríguez</p>
+              <p class="leva-testimonial__role">Administradora · Clínica Norte</p>
             </div>
-            <div
-              id="medical-institutes-map"
-              data-controller="map"
-              data-map-markers-value="<%= json_escape(map_markers.to_json) %>"
-              data-map-center-value="<%= json_escape(map_center.to_json) %>"
-              data-map-zoom-value="5"
-            ></div>
           </div>
         </div>
-        <div class="col-lg-5">
-          <div class="card border-0 shadow-sm h-100 p-4">
-            <h3 class="fw-bold mb-3">Nuestras ubicaciones</h3>
-            <p class="text-secondary">Cada clínica cuenta con profesionales y especialidades listas para atenderte.</p>
-            <% if map_markers.present? %>
-              <ul class="list-unstyled mediapp-location-list mt-4">
-                <% @medical_institutes.each do |institute| %>
-                  <li class="mb-4">
-                    <button
-                      class="mediapp-location-item d-flex gap-3 align-items-start"
-                      type="button"
-                      data-action="click->map#focusMarker keypress->map#focusMarker"
-                      data-map-marker-id-param="<%= institute.id %>"
-                    >
-                      <div class="mediapp-location-icon d-flex align-items-center justify-content-center flex-shrink-0">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M12 20s-6.5-4.35-6.5-9.5A4.5 4.5 0 0 1 10 6a4.3 4.3 0 0 1 2 1 4.3 4.3 0 0 1 2-1 4.5 4.5 0 0 1 4.5 4.5C18.5 15.65 12 20 12 20z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                          <path d="M11.5 9.5a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0-3 0" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                        </svg>
-                      </div>
-                      <div class="mediapp-location-details">
-                        <h5 class="fw-semibold mb-1 text-dark"><%= institute.name %></h5>
-                        <p class="text-secondary mb-1"><%= institute.address %></p>
-                        <small class="text-muted"><strong>Tel:</strong> <%= institute.phone_number %></small>
-                      </div>
-                    </button>
-                  </li>
-                <% end %>
-              </ul>
-            <% else %>
-              <div class="alert alert-light border mt-4" role="alert">
-                Aún no hay ubicaciones con coordenadas disponibles. Actualiza las instituciones para mostrar el mapa.
-              </div>
-            <% end %>
+
+        <div class="leva-testimonial">
+          <div class="leva-testimonial__stars">
+            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+          </div>
+          <p class="leva-testimonial__quote">"El asistente IA me ayuda a preparar consultas y a revisar diagnósticos previos del paciente antes de cada cita. Un copiloto médico real."</p>
+          <div class="leva-testimonial__author">
+            <div class="leva-testimonial__avatar">C</div>
+            <div>
+              <p class="leva-testimonial__name">Dr. Carlos Medina</p>
+              <p class="leva-testimonial__role">Cardiólogo · Hospital Central</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="leva-testimonial">
+          <div class="leva-testimonial__stars">
+            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-stroke"></i>
+          </div>
+          <p class="leva-testimonial__quote">"Por fin tengo visibilidad financiera de las 3 sedes en un solo lugar. Los reportes mensuales me ahorran horas de trabajo cada semana."</p>
+          <div class="leva-testimonial__author">
+            <div class="leva-testimonial__avatar">A</div>
+            <div>
+              <p class="leva-testimonial__name">Andrea Torres</p>
+              <p class="leva-testimonial__role">Gerente General · Red LEVA</p>
+            </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="doctores" class="py-5">
-      <div class="mb-4 text-center">
-        <span class="mediapp-hero-badge mediapp-section-badge mb-3">
-          Nuestro equipo
-        </span>
-        <h2 class="fw-bold mb-2">Doctores disponibles</h2>
-        <p class="text-secondary fs-5 mb-0">
-          Conoce a los especialistas que pueden atenderte hoy mismo.
-        </p>
-      </div>
-
-      <div class="mediapp-testimonial-shell p-4 p-md-5">
-        <% if @featured_doctors.present? %>
-          <% doctor_avatar_icons = avatar_icon_sets[:doctor] %>
-          <% doctor_groups = @featured_doctors.each_slice(3).to_a %>
-          <div
-            id="levaDoctorsCarousel"
-            class="carousel slide"
-            data-bs-ride="carousel"
-            data-bs-interval="8000"
-            data-bs-touch="true"
-          >
-            <div class="carousel-indicators">
-              <% doctor_groups.each_with_index do |group, index| %>
-                <% label = group.map { |doctor| ("#{doctor.user&.name} #{doctor.user&.last_name}".strip.presence || 'Doctor') }.join(", ") %>
-                <button
-                  type="button"
-                  data-bs-target="#levaDoctorsCarousel"
-                  data-bs-slide-to="<%= index %>"
-                  class="<%= 'active' if index.zero? %>"
-                  aria-current="<%= index.zero? %>"
-                  aria-label="<%= label %>"
-                ></button>
-              <% end %>
-            </div>
-            <div class="carousel-inner px-2 px-md-5">
-              <% doctor_groups.each_with_index do |group, group_index| %>
-                <div class="carousel-item <%= 'active' if group_index.zero? %>">
-                  <div class="row g-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
-                    <% group.each do |doctor| %>
-                      <% doctor_name = "#{doctor.user&.name} #{doctor.user&.last_name}".strip %>
-                      <% speciality = doctor.speciality&.humanize %>
-                      <% institute = doctor.medical_institute %>
-                      <% avatar_options = doctor_avatar_icons.presence || avatar_icon_sets[:patient] %>
-                      <% avatar_url = avatar_options.sample %>
-                      <% initials = [doctor.user&.name&.first, doctor.user&.last_name&.first].compact.join %>
-                      <% institute_name = institute&.name || 'Instituto disponible' %>
-                      <% institute_address = institute&.address || 'Sin dirección registrada' %>
-                      <% doctor_registration = doctor.medical_registration.presence || 'Sin datos' %>
-                      <% phone_number = institute&.phone_number %>
-                      <div class="col d-flex">
-                        <div class="mediapp-testimonial-card mediapp-doctor-card mx-auto p-4 p-md-5 w-100 h-100">
-                          <div class="mediapp-doctor-header d-flex align-items-center gap-3 mb-4">
-                            <div class="mediapp-testimonial-avatar">
-                              <img src="<%= avatar_url %>" alt="Ícono del profesional <%= doctor_name.presence || initials.presence || 'LEVA' %>" loading="lazy">
-                            </div>
-                            <div>
-                              <h5 class="mb-1 fw-bold"><%= doctor_name.presence || 'Doctor disponible' %></h5>
-                              <div class="mediapp-doctor-speciality"><%= speciality || 'Especialidad no registrada' %></div>
-                            </div>
-                          </div>
-                          <p class="mediapp-doctor-location mb-4">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                              <path d="M12 20s-6.5-4.35-6.5-9.5A4.5 4.5 0 0 1 10 6a4.3 4.3 0 0 1 2 1 4.3 4.3 0 0 1 2-1 4.5 4.5 0 0 1 4.5 4.5C18.5 15.65 12 20 12 20z" stroke="currentColor" stroke-width="1.6" fill="none"/>
-                              <circle cx="12" cy="10.5" r="1.6" stroke="currentColor" stroke-width="1.6" fill="none"/>
-                            </svg>
-                            <span>Atiende en <strong><%= institute_name %></strong> · <span class="text-secondary"><%= institute_address %></span></span>
-                          </p>
-                          <div class="d-flex flex-wrap gap-3">
-                            <div class="mediapp-doctor-chip">
-                              Matrícula
-                              <strong><%= doctor_registration %></strong>
-                            </div>
-                            <% if phone_number.present? %>
-                              <div class="mediapp-doctor-chip">
-                                Tel
-                                <strong><%= phone_number %></strong>
-                              </div>
-                            <% end %>
-                          </div>
-                        </div>
-                      </div>
-                    <% end %>
-                  </div>
-                </div>
-              <% end %>
-            </div>
-            <button class="carousel-control-prev mediapp-carousel-control" type="button" data-bs-target="#levaDoctorsCarousel" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Anterior</span>
-            </button>
-            <button class="carousel-control-next mediapp-carousel-control" type="button" data-bs-target="#levaDoctorsCarousel" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Siguiente</span>
-            </button>
-          </div>
-        <% else %>
-          <div class="alert alert-light border mb-0" role="alert">
-            Aún no hay doctores disponibles para mostrar en este momento.
-          </div>
+  <%# ─── CTA BAND ──────────────────────────────── %>
+  <div class="leva-cta-band">
+    <div class="leva-cta-band__content">
+      <span class="leva-cta-band__tag"><i class="fa fa-rocket"></i> Empieza hoy</span>
+      <h2 class="leva-cta-band__title">Tu clínica merece tecnología de primer nivel</h2>
+      <p class="leva-cta-band__sub">Únete a los cientos de profesionales que ya optimizaron su práctica médica con LEVA.</p>
+      <div class="leva-cta-band__actions">
+        <%= link_to new_user_session_path, class: "btn-leva-cta-band btn-leva-cta-band--white" do %>
+          <i class="fa fa-arrow-right"></i> Ingresar a LEVA
         <% end %>
-      </div>
-    </section>
-
-    <section id="about" class="py-5">
-  <div class="container">
-    <div class="row align-items-center gy-4">
-      <div class="col-lg-5">
-        <span class="mediapp-hero-badge mediapp-section-badge mb-3">
-          Cuidado confiable
-        </span>
-
-        <h2 class="fw-bold mb-3">Sobre Nosotros</h2>
-
-        <p class="text-secondary fs-5 mb-3">
-          Nuestra misión es simplificar el acceso a la atención médica, conectando a pacientes y doctores de manera eficiente.
-        </p>
-
-        <p class="text-secondary mb-0">
-          Creemos en un sistema de salud donde la tecnología facilita el cuidado, permitiéndote gestionar tus citas con total tranquilidad y seguridad.
-        </p>
-      </div>
-
-      <div class="col-lg-7">
-        <div class="row g-3">
-          <div class="col-md-6">
-            <div class="mediapp-gradient-card mediapp-section-card h-100 p-4">
-              <div class="d-flex align-items-center mb-3">
-                <div class="mediapp-feature-icon d-flex align-items-center justify-content-center me-3">
-                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M13 2L4 14h6l-1 8 9-12h-6z" />
-                  </svg>
-                </div>
-                <h5 class="fw-bold mb-0">Fácil y rápido</h5>
-              </div>
-              <p class="text-secondary mb-0">
-                Encuentra disponibilidad y agenda tu cita en menos de un minuto.
-              </p>
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="mediapp-gradient-card mediapp-section-card h-100 p-4">
-              <div class="d-flex align-items-center mb-3">
-                <div class="mediapp-feature-icon d-flex align-items-center justify-content-center me-3">
-                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M12 2l8 4v6c0 5.27-3.52 10.01-8 11-4.48-0.99-8-5.73-8-11V6l8-4zm0 2.18L6 7.33v4.67c0 4.18 2.72 8.03 6 9.02 3.28-0.99 6-4.84 6-9.02V7.33l-6-3.15zm-1.25 9.82l-2.5-2.5L9.7 10.05l1.05 1.05 3.55-3.55L15.75 9l-5 5z" />
-                  </svg>
-                </div>
-                <h5 class="fw-bold mb-0">Especialistas de confianza</h5>
-              </div>
-              <p class="text-secondary mb-0">
-                Accede a una red verificada de profesionales médicos en diversas especialidades.
-              </p>
-            </div>
-          </div>
-
-
-          <div class="col-md-12">
-            <div class="mediapp-gradient-card mediapp-section-card h-100 p-4">
-              <div class="d-flex align-items-center mb-3">
-                <div class="mediapp-feature-icon mediapp-service-icon d-flex align-items-center justify-content-center me-3">
-                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M17 9h-1V7a4 4 0 00-8 0v2H7a2 2 0 00-2 2v9a2 2 0 002 2h10a2 2 0 002-2v-9a2 2 0 00-2-2zm-7-2a2 2 0 014 0v2h-4V7zm2 11a2 2 0 110-4 2 2 0 010 4z"/>
-                  </svg>
-                </div>
-                <h5 class="fw-bold mb-0">Seguridad garantizada</h5>
-              </div>
-              <p class="text-secondary mb-0">
-                Tus datos personales y médicos están protegidos con los más altos estándares.
-              </p>
-            </div>
-          </div>
-        </div>
+        <a href="#roles" class="btn-leva-cta-band btn-leva-cta-band--ghost">
+          Ver todos los roles
+        </a>
       </div>
     </div>
   </div>
-</section>
 
-
-    <section id="servicios" class="py-5">
-  <div class="container">
-    <div class="mb-4 text-center">
-      <span class="mediapp-hero-badge mediapp-section-badge mb-3">
-        Planes pensados para ti
-      </span>
-      <h2 class="fw-bold mb-2">Servicios</h2>
-      <p class="text-secondary fs-5 mb-0">
-        Planes flexibles diseñados para adaptarse a cada tipo de paciente o institución.
-      </p>
-    </div>
-
-
-    <div class="row g-3">
-      <div class="col-md-4">
-        <div class="mediapp-gradient-card mediapp-section-card h-100">
-          <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-start mb-3">
-              <div>
-                <h5 class="fw-bold mb-1">Planes anuales</h5>
-                <p class="small text-muted mb-0">
-                  Ideal para pacientes con seguimiento constante.
-                </p>
-              </div>
-              <div class="mediapp-feature-icon mediapp-service-icon d-flex align-items-center justify-content-center">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z" />
-                </svg>
-              </div>
-            </div>
-            <p class="text-secondary mb-0">
-              Cobertura completa durante todo el año con seguimiento y consultas ilimitadas.
-            </p>
-            <div class="mediapp-plan-price">
-              <span class="amount">2700 U$S</span>
-              <span class="billing text-uppercase small fw-semibold">Pago anual</span>
-            </div>
-          </div>
+  <%# ─── FOOTER ────────────────────────────────── %>
+  <footer class="leva-footer">
+    <div class="leva-footer__inner">
+      <div class="leva-footer__top">
+        <div>
+          <%= link_to root_path, class: "leva-footer__brand" do %>
+            <%= image_tag "logo_leva.png", alt: "LEVA", class: "leva-footer__logo" %>
+            <span class="leva-footer__brand-name">LEVA</span>
+          <% end %>
+          <p class="leva-footer__desc">
+            Plataforma médica inteligente que conecta doctores, administradores y gerentes en un ecosistema unificado.
+          </p>
+        </div>
+        <div>
+          <p class="leva-footer__col-title">Plataforma</p>
+          <ul class="leva-footer__links">
+            <li><a href="#como-funciona">Cómo funciona</a></li>
+            <li><a href="#servicios">Características</a></li>
+            <li><a href="#roles">Para doctores</a></li>
+            <li><a href="#roles">Para administradores</a></li>
+            <li><a href="#roles">Para gerentes</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="leva-footer__col-title">Empresa</p>
+          <ul class="leva-footer__links">
+            <li><%= link_to "Sobre nosotros", pages_about_path %></li>
+            <li><a href="#ubicaciones">Nuestras sedes</a></li>
+            <li><a href="#doctores">Plantilla médica</a></li>
+            <li><a href="#testimonios">Testimonios</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="leva-footer__col-title">Contacto</p>
+          <ul class="leva-footer__links">
+            <li><a href="mailto:soporte@leva.com">soporte@leva.com</a></li>
+            <li><a href="tel:+5400000000">+54 11 0000-0000</a></li>
+            <%= link_to "Iniciar sesión", new_user_session_path %>
+          </ul>
         </div>
       </div>
-
-      <!-- Planes por grupo médico -->
-      <div class="col-md-4">
-        <div class="mediapp-gradient-card mediapp-section-card h-100">
-          <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-start mb-3">
-              <div>
-                <h5 class="fw-bold mb-1">Planes por grupo médico</h5>
-                <p class="small text-muted mb-0">
-                  Pensado para equipos y especialidades.
-                </p>
-              </div>
-              <div class="mediapp-feature-icon mediapp-service-icon d-flex align-items-center justify-content-center">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z" />
-                </svg>
-              </div>
-            </div>
-            <p class="text-secondary mb-0">
-              Soluciones para clínicas y especialidades que necesitan coordinar agenda y pacientes.
-            </p>
-            <div class="mediapp-plan-price">
-              <span class="amount">250 U$S</span>
-              <span class="billing text-uppercase small fw-semibold">Por mes</span>
-            </div>
-          </div>
+      <div class="leva-footer__bottom">
+        <p class="leva-footer__copy">&copy; <%= Time.current.year %> LEVA. Todos los derechos reservados.</p>
+        <div class="leva-footer__legal">
+          <a href="#">Privacidad</a>
+          <a href="#">Términos</a>
+          <a href="#">Cookies</a>
         </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="mediapp-gradient-card mediapp-section-card h-100">
-          <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-start mb-3">
-              <div>
-                <h5 class="fw-bold mb-1">Planes personalizados</h5>
-                <p class="small text-muted mb-0">
-                  A la medida de tu institución.
-                </p>
-              </div>
-              <div class="mediapp-feature-icon mediapp-service-icon d-flex align-items-center justify-content-center">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z" />
-                </svg>
-              </div>
-            </div>
-            <p class="text-secondary mb-0">
-              Opciones ajustadas a tus necesidades específicas, con módulos y beneficios a medida.
-            </p>
-            <div class="mediapp-plan-price">
-              <span class="amount">320 U$S</span>
-              <span class="billing text-uppercase small fw-semibold">Por mes</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-    <section id="testimonios" class="py-5">
-      <div class="mb-4 text-center">
-        <h2 class="fw-bold">Testimonios</h2>
-        <p class="text-secondary fs-5 mb-0">Lo que nuestros usuarios dicen sobre su experiencia con LEVA.</p>
-      </div>
-      <% testimonials = [
-        {
-          name: "Carolina M.",
-          role: "Paciente de Cardiología",
-          quote: "\"Con LEVA pude agendar mi consulta en minutos. El proceso fue muy simple y seguro.\"",
-          label: "Carolina",
-          type: :patient
-        },
-        {
-          name: "Tomás R.",
-          role: "Paciente de Neurología",
-          quote: "\"Los especialistas verificados me dieron la confianza que necesitaba para hacer seguimiento.\"",
-          label: "Tomás",
-          type: :patient
-        },
-        {
-          name: "Gabriela S.",
-          role: "Paciente de Pediatría",
-          quote: "\"La seguridad de mis datos y la atención personalizada son excelentes.\"",
-          label: "Gabriela",
-          type: :patient
-        },
-        {
-          name: "Hernán D.",
-          role: "Paciente de Traumatología",
-          quote: "\"Encontré turnos rápidos y pude coordinar mis estudios sin llamadas interminables.\"",
-          label: "Hernán",
-          type: :patient
-        },
-        {
-          name: "Lucía P.",
-          role: "Paciente de Dermatología",
-          quote: "\"La app me recuerda mis controles y converso con mi médica desde casa.\"",
-          label: "Lucía",
-          type: :patient
-        },
-        {
-          name: "Dra. Valeria Ruiz",
-          role: "Cardióloga pediátrica",
-          quote: "\"Con LEVA puedo hacer seguimiento remoto a mis pacientes y compartir informes con sus familias en segundos.\"",
-          label: "Valeria",
-          type: :doctor
-        },
-        {
-          name: "Dr. Miguel Núñez",
-          role: "Director médico NeuroPlus",
-          quote: "\"La sincronización con nuestro sistema de historias clínicas redujo tiempos de espera y mejoró la adherencia a tratamientos.\"",
-          label: "Miguel",
-          type: :doctor
-        },
-        {
-          name: "Clínica Aurora",
-          role: "Centro integral asociado",
-          quote: "\"Coordinamos cirugías y turnos ambulatorios con mayor precisión. Nuestro equipo administrativo ganó horas valiosas.\"",
-          label: "Clínica Aurora",
-          type: :clinic
-        },
-        {
-          name: "Red Salud Viva",
-          role: "Clínica aliada",
-          quote: "\"Integramos todas nuestras sedes en un mismo panel y los pacientes reservan con cualquier especialidad desde el celular.\"",
-          label: "Red Salud Viva",
-          type: :clinic
-        }
-      ] %>
-      <% testimonial_avatar_pools = avatar_icon_sets %>
-      <% testimonial_chunks = testimonials.each_slice(3).to_a %>
-      <div class="mediapp-testimonial-shell p-4 p-md-5">
-        <div id="levaTestimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="7000" data-bs-touch="true">
-          <div class="carousel-indicators">
-            <% testimonial_chunks.each_with_index do |chunk, index| %>
-              <% label = chunk.map { |testimony| testimony[:label] }.join(", ") %>
-              <button
-                type="button"
-                data-bs-target="#levaTestimonialCarousel"
-                data-bs-slide-to="<%= index %>"
-                class="<%= 'active' if index.zero? %>"
-                aria-current="<%= index.zero? %>"
-                aria-label="<%= label %>"
-              ></button>
-            <% end %>
-          </div>
-          <div class="carousel-inner px-2 px-md-5">
-            <% testimonial_chunks.each_with_index do |chunk, chunk_index| %>
-              <div class="carousel-item <%= 'active' if chunk_index.zero? %>">
-                <div class="row g-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
-                  <% chunk.each do |testimonial| %>
-                    <% avatar_pool = testimonial_avatar_pools[testimonial[:type]] || testimonial_avatar_pools[:patient] %>
-                    <% avatar_url = avatar_pool.sample %>
-                    <div class="col d-flex">
-                      <div class="mediapp-testimonial-card mediapp-review-card mx-auto p-4 p-md-4 p-xl-5 w-100 h-100">
-                        <div class="row g-3 align-items-center mb-4">
-                          <div class="col-12 col-lg">
-                            <div class="d-flex align-items-center gap-3">
-                              <div class="mediapp-testimonial-avatar flex-shrink-0">
-                                <img src="<%= avatar_url %>" alt="Ícono de <%= testimonial[:name] %>" loading="lazy">
-                              </div>
-                              <div class="text-start">
-                                <h5 class="mb-0 fw-bold"><%= testimonial[:name] %></h5>
-                                <small class="mediapp-testimonial-role text-muted"><%= testimonial[:role] %></small>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-12 col-lg-auto">
-                            <div class="mediapp-review-rating text-lg-end">
-                              <div class="mediapp-testimonial-stars d-flex gap-1 justify-content-start justify-content-lg-end mb-1">
-                                <% 5.times do %>
-                                  <svg viewBox="0 0 24 24"><path d="M12 2l3 6.1 6.7.9-4.9 4.7 1.2 6.6-6-3.2-6 3.2 1.2-6.6-4.9-4.7 6.7-.9z"/></svg>
-                                <% end %>
-                              </div>
-                              <small class="fw-semibold text-secondary d-block">Calificación 5/5</small>
-                            </div>
-                          </div>
-                        </div>
-                        <p class="mediapp-testimonial-quote mediapp-review-quote mb-0"><%= testimonial[:quote] %></p>
-                      </div>
-                    </div>
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
-          </div>
-          <button class="carousel-control-prev mediapp-carousel-control" type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Anterior</span>
-          </button>
-          <button class="carousel-control-next mediapp-carousel-control" type="button" data-bs-target="#levaTestimonialCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Siguiente</span>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <section id="contacto" class="py-5">
-      <div class="mediapp-contact-shell p-4 p-lg-5">
-        <div class="row g-4 align-items-center">
-          <div class="col-lg-7">
-            <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
-              <span class="mediapp-contact-badge text-uppercase">Asistencia en vivo</span>
-              <small class="text-secondary">Tiempo de respuesta promedio <span class="fw-semibold text-dark">15 min</span></small>
-            </div>
-            <h3 class="fw-bold mb-2">¿Necesitas ayuda personalizada?</h3>
-            <p class="text-secondary mb-4">Nuestro equipo está disponible para resolver tus dudas, coordinar nuevas integraciones o ayudarte a migrar tu agenda con acompañamiento dedicado.</p>
-            <div class="d-flex flex-wrap gap-3 align-items-center">
-              <a href="mailto:leva.soporte@gmail.com" class="btn mediapp-hero-btn mediapp-nav-btn text-white px-4 py-3 fw-semibold">Contactar equipo</a>
-              <div class="d-flex align-items-center gap-2 text-secondary small">
-                <span class="mediapp-contact-signal"></span>
-                En línea ahora
-              </div>
-            </div>
-            <div class="d-flex flex-wrap gap-3 mt-4">
-              <div class="mediapp-contact-chip flex-fill flex-md-grow-0">
-                <div class="d-flex align-items-center gap-3">
-                  <span class="mediapp-contact-icon">
-                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-                      <path d="M6.6 10.8a11.05 11.05 0 0 0 6.6 6.6l1.5-2.2a1 1 0 0 1 1.1-.4c1.2.4 2.5.6 3.8.6a1 1 0 0 1 1 1v3.7a1 1 0 0 1-1 1C9.8 21.1 2.9 14.2 2.9 5.4a1 1 0 0 1 1-1H7.6a1 1 0 0 1 1 1c0 1.3.2 2.6.6 3.8a1 1 0 0 1-.4 1.1l-2.2 1.5z"/>
-                    </svg>
-                  </span>
-                  <div>
-                    <small class="text-secondary d-block">Línea directa</small>
-                    <strong class="text-dark">+11 0000 0000</strong>
-                  </div>
-                </div>
-              </div>
-              <div class="mediapp-contact-chip flex-fill flex-md-grow-0">
-                <div class="d-flex align-items-center gap-3">
-                  <span class="mediapp-contact-icon">
-                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-                      <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 2v.01L12 13 4 6.01V6h16zM4 18V8l8 7 8-7v10H4z"/>
-                    </svg>
-                  </span>
-                  <div>
-                    <small class="text-secondary d-block">Escríbenos</small>
-                    <strong class="text-dark">leva.soporte@gmail.com</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-5">
-            <div class="mediapp-contact-panel h-100 p-4">
-              <h6 class="fw-bold mb-3">Canales disponibles</h6>
-              <ul class="list-unstyled mb-0">
-                <li class="d-flex align-items-start gap-3 mb-3">
-                  <span class="mediapp-contact-icon">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                      <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
-                  </span>
-                  <div>
-                    <strong class="d-block">Gestor dedicado</strong>
-                    <small class="text-secondary">Acompañamiento para clínicas y grupos médicos.</small>
-                  </div>
-                </li>
-                <li class="d-flex align-items-start gap-3 mb-3">
-                  <span class="mediapp-contact-icon">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                      <path d="M12 3a9 9 0 0 0-9 9c0 3.87 2.45 7.16 5.86 8.39.43.08.59-.18.59-.4v-1.55c-2.39.52-2.89-1.04-2.89-1.04-.39-.98-.95-1.24-.95-1.24-.78-.54.06-.53.06-.53.86.06 1.31.88 1.31.88.77 1.31 2.02.93 2.51.71.08-.56.3-.93.54-1.15-1.91-.22-3.92-.96-3.92-4.27 0-.94.34-1.71.9-2.31-.09-.22-.38-1.11.09-2.31 0 0 .72-.23 2.36.88a8.1 8.1 0 0 1 4.3 0c1.64-1.11 2.36-.88 2.36-.88.47 1.2.18 2.09.09 2.31.56.6.9 1.37.9 2.31 0 3.32-2.01 4.05-3.93 4.27.31.27.59.8.59 1.62v2.4c0 .22.16.48.6.4A9 9 0 0 0 21 12 9 9 0 0 0 12 3z"/>
-                    </svg>
-                  </span>
-                  <div>
-                    <strong class="d-block">Comunidad médica</strong>
-                    <small class="text-secondary">Webinars, soporte y recursos exclusivos.</small>
-                  </div>
-                </li>
-                <li class="d-flex align-items-start gap-3">
-                  <span class="mediapp-contact-icon">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                      <path d="M20 2H4a2 2 0 0 0-2 2v16l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
-                    </svg>
-                  </span>
-                  <div>
-                    <strong class="d-block">Chat prioritario</strong>
-                    <small class="text-secondary">Respuesta instantánea desde la app o WhatsApp.</small>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="container border-top pt-4 mt-4">
-    <div class="row gy-2 align-items-center">
-      <div class="col-md-8 text-center text-md-start">
-        <small class="text-secondary d-block">&copy; 2025 LEVA. Todos los derechos reservados.</small>
-        <small class="text-secondary">Contacto: <a href="mailto:leva.soporte@gmail.com" class="text-decoration-none text-secondary">leva.soporte@gmail.com</a> · +11 0000 0000</small>
-      </div>
-      <div class="col-md-4 text-center text-md-end">
-        <div class="d-flex justify-content-center justify-content-md-end gap-2 mb-2">
-          <a class="btn mediapp-social-btn" href="https://x.com" target="_blank" rel="noopener" aria-label="X">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M18.27 2H21l-6.24 7.1L22 22h-5.93l-4.29-6-4.95 6H3.21l6.79-7.76L2.5 2h6.02l4.03 5.5L18.27 2z"/>
-            </svg>
-          </a>
-          <a class="btn mediapp-social-btn" href="https://www.linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-9 15H7v-7h3v7zm-1.5-8.1a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5zM20 18h-3v-3.5c0-2.1-2.25-1.93-2.25 0V18h-3v-7h3v1.1c1.4-2.58 5.25-2.77 5.25 2.46V18z"/>
-            </svg>
-          </a>
-          <a class="btn mediapp-social-btn" href="https://www.instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2A3.2 3.2 0 1 1 12 8a3.2 3.2 0 0 1 0 6.2z"/>
-              <path d="M17.5 2h-11A4.5 4.5 0 0 0 2 6.5v11A4.5 4.5 0 0 0 6.5 22h11a4.5 4.5 0 0 0 4.5-4.5v-11A4.5 4.5 0 0 0 17.5 2zm2.7 15.5a2.7 2.7 0 0 1-2.7 2.7h-11a2.7 2.7 0 0 1-2.7-2.7v-11a2.7 2.7 0 0 1 2.7-2.7h11a2.7 2.7 0 0 1 2.7 2.7v11z"/>
-              <circle cx="17.4" cy="6.6" r="1.1"/>
-            </svg>
-          </a>
-        </div>
-        <small class="text-secondary">Innovamos la experiencia médica digital.</small>
       </div>
     </div>
   </footer>
-</div>
 
-<div class="landing-chat" data-controller="landing-chat">
-  <div class="landing-chat__panel" data-landing-chat-target="panel" aria-live="polite">
-    <div class="landing-chat__header">
-      <div>
-        <p class="landing-chat__title mb-0">Agenda inteligente</p>
-        <small class="text-secondary">Consulta horarios disponibles</small>
+  <%# ─── AI CHAT WIDGET ─────────────────────────── %>
+  <div class="leva-chat-widget" data-landing-chat-target="widget">
+    <div class="leva-chat-panel" data-landing-chat-target="panel">
+      <div class="leva-chat-header">
+        <p class="leva-chat-title"><i class="fa fa-robot" style="color:#9d84ff;"></i>&nbsp; Asistente LEVA</p>
+        <button class="leva-chat-close" data-action="click->landing-chat#togglePanel" aria-label="Cerrar">
+          <i class="fa fa-times"></i>
+        </button>
       </div>
-      <button type="button" class="btn btn-link text-decoration-none p-0 text-secondary" data-action="landing-chat#toggle" aria-label="Cerrar chat">
-        ×
-      </button>
-    </div>
-    <div class="landing-chat__messages" data-landing-chat-target="messages">
-      <div class="landing-chat__message landing-chat__message--assistant" data-initial-message="true" data-message="Hola 👋 ¿Deseas conocer horarios disponibles o agendar una cita? Indica la especialidad que necesitas.">
-        <p class="landing-chat__message-author mb-1">Asistente LEVA</p>
-        <p class="landing-chat__message-body mb-0">Hola 👋 ¿Deseas conocer horarios disponibles o agendar una cita? Indica la especialidad que necesitas.</p>
+      <div class="leva-chat-messages" data-landing-chat-target="messages">
+        <div class="leva-chat-msg leva-chat-msg--bot">
+          ¡Hola! Soy el asistente de LEVA. Puedo ayudarte con información sobre disponibilidad, citas y servicios. ¿En qué puedo ayudarte?
+        </div>
       </div>
+      <%= form_with url: message_public_assistant_path, method: :post,
+                    data: { action: "submit->landing-chat#sendMessage",
+                            landing_chat_target: "form" } do |f| %>
+        <div class="leva-chat-input-row">
+          <%= f.text_area :content,
+                          placeholder: "Escribe tu consulta...",
+                          class: "leva-chat-textarea",
+                          data: { landing_chat_target: "input" },
+                          rows: 2 %>
+          <button type="submit" class="leva-chat-send" data-landing-chat-target="submit">
+            <i class="fa fa-paper-plane"></i>
+          </button>
+        </div>
+        <p data-landing-chat-target="error" style="color:#d9534f;font-size:.82rem;min-height:16px;margin:6px 0 0;"></p>
+      <% end %>
     </div>
-    <div class="landing-chat__error" data-landing-chat-target="error"></div>
-    <form class="landing-chat__form" data-action="submit->landing-chat#send" data-landing-chat-target="form">
-      <label for="landing_chat_input" class="visually-hidden">Escribe tu mensaje</label>
-      <textarea id="landing_chat_input" placeholder="Ej. Necesito cardiólogo para la próxima semana" data-landing-chat-target="input"></textarea>
-      <button type="submit" class="landing-chat__submit" data-landing-chat-target="submit">Preguntar al asistente</button>
-    </form>
+
+    <button class="leva-chat-toggle" data-action="click->landing-chat#togglePanel" aria-label="Chat con LEVA">
+      <i class="fa fa-comment-medical" data-landing-chat-target="toggleIcon"></i>
+    </button>
   </div>
-  <button type="button"
-          class="btn btn-primary rounded-pill shadow mediapp-floating-btn d-inline-flex align-items-center gap-2 px-3 py-2"
-          aria-label="Consultas rápidas"
-          data-action="landing-chat#toggle">
-    <span class="fw-semibold text-white text-uppercase small">Asistente IA</span>
-    <span class="mediapp-floating-arrow rounded-circle ms-2">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 5l-1.41 1.41L15.17 11H6v2h9.17l-4.58 4.59L12 19l7-7z" fill="currentColor"/>
-      </svg>
-    </span>
-  </button>
+
 </div>
 
+<%# ─── SCRIPTS ────────────────────────────────── %>
 <script>
-  const levaSmoothNav = () => {
-    const nav = document.querySelector('.mediapp-nav');
-    const navOffset = (nav?.offsetHeight || 0) + 20;
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(el => {
+  el.addEventListener('click', e => {
+    const target = document.querySelector(el.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
 
-    document.querySelectorAll('[data-scroll-target]').forEach((link) => {
-      if (link.dataset.bound === 'true') return;
-      link.dataset.bound = 'true';
-      link.addEventListener('click', (event) => {
-        event.preventDefault();
-        const target = document.querySelector(link.dataset.scrollTarget);
-        if (!target) return;
+// Roles tabs
+document.querySelectorAll('.leva-roles__tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.leva-roles__tab').forEach(t => t.classList.remove('is-active'));
+    document.querySelectorAll('.leva-roles__panel').forEach(p => p.classList.remove('is-active'));
+    tab.classList.add('is-active');
+    const panel = document.getElementById('tab-' + tab.dataset.tab);
+    if (panel) panel.classList.add('is-active');
+  });
+});
 
-        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
-        const scrollTo = Math.max(targetPosition - navOffset, 0);
+// Intersection observer for scroll animations
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.08 });
 
-        window.scrollTo({ top: scrollTo, behavior: 'smooth' });
-      });
-    });
-  };
-
-  document.addEventListener('DOMContentLoaded', levaSmoothNav);
-  document.addEventListener('turbo:load', levaSmoothNav);
+document.querySelectorAll('.leva-step, .leva-feature, .leva-doctor-card, .leva-testimonial').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(24px)';
+  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  observer.observe(el);
+});
 </script>

@@ -1,38 +1,49 @@
-<div class="admin-page-header">
+<% content_for :page_title do %>
+  Recepción · Usuario
+<% end %>
+
+<div class="panel-page-header">
   <div>
-    <span class="page-eyebrow">Ficha del usuario</span>
-    <h1 class="admin-page-title"><%= @user.name %> <%= @user.last_name %></h1>
-    <p class="admin-page-description">
-      Informacion clave para coordinar citas, notificaciones y accesos dentro del equipo.
-    </p>
+    <span class="panel-eyebrow"><i class="fa fa-user"></i> Usuarios</span>
+    <h1 class="panel-page-title"><%= @user.name %> <%= @user.last_name %></h1>
+    <p class="panel-page-description">Ficha del usuario. Información de contacto y acceso dentro del sistema.</p>
   </div>
-  <div class="admin-actions">
-    <span class="status-chip"><%= @user.admin? ? "Administrador" : "Usuario estandar" %></span>
+  <div class="d-flex gap-2">
+    <%= link_to "Editar", edit_admin_user_path(@user), class: "btn-panel-primary" %>
+    <%= link_to "Volver al listado", admin_users_path, class: "btn-panel-ghost" %>
   </div>
 </div>
 
-<div class="admin-card">
-  <div class="admin-details">
-    <div class="admin-detail-item">
-      <p class="admin-detail-label">Correo</p>
-      <p class="admin-detail-value"><%= @user.email %></p>
+<div class="panel-card">
+  <div class="panel-card__header">
+    <div>
+      <span class="panel-eyebrow"><i class="fa fa-id-badge"></i> Perfil</span>
     </div>
-    <div class="admin-detail-item">
-      <p class="admin-detail-label">Telefono</p>
-      <p class="admin-detail-value"><%= @user.phone_number.presence || "Sin numero" %></p>
-    </div>
-    <div class="admin-detail-item">
-      <p class="admin-detail-label">Genero</p>
-      <p class="admin-detail-value"><%= @user.gender&.humanize || "No especificado" %></p>
-    </div>
-    <div class="admin-detail-item">
-      <p class="admin-detail-label">Creado el</p>
-      <p class="admin-detail-value"><%= @user.created_at.strftime("%d %b %Y") %></p>
-    </div>
+    <span class="status-pill <%= @user.admin? || @user.gerente? ? 'completado' : 'pendiente' %>">
+      <% if @user.gerente? %>Gerente
+      <% elsif @user.admin? %>Administrador
+      <% elsif @user.doctor.present? %>Doctor
+      <% else %>Usuario estándar
+      <% end %>
+    </span>
   </div>
 
-  <div class="admin-form-actions">
-    <%= link_to "Editar", edit_admin_user_path(@user), class: "btn-leva-primary" %>
-    <%= link_to "Volver al listado", admin_users_path, class: "btn-leva-ghost" %>
+  <div class="panel-details">
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Correo</p>
+      <p class="panel-detail-value"><%= @user.email %></p>
+    </div>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Teléfono</p>
+      <p class="panel-detail-value"><%= @user.phone_number.presence || "Sin número" %></p>
+    </div>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Género</p>
+      <p class="panel-detail-value"><%= @user.gender&.humanize || "No especificado" %></p>
+    </div>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Miembro desde</p>
+      <p class="panel-detail-value"><%= @user.created_at.strftime("%d %b %Y") %></p>
+    </div>
   </div>
 </div>

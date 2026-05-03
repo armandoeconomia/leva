@@ -1,0 +1,42 @@
+<%= simple_form_for [:gerente, @medical_institute], html: { class: "panel-form" } do |f| %>
+  <%= f.error_notification %>
+
+  <div class="panel-form-grid">
+    <div>
+      <%= f.label :name, "Nombre de la sede" %>
+      <%= f.input_field :name, class: "login-input", placeholder: "Clínica Norte, Hospital Central..." %>
+    </div>
+    <div>
+      <%= f.label :institute_type, "Tipo de instituto" %>
+      <%= f.input_field :institute_type, as: :select,
+            collection: MedicalInstitute.institute_types.keys.map { |t| [t.humanize, t] },
+            include_blank: "Seleccionar...",
+            class: "login-input" %>
+    </div>
+    <div>
+      <%= f.label :address, "Dirección" %>
+      <%= f.input_field :address, class: "login-input", placeholder: "Calle 123, Ciudad" %>
+    </div>
+    <div>
+      <%= f.label :phone_number, "Teléfono" %>
+      <%= f.input_field :phone_number, class: "login-input", placeholder: "+57 300 000 0000" %>
+    </div>
+    <div>
+      <%= f.label :emergency_phone_number, "Tel. emergencias" %>
+      <%= f.input_field :emergency_phone_number, class: "login-input", placeholder: "+57 300 000 0001" %>
+    </div>
+    <div>
+      <%= f.label :user_id, "Responsable" %>
+      <%= f.input_field :user_id, as: :select,
+            collection: @users.map { |u| ["#{u.name} #{u.last_name}", u.id] },
+            include_blank: "Seleccionar responsable",
+            class: "login-input" %>
+    </div>
+  </div>
+
+  <div class="panel-form-actions">
+    <%= f.submit @medical_institute.new_record? ? "Crear sede" : "Guardar cambios",
+                class: "btn-panel-primary" %>
+    <%= link_to "Cancelar", gerente_medical_institutes_path, class: "btn-panel-ghost" %>
+  </div>
+<% end %>

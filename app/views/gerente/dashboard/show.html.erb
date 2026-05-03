@@ -1,0 +1,169 @@
+<% content_for :page_title do %>
+  Finanzas · Dashboard
+<% end %>
+
+<div class="panel-page-header">
+  <div>
+    <span class="panel-eyebrow"><i class="fa fa-chart-line"></i> Gerencia</span>
+    <h1 class="panel-page-title">Resumen financiero</h1>
+    <p class="panel-page-description">
+      Monitorea los ingresos del negocio, el rendimiento por sede y el estado global de las citas.
+    </p>
+  </div>
+  <div class="d-flex gap-2 flex-wrap">
+    <%= link_to "Nueva ubicación", new_gerente_medical_institute_path, class: "btn-panel-primary" %>
+    <%= link_to "Ver ubicaciones", gerente_medical_institutes_path, class: "btn-panel-ghost" %>
+  </div>
+</div>
+
+<!-- KPIs -->
+<div class="panel-metrics">
+  <div class="panel-metric panel-metric--accent">
+    <div class="panel-metric__icon" style="background: rgba(182,156,255,0.2);">
+      <i class="fa fa-dollar-sign"></i>
+    </div>
+    <p class="panel-metric__value"><%= number_to_currency(@total_revenue_all_time, precision: 0, unit: "$") %></p>
+    <p class="panel-metric__label">Ingresos totales (histórico)</p>
+  </div>
+  <div class="panel-metric panel-metric--success">
+    <div class="panel-metric__icon" style="background: rgba(93,211,158,0.2); color: #2ea87a;">
+      <i class="fa fa-calendar-check"></i>
+    </div>
+    <p class="panel-metric__value"><%= @total_appointments_all_time %></p>
+    <p class="panel-metric__label">Citas completadas (histórico)</p>
+  </div>
+  <div class="panel-metric panel-metric--warning">
+    <div class="panel-metric__icon" style="background: rgba(255,202,58,0.2); color: #a07900;">
+      <i class="fa fa-clock"></i>
+    </div>
+    <p class="panel-metric__value"><%= @appointments_by_status[:pendiente] %></p>
+    <p class="panel-metric__label">Citas pendientes</p>
+  </div>
+  <div class="panel-metric">
+    <div class="panel-metric__icon">
+      <i class="fa fa-hospital"></i>
+    </div>
+    <p class="panel-metric__value"><%= @institutes.count %></p>
+    <p class="panel-metric__label">Ubicaciones activas</p>
+  </div>
+</div>
+
+<!-- Gráfico mensual -->
+<div class="panel-card">
+  <div class="panel-card__header">
+    <div>
+      <span class="panel-eyebrow"><i class="fa fa-chart-bar"></i> Ventas</span>
+      <h2 class="panel-card__title">Ingresos por mes</h2>
+      <p class="panel-card__description">Evolución de ingresos basada en citas completadas (últimos 6 meses).</p>
+    </div>
+    <div class="d-flex flex-column align-items-end gap-1">
+      <strong style="font-size:1.4rem; color:#2A2A2A;"><%= number_to_currency(@sales_summary[:total_revenue], precision: 0) %></strong>
+      <span style="font-size:0.8rem; color:#6f6f6f;">Total período</span>
+    </div>
+  </div>
+
+  <% if @monthly_data.present? %>
+    <div class="d-flex gap-4 flex-wrap mb-4">
+      <div>
+        <p style="font-size:0.75rem; color:#6f6f6f; text-transform:uppercase; letter-spacing:.08em; margin:0 0 2px;">Citas facturadas</p>
+        <strong style="font-size:1.1rem;"><%= @sales_summary[:total_appointments] %></strong>
+      </div>
+      <div>
+        <p style="font-size:0.75rem; color:#6f6f6f; text-transform:uppercase; letter-spacing:.08em; margin:0 0 2px;">Ticket promedio</p>
+        <strong style="font-size:1.1rem;"><%= number_to_currency(@sales_summary[:average_ticket], precision: 0) %></strong>
+      </div>
+      <% if @sales_summary[:best_month_label].present? %>
+        <div>
+          <p style="font-size:0.75rem; color:#6f6f6f; text-transform:uppercase; letter-spacing:.08em; margin:0 0 2px;">Mejor mes</p>
+          <strong style="font-size:1.1rem;"><%= @sales_summary[:best_month_label] %> · <%= number_to_currency(@sales_summary[:best_month_revenue], precision: 0) %></strong>
+        </div>
+      <% end %>
+    </div>
+
+    <% max_rev = @monthly_data.map { |p| p[:revenue] }.max.to_f %>
+    <div class="panel-chart">
+      <% @monthly_data.each do |point| %>
+        <% height = max_rev.zero? ? 4 : ((point[:revenue] / max_rev) * 100).round.clamp(4, 100) %>
+        <div class="panel-chart__col">
+          <div class="panel-chart__bar-wrap">
+            <div class="panel-chart__bar" style="height: <%= height %>%;">
+              <div class="panel-chart__tooltip"><%= number_to_currency(point[:revenue], precision: 0) %></div>
+            </div>
+          </div>
+          <p class="panel-chart__label"><%= point[:label] %></p>
+          <p class="panel-chart__sub"><%= point[:appointments] %> citas</p>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p style="color:#6f6f6f; margin:0;">Aún no hay citas completadas para mostrar.</p>
+  <% end %>
+</div>
+
+<!-- Ingresos por sede -->
+<div class="panel-card" style="margin-top:20px;">
+  <div class="panel-card__header">
+    <div>
+      <span class="panel-eyebrow"><i class="fa fa-hospital"></i> Sedes</span>
+      <h2 class="panel-card__title">Rendimiento por ubicación</h2>
+      <p class="panel-card__description">Comparativa de citas e ingresos por sede médica.</p>
+    </div>
+    <%= link_to "Gestionar ubicaciones", gerente_medical_institutes_path, class: "btn-panel-ghost" %>
+  </div>
+
+  <% if @revenue_by_institute.any? %>
+    <div class="panel-table-wrapper">
+      <table class="panel-table">
+        <thead>
+          <tr>
+            <th>Sede</th>
+            <th class="text-center">Citas completadas</th>
+            <th class="text-right" style="text-align:right;">Ingresos estimados</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @revenue_by_institute.each do |data| %>
+            <% institute = @institutes.find { |i| i.name == data[:name] } %>
+            <tr>
+              <td><strong><%= data[:name] %></strong></td>
+              <td class="text-center"><%= data[:appointments] %></td>
+              <td style="text-align:right; font-weight:700; color: #3b1f8a;"><%= number_to_currency(data[:revenue], precision: 0) %></td>
+              <td>
+                <% if institute %>
+                  <%= link_to "Ver", gerente_medical_institute_path(institute), class: "btn-panel-link" %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <p style="color:#6f6f6f; margin:0;">No hay ubicaciones con datos de citas todavía.</p>
+  <% end %>
+</div>
+
+<!-- Estado de citas -->
+<div class="panel-card" style="margin-top:20px;">
+  <div class="panel-card__header">
+    <div>
+      <span class="panel-eyebrow"><i class="fa fa-circle-info"></i> Estado global</span>
+      <h2 class="panel-card__title">Distribución de citas</h2>
+    </div>
+  </div>
+  <div class="panel-metrics" style="grid-template-columns: repeat(3, 1fr); margin-bottom:0;">
+    <div class="panel-metric panel-metric--warning">
+      <p class="panel-metric__value"><%= @appointments_by_status[:pendiente] %></p>
+      <p class="panel-metric__label">Pendientes</p>
+    </div>
+    <div class="panel-metric panel-metric--success">
+      <p class="panel-metric__value"><%= @appointments_by_status[:completado] %></p>
+      <p class="panel-metric__label">Completadas</p>
+    </div>
+    <div class="panel-metric panel-metric--danger">
+      <p class="panel-metric__value"><%= @appointments_by_status[:cancelado] %></p>
+      <p class="panel-metric__label">Canceladas</p>
+    </div>
+  </div>
+</div>

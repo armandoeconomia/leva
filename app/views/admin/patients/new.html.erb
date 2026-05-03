@@ -1,13 +1,15 @@
-<div class="admin-page-header">
+<% content_for :page_title do %>
+  Recepción · Registrar Paciente
+<% end %>
+
+<div class="panel-page-header">
   <div>
-    <span class="page-eyebrow">Expedientes</span>
-    <h1 class="admin-page-title">Registrar paciente</h1>
-    <p class="admin-page-description">
-      Completa los datos esenciales para brindar acompanamiento personalizado desde el primer contacto.
-    </p>
+    <span class="panel-eyebrow"><i class="fa fa-user-plus"></i> Pacientes</span>
+    <h1 class="panel-page-title">Registrar paciente</h1>
+    <p class="panel-page-description">Completa los datos esenciales para brindar acompañamiento personalizado desde el primer contacto.</p>
   </div>
-  <div class="admin-actions">
-    <%= link_to "Volver al listado", admin_patients_path, class: "btn-leva-ghost" %>
+  <div class="d-flex gap-2">
+    <%= link_to "Volver al listado", admin_patients_path, class: "btn-panel-ghost" %>
   </div>
 </div>
 

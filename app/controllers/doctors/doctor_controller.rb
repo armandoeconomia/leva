@@ -1,5 +1,4 @@
-class Doctors::DoctorController < ApplicationController
-  before_action :require_doctor!
+class Doctors::DoctorController < Doctors::BaseController
   before_action :set_doctor
 
   def show
@@ -25,10 +24,6 @@ class Doctors::DoctorController < ApplicationController
 
   def set_doctor
     @doctor = current_user.doctor
-  end
-
-  def require_doctor!
-    redirect_to root_path, alert: "No tienes acceso como doctor" unless current_user&.doctor.present?
   end
 
   def doctor_params

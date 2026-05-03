@@ -3,9 +3,9 @@ class PagesController < ApplicationController
 
   def home
     if user_signed_in?
-      return redirect_to patients_dashboard_path(current_user) if current_user.patient
-      return redirect_to doctors_dashboard_path(current_user) if current_user.doctor
-      return redirect_to admin_dashboard_path(current_user) if current_user.admin
+      return redirect_to doctors_dashboard_path if current_user.doctor?
+      return redirect_to gerente_dashboard_path  if current_user.gerente?
+      return redirect_to admin_dashboard_path    if current_user.admin?
     end
 
     @medical_institutes = MedicalInstitute.where.not(latitude: nil, longitude: nil)

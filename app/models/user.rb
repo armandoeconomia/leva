@@ -22,4 +22,12 @@ class User < ApplicationRecord
     doctor.present?
   end
 
+  def admin?
+    admin == true
+  end
+
+  def gerente?
+    gerente == true
+  end
+
 end

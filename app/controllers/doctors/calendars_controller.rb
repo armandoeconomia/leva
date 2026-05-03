@@ -1,5 +1,4 @@
-class Doctors::CalendarsController < ApplicationController
-  before_action :require_doctor!
+class Doctors::CalendarsController < Doctors::BaseController
   before_action :set_doctor
   before_action :set_calendar, only: [:show, :edit, :update, :destroy]
 
@@ -48,10 +47,6 @@ class Doctors::CalendarsController < ApplicationController
 
   def calendar_params
     params.require(:calendar).permit(:date)
-  end
-
-  def require_doctor!
-    redirect_to root_path, alert: "No estás autorizado para ver esta sección." unless current_user&.doctor.present?
   end
 
   def set_doctor

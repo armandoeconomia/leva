@@ -1,0 +1,64 @@
+<% content_for :page_title do %>
+  Gerencia · Ubicaciones
+<% end %>
+
+<div class="panel-page-header">
+  <div>
+    <span class="panel-eyebrow"><i class="fa fa-hospital"></i> Ubicaciones</span>
+    <h1 class="panel-page-title">Sedes médicas</h1>
+    <p class="panel-page-description">Gestiona las ubicaciones del negocio: abre nuevas sedes o cierra las existentes.</p>
+  </div>
+  <%= link_to "Nueva sede", new_gerente_medical_institute_path, class: "btn-panel-primary" %>
+</div>
+
+<div class="panel-card">
+  <% if @medical_institutes.any? %>
+    <div class="panel-table-wrapper">
+      <table class="panel-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+            <th>Tipo</th>
+            <th class="text-center">Doctores</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @medical_institutes.each do |institute| %>
+            <tr>
+              <td><strong><%= institute.name %></strong></td>
+              <td><%= institute.address.presence || "—" %></td>
+              <td><%= institute.phone_number.presence || "—" %></td>
+              <td>
+                <span class="status-pill <%= institute.institute_type == 'publico' ? 'completado' : 'pendiente' %>">
+                  <%= institute.institute_type&.humanize %>
+                </span>
+              </td>
+              <td class="text-center"><%= institute.doctors.size %></td>
+              <td>
+                <div style="display:flex;gap:8px;justify-content:flex-end;">
+                  <%= link_to "Ver", gerente_medical_institute_path(institute), class: "btn-panel-link" %>
+                  <%= link_to "Editar", edit_gerente_medical_institute_path(institute), class: "btn-panel-ghost", style: "padding:6px 12px;font-size:.8rem;" %>
+                  <%= button_to "Cerrar sede",
+                                gerente_medical_institute_path(institute),
+                                method: :delete,
+                                data: { confirm: "¿Confirmas cerrar y eliminar '#{institute.name}'? Esta acción no se puede deshacer." },
+                                class: "btn-panel-danger",
+                                style: "padding:6px 12px;font-size:.8rem;" %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div style="text-align:center;padding:48px 0;color:#aaa;">
+      <i class="fa fa-hospital" style="font-size:2.5rem;margin-bottom:12px;display:block;"></i>
+      <p style="margin:0;font-size:1rem;">No hay sedes registradas todavía.</p>
+      <%= link_to "Crear primera sede", new_gerente_medical_institute_path, class: "btn-panel-primary", style: "margin-top:16px;display:inline-flex;" %>
+    </div>
+  <% end %>
+</div>

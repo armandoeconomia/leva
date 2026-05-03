@@ -1,48 +1,62 @@
-<div class="admin-card">
-  <%= form_with model: [:admin, @user], local: true, html: { class: "admin-form" } do |f| %>
-    <div class="field-group">
-      <%= f.label :name, "Nombre" %>
-      <%= f.text_field :name, placeholder: "Nombre de pila" %>
+<div class="panel-card">
+  <%= form_with model: [:admin, @user], local: true, html: { class: "panel-form" } do |f| %>
+    <% if @user.errors.any? %>
+      <div style="border-radius:12px;padding:14px 18px;background:rgba(231,76,60,.08);color:#a44545;font-weight:600;border:1px solid rgba(231,76,60,.15);">
+        Revisa los siguientes campos:
+        <ul style="margin:8px 0 0 18px;padding:0;color:#666;font-weight:500;">
+          <% @user.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="panel-form-grid">
+      <div>
+        <%= f.label :name, "Nombre" %>
+        <%= f.text_field :name, placeholder: "Nombre de pila" %>
+      </div>
+      <div>
+        <%= f.label :last_name, "Apellidos" %>
+        <%= f.text_field :last_name, placeholder: "Apellidos" %>
+      </div>
     </div>
 
-    <div class="field-group">
-      <%= f.label :last_name, "Apellidos" %>
-      <%= f.text_field :last_name, placeholder: "Apellidos" %>
-    </div>
-
-    <div class="field-group">
-      <%= f.label :email, "Correo" %>
+    <div>
+      <%= f.label :email, "Correo electrónico" %>
       <%= f.email_field :email, placeholder: "correo@leva.com" %>
     </div>
 
-    <div class="field-group">
-      <%= f.label :password, "Contrasena" %>
-      <%= f.password_field :password, placeholder: "********" %>
+    <div class="panel-form-grid">
+      <div>
+        <%= f.label :password, "Contraseña" %>
+        <%= f.password_field :password, placeholder: "Dejar en blanco para no cambiar" %>
+      </div>
+      <div>
+        <%= f.label :password_confirmation, "Confirmar contraseña" %>
+        <%= f.password_field :password_confirmation, placeholder: "Repite la contraseña" %>
+      </div>
     </div>
 
-    <div class="field-group">
-      <%= f.label :password_confirmation, "Confirmar contrasena" %>
-      <%= f.password_field :password_confirmation, placeholder: "Repite la contrasena" %>
+    <div class="panel-form-grid">
+      <div>
+        <%= f.label :phone_number, "Teléfono" %>
+        <%= f.text_field :phone_number, placeholder: "+57 300 000 0000" %>
+      </div>
+      <div>
+        <%= f.label :gender, "Género" %>
+        <%= f.select :gender, User.genders.keys.map { |g| [g.humanize, g] }, { prompt: "Selecciona género" } %>
+      </div>
     </div>
 
-    <div class="field-group">
-      <%= f.label :phone_number, "Telefono" %>
-      <%= f.text_field :phone_number, placeholder: "+506 8888 8888" %>
+    <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:#f5f5f5;border-radius:12px;">
+      <%= f.check_box :admin, style: "width:18px;height:18px;border-radius:6px;cursor:pointer;" %>
+      <%= f.label :admin, "Usuario administrador (recepcionista)", style: "margin:0;font-weight:600;cursor:pointer;" %>
     </div>
 
-    <div class="field-group">
-      <%= f.label :gender, "Genero" %>
-      <%= f.select :gender, User.genders.keys.map { |g| [g.humanize, g] } %>
-    </div>
-
-    <div class="form-check">
-      <%= f.check_box :admin %>
-      <%= f.label :admin, "Usuario administrador" %>
-    </div>
-
-    <div class="admin-form-actions">
-      <%= f.submit "Guardar cambios", class: "btn-leva-primary" %>
-      <%= link_to "Cancelar", admin_users_path, class: "btn-leva-ghost" %>
+    <div class="panel-form-actions">
+      <%= f.submit "Guardar cambios", class: "btn-panel-primary" %>
+      <%= link_to "Cancelar", admin_users_path, class: "btn-panel-ghost" %>
     </div>
   <% end %>
 </div>

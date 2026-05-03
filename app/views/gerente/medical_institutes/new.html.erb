@@ -1,0 +1,18 @@
+<% content_for :page_title do %>
+  Gerencia · Nueva sede
+<% end %>
+
+<div class="panel-page-header">
+  <div>
+    <%= link_to gerente_medical_institutes_path, class: "btn-panel-ghost", style: "margin-bottom:12px;display:inline-flex;" do %>
+      <i class="fa fa-arrow-left"></i>&nbsp; Volver
+    <% end %>
+    <span class="panel-eyebrow"><i class="fa fa-plus"></i> Nueva sede</span>
+    <h1 class="panel-page-title">Abrir nueva ubicación</h1>
+    <p class="panel-page-description">Registra una nueva sede médica para el negocio.</p>
+  </div>
+</div>
+
+<div class="panel-card" style="max-width:720px;">
+  <%= render "form" %>
+</div>

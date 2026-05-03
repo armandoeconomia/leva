@@ -2,7 +2,7 @@ class Admin::BaseController < ApplicationController
   before_action :authenticate_user!
   before_action :verify_admin!
 
-  layout "admin"
+  layout "panel"
 
   private
 

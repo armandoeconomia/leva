@@ -1,6 +1,4 @@
-class Doctors::AssistantsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :require_doctor!
+class Doctors::AssistantsController < Doctors::BaseController
   before_action :set_conversation
 
   def show
@@ -22,10 +20,6 @@ class Doctors::AssistantsController < ApplicationController
   end
 
   private
-
-  def require_doctor!
-    redirect_to root_path, alert: "No autorizado" unless current_user&.doctor
-  end
 
   def set_conversation
     @conversation = current_user.ai_conversations.find_or_create_by!(role: :doctor)

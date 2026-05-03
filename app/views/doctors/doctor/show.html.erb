@@ -1,63 +1,50 @@
-<div class="admin-shell" style="padding: 32px 40px 48px; max-width: 1100px; margin: 0 auto;">
-  <div class="admin-page-header">
-    <div>
-      <span class="page-eyebrow">Perfil</span>
-      <h1 class="admin-page-title">Mi perfil</h1>
-      <p class="admin-page-description">Revisa tus datos personales y profesionales.</p>
-    </div>
-    <div class="admin-actions">
-      <%= link_to "Editar perfil", edit_doctors_doctor_path, class: "btn-leva-primary" %>
-      <%= link_to "Volver al dashboard", doctors_dashboard_path, class: "btn-leva-ghost" %>
-    </div>
+<% content_for :page_title do %>
+  Doctor · Mi Perfil
+<% end %>
+
+<div class="panel-page-header">
+  <div>
+    <span class="panel-eyebrow"><i class="fa fa-user-doctor"></i> Perfil</span>
+    <h1 class="panel-page-title">Mi perfil</h1>
+    <p class="panel-page-description">Revisa y actualiza tus datos personales y profesionales.</p>
+  </div>
+  <div class="d-flex gap-2">
+    <%= link_to "Editar perfil", edit_doctors_doctor_path, class: "btn-panel-primary" %>
+    <%= link_to "Dashboard", doctors_dashboard_path, class: "btn-panel-ghost" %>
+  </div>
+</div>
+
+<div class="panel-card">
+  <div class="panel-card__header">
+    <span class="panel-eyebrow"><i class="fa fa-id-badge"></i> Datos personales</span>
+    <span class="status-pill completado"><%= @doctor.speciality&.titleize || "Sin especialidad" %></span>
   </div>
 
-  <section class="admin-card mt-4" style="border-radius: 18px; box-shadow: 0 18px 32px rgba(0,0,0,0.06); padding: 22px;">
-    <div class="admin-card__header">
-      <div>
-        <p class="page-eyebrow">Datos personales</p>
-        <h2 class="admin-card__title"><%= [@doctor.user&.name, @doctor.user&.last_name].compact.join(" ") %></h2>
-        <p class="admin-card__description">Información básica del perfil.</p>
-      </div>
+  <div class="panel-details">
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Nombre</p>
+      <p class="panel-detail-value"><%= [@doctor.user&.name, @doctor.user&.last_name].compact.join(" ") %></p>
     </div>
-    <div class="row g-3">
-      <div class="col-md-6">
-        <p class="text-muted mb-1 small">Email</p>
-        <p class="fw-semibold mb-0"><%= @doctor.user&.email || "Sin email" %></p>
-      </div>
-      <div class="col-md-6">
-        <p class="text-muted mb-1 small">Teléfono</p>
-        <p class="fw-semibold mb-0"><%= @doctor.user&.phone_number.presence || "Sin teléfono" %></p>
-      </div>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Correo</p>
+      <p class="panel-detail-value"><%= @doctor.user&.email || "Sin email" %></p>
     </div>
-  </section>
-
-  <section class="admin-card mt-4" style="border-radius: 18px; box-shadow: 0 18px 32px rgba(0,0,0,0.06); padding: 22px;">
-    <div class="admin-card__header">
-      <div>
-        <p class="page-eyebrow">Datos profesionales</p>
-        <h2 class="admin-card__title">Información médica</h2>
-        <p class="admin-card__description">Registro, especialidad e instituto.</p>
-      </div>
-      <span class="status-pill info"><%= @doctor.speciality&.titleize || "Sin especialidad" %></span>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Teléfono</p>
+      <p class="panel-detail-value"><%= @doctor.user&.phone_number.presence || "Sin teléfono" %></p>
     </div>
-    <div class="row g-3">
-      <div class="col-md-6">
-        <p class="text-muted mb-1 small">Registro médico</p>
-        <p class="fw-semibold mb-0"><%= @doctor.medical_registration.presence || "No especificado" %></p>
-      </div>
-      <div class="col-md-6">
-        <p class="text-muted mb-1 small">Especialidad</p>
-        <p class="fw-semibold mb-0"><%= @doctor.speciality&.humanize || "No definida" %></p>
-      </div>
-      <div class="col-md-12">
-        <p class="text-muted mb-1 small">Instituto médico</p>
-        <% if @doctor.medical_institute %>
-          <p class="fw-semibold mb-0"><%= @doctor.medical_institute.name %></p>
-          <p class="text-muted mb-0 small"><%= @doctor.medical_institute.address.presence || "Sin dirección" %></p>
-        <% else %>
-          <p class="fw-semibold mb-0">Sin instituto asignado</p>
-        <% end %>
-      </div>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Registro médico</p>
+      <p class="panel-detail-value"><%= @doctor.medical_registration.presence || "No especificado" %></p>
     </div>
-  </section>
+    <div class="panel-detail-item panel-detail-item--full">
+      <p class="panel-detail-label">Instituto médico</p>
+      <% if @doctor.medical_institute %>
+        <p class="panel-detail-value"><%= @doctor.medical_institute.name %></p>
+        <p style="color:#888;font-size:.875rem;margin:2px 0 0;"><%= @doctor.medical_institute.address.presence || "Sin dirección registrada" %></p>
+      <% else %>
+        <p class="panel-detail-value" style="opacity:.5;">Sin instituto asignado</p>
+      <% end %>
+    </div>
+  </div>
 </div>

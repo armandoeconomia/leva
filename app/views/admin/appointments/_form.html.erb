@@ -1,9 +1,9 @@
-<div class="admin-card">
-  <%= form_with model: [:admin, @appointment], local: true, html: { class: "admin-form" } do |f| %>
+<div class="panel-card">
+  <%= form_with model: [:admin, @appointment], local: true, html: { class: "panel-form" } do |f| %>
     <% if @appointment.errors.any? %>
-      <div class="admin-alert">
+      <div style="border-radius:12px;padding:14px 18px;background:rgba(231,76,60,.08);color:#a44545;font-weight:600;border:1px solid rgba(231,76,60,.15);">
         Revisa los siguientes campos:
-        <ul>
+        <ul style="margin:8px 0 0 18px;padding:0;color:#666;font-weight:500;">
           <% @appointment.errors.full_messages.each do |msg| %>
             <li><%= msg %></li>
           <% end %>
@@ -11,7 +11,7 @@
       </div>
     <% end %>
 
-    <div class="field-group">
+    <div>
       <%= f.label :patient_id, "Paciente" %>
       <%= f.collection_select :patient_id,
                               Patient.includes(:user).all,
@@ -20,7 +20,7 @@
                               { prompt: "Selecciona paciente" } %>
     </div>
 
-    <div class="field-group">
+    <div>
       <%= f.label :doctor_id, "Doctor" %>
       <%= f.collection_select :doctor_id,
                               Doctor.includes(:user).all,
@@ -29,31 +29,32 @@
                               { prompt: "Selecciona doctor" } %>
     </div>
 
-    <div class="field-group">
-      <%= f.label :date, "Fecha" %>
-      <%= f.date_field :date %>
+    <div class="panel-form-grid">
+      <div>
+        <%= f.label :date, "Fecha" %>
+        <%= f.date_field :date %>
+      </div>
+      <div>
+        <%= f.label :hour, "Hora" %>
+        <%= f.time_field :hour, min: "08:00", max: "17:00", step: 3600 %>
+      </div>
     </div>
 
-    <div class="field-group">
-      <%= f.label :hour, "Hora" %>
-      <%= f.time_field :hour, min: "08:00", max: "17:00", step: 3600 %>
-    </div>
-
-    <div class="field-group">
+    <div>
       <%= f.label :reason_for_consultation, "Motivo de consulta" %>
-      <%= f.text_area :reason_for_consultation, rows: 2, placeholder: "Sintomas o contexto" %>
+      <%= f.text_area :reason_for_consultation, rows: 3, placeholder: "Síntomas o contexto de la consulta" %>
     </div>
 
-    <div class="field-group">
+    <div>
       <%= f.label :status, "Estado" %>
       <%= f.select :status,
                    Appointment.statuses.keys.map { |s| [s.humanize, s] },
                    { prompt: "Selecciona estado" } %>
     </div>
 
-    <div class="admin-form-actions">
-      <%= f.submit "Guardar cita", class: "btn-leva-primary" %>
-      <%= link_to "Cancelar", admin_appointments_path, class: "btn-leva-ghost" %>
+    <div class="panel-form-actions">
+      <%= f.submit "Guardar cita", class: "btn-panel-primary" %>
+      <%= link_to "Cancelar", admin_appointments_path, class: "btn-panel-ghost" %>
     </div>
   <% end %>
 </div>

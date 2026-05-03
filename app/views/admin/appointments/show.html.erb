@@ -1,56 +1,63 @@
-<div class="admin-page-header">
+<% content_for :page_title do %>
+  Recepción · Cita #<%= @appointment.id %>
+<% end %>
+
+<div class="panel-page-header">
   <div>
-    <span class="page-eyebrow">Detalle de la cita</span>
-    <h1 class="admin-page-title">Cita #<%= @appointment.id %></h1>
-    <p class="admin-page-description">
-      Confirma quienes participan y el motivo para anticipar recursos y recordatorios.
-    </p>
+    <%= link_to admin_appointments_path, class: "btn-panel-ghost", style: "margin-bottom:12px;display:inline-flex;" do %>
+      <i class="fa fa-arrow-left"></i>&nbsp; Volver a la agenda
+    <% end %>
+    <span class="panel-eyebrow"><i class="fa fa-calendar"></i> Cita</span>
+    <h1 class="panel-page-title">Cita #<%= @appointment.id %></h1>
   </div>
-  <div class="admin-actions">
-    <% status_chip_class = case @appointment.status
-                          when "confirmed", "completed" then "status-chip--success"
-                          when "cancelled" then "status-chip--danger"
-                          else "" end %>
-    <span class="status-chip <%= status_chip_class %>"><%= @appointment.status.humanize %></span>
+  <div class="d-flex gap-2 align-items-start">
+    <% status_class = case @appointment.status
+                      when "completado" then "completado"
+                      when "cancelado" then "cancelado"
+                      else "pendiente" end %>
+    <span class="status-pill <%= status_class %>" style="font-size:.9rem;padding:6px 16px;">
+      <%= @appointment.status&.humanize %>
+    </span>
   </div>
 </div>
 
-<div class="admin-card">
-  <div class="admin-details">
-    <div class="admin-detail-item">
-      <p class="admin-detail-label">Paciente</p>
-      <% patient_user = @appointment.patient&.user %>
-      <p class="admin-detail-value">
-        <%= patient_user&.name %> <%= patient_user&.last_name %><br>
-        <span class="admin-row-meta"><%= patient_user&.email %></span>
+<div class="panel-card">
+  <div class="panel-details">
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Paciente</p>
+      <% pu = @appointment.patient&.user %>
+      <p class="panel-detail-value"><%= pu&.name %> <%= pu&.last_name %></p>
+      <small style="color:#6f6f6f;"><%= pu&.email %></small>
+    </div>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Doctor</p>
+      <% du = @appointment.doctor&.user %>
+      <p class="panel-detail-value">Dr. <%= du&.name %> <%= du&.last_name %></p>
+      <small style="color:#6f6f6f;"><%= @appointment.doctor&.speciality&.humanize %></small>
+    </div>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Fecha</p>
+      <p class="panel-detail-value"><%= @appointment.date ? l(@appointment.date) : "—" %></p>
+    </div>
+    <div class="panel-detail-item">
+      <p class="panel-detail-label">Hora</p>
+      <p class="panel-detail-value"><%= @appointment.hour&.strftime("%H:%M") || "—" %></p>
+    </div>
+    <div class="panel-detail-item panel-detail-item--full">
+      <p class="panel-detail-label">Motivo de consulta</p>
+      <p class="panel-detail-value" style="font-weight:400;font-size:.95rem;line-height:1.6;">
+        <%= @appointment.reason_for_consultation.presence || "Sin descripción" %>
       </p>
-    </div>
-    <div class="admin-detail-item">
-      <p class="admin-detail-label">Doctor</p>
-      <% doctor_user = @appointment.doctor&.user %>
-      <p class="admin-detail-value">
-        <%= doctor_user&.name %> <%= doctor_user&.last_name %><br>
-        <span class="admin-row-meta"><%= @appointment.doctor&.speciality&.humanize %></span>
-      </p>
-    </div>
-    <div class="admin-detail-item">
-      <p class="admin-detail-label">Fecha</p>
-      <p class="admin-detail-value"><%= @appointment.date ? l(@appointment.date) : "--" %></p>
-    </div>
-    <div class="admin-detail-item">
-      <p class="admin-detail-label">Hora</p>
-      <p class="admin-detail-value"><%= @appointment.hour&.strftime("%I:%M %p") || "--" %></p>
-    </div>
-    <div class="admin-detail-item admin-detail-item--full">
-      <p class="admin-detail-label">Motivo</p>
-      <div class="admin-detail-value">
-        <%= simple_format(@appointment.reason_for_consultation.presence || "Sin descripcion") %>
-      </div>
     </div>
   </div>
 
-  <div class="admin-form-actions">
-    <%= link_to "Editar", edit_admin_appointment_path(@appointment), class: "btn-leva-primary" %>
-    <%= link_to "Volver al listado", admin_appointments_path, class: "btn-leva-ghost" %>
+  <div class="panel-form-actions" style="margin-top:20px;padding-top:16px;border-top:1px solid #edecf0;">
+    <%= link_to "Editar cita", edit_admin_appointment_path(@appointment), class: "btn-panel-primary" %>
+    <%= link_to "Volver al listado", admin_appointments_path, class: "btn-panel-ghost" %>
+    <%= button_to "Eliminar",
+                  admin_appointment_path(@appointment),
+                  method: :delete,
+                  data: { confirm: "¿Eliminar esta cita?" },
+                  class: "btn-panel-danger" %>
   </div>
 </div>
